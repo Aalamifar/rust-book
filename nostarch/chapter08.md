@@ -25,7 +25,7 @@ three collections that are used very often in Rust programs:
   particular implementation of the more general data structure called a *map*.
 
 To learn about the other kinds of collections provided by the standard library,
-see the documentation at *../std/collections/index.html*.
+see the documentation at <https://doc.rust-lang.org/std/collections/index.html>.
 
 We’ll discuss how to create and update vectors, strings, and hash maps, as well
 as what makes each special.

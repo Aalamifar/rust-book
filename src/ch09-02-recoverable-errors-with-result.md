@@ -547,4 +547,4 @@ cases.
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
 [trait-objects]: ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior
-[termination]: ../std/process/trait.Termination.html
+[termination]: https://doc.rust-lang.org/std/process/trait.Termination.html

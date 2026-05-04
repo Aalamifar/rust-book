@@ -29,12 +29,12 @@ Second, you can also annotate any piece of text to record your thoughts about it
 
 This book's content is mostly similar to TRPL, and we synchronize the books every few months. The biggest difference is the chapter on [Understanding Ownership][understanding-ownership]. This book explains ownership using ideas and visualizations that our research has demonstrated can better improve your understanding of Rust compared to the original book. You will see many diagrams like the ones below, which visualize the compile-time and run-time behavior of Rust using [Aquascope][aquascope]:
 
-```aquascope,interpreter,permissions,boundaries,stepper,shouldFail
+```aquascope,interpreter,horizontal
 #fn main() {
-let mut v: Vec<i32> = vec![1, 2, 3];
-let num: &i32 = &v[2];`{}`
-v.push(4);`{}`
-println!("Third element is {}", *num);
+let mut s = String::from("Hello world");`[]`
+let hello = &s[0..5];`[]`
+s.push_str("!");`[]`
+drop(s);`[]`
 #}
 ```
 
