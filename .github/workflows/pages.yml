@@ -38,6 +38,14 @@ jobs:
           cargo +${AQUASCOPE_TOOLCHAIN} miri setup
           echo "LD_LIBRARY_PATH=$($(rustup which --toolchain ${AQUASCOPE_TOOLCHAIN} rustc) --print target-libdir)" >> "${GITHUB_ENV}"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Install mdBook tools
         run: |
           mkdir bin
@@ -51,6 +59,11 @@ jobs:
 
       - name: Build local preprocessors
         run: cargo install --path packages/mdbook-trpl
+
+      - name: Build JavaScript extensions
+        run: |
+          cd js-extensions
+          pnpm init-repo
 
       - name: Build book
         run: mdbook build

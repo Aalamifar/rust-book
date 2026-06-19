@@ -1,13 +1,36 @@
+# mdBook output
 book/
+
+# Local mdBook / Aquascope / quiz binaries
 bin/
 bin-tools/
-*~
-.idea
-.DS_Store
-target
-tmp
 
+# Rust build artifacts
+target/
+**/target/
+
+# JavaScript dependencies and build output
+node_modules/
+**/node_modules/
+**/dist/
+
+# Editor and OS files
+*~
+.idea/
+.vscode/
+.DS_Store
+.nova/
+
+# mdBook interactive content (generated locally)
 /src/quiz
 /src/aquascope
 .aquascope-cache
-.nova
+
+# Temporary files
+tmp/
+*.swp
+*.swo
+
+# Environment and secrets
+.env
+.env.*

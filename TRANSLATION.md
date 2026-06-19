@@ -1,7 +1,9 @@
 # برنامهٔ ترجمهٔ فارسی
 
-این پوشه نسخهٔ فارسی کتاب آزمایشی Rust Book از Brown است. منبع اصلی در
-`../upstream-rust-book` نگه داشته شده تا بتوان تغییرات آینده را با آن مقایسه کرد.
+این مخزن نسخهٔ فارسی کتاب آزمایشی Rust Book از Brown است. منبع اصلی:
+
+- [cognitive-engineering-lab/rust-book](https://github.com/cognitive-engineering-lab/rust-book)
+- [rust-lang/book](https://github.com/rust-lang/book)
 
 ## وضعیت
 
@@ -12,7 +14,7 @@
 - [x] ترجمهٔ «این کتاب چه تفاوتی دارد؟»
 - [x] ترجمهٔ پیش‌گفتار
 - [x] ترجمهٔ مقدمه
-- [x] آماده‌سازی GitHub Actions برای انتشار روی `aalamifar.github.io`
+- [x] آماده‌سازی GitHub Actions برای انتشار روی GitHub Pages
 - [ ] ترجمهٔ فصل‌های ۱ تا ۲۱
 - [ ] ترجمهٔ پیوست‌ها
 
