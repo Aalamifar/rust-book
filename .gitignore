@@ -1,4 +1,6 @@
 book/
+bin/
+bin-tools/
 *~
 .idea
 .DS_Store

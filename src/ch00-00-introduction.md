@@ -1,201 +1,187 @@
-# Introduction
+# مقدمه
 
-> Note: This edition of the book is the same as [The Rust Programming
-> Language][nsprust] available in print and ebook format from [No Starch
-> Press][nsp].
+> نکته: این ویرایش کتاب همان [The Rust Programming Language][nsprust] است که
+> در قالب چاپی و کتاب الکترونیکی از [No Starch Press][nsp] منتشر شده است.
 
 [nsprust]: https://nostarch.com/rust-programming-language-3rd-edition
 [nsp]: https://nostarch.com/
 
-Welcome to _The Rust Programming Language_, an introductory book about Rust.
-The Rust programming language helps you write faster, more reliable software.
-High-level ergonomics and low-level control are often at odds in programming
-language design; Rust challenges that conflict. Through balancing powerful
-technical capacity and a great developer experience, Rust gives you the option
-to control low-level details (such as memory usage) without all the hassle
-traditionally associated with such control.
+به _زبان برنامه‌نویسی Rust_ خوش آمدید؛ کتابی مقدماتی دربارهٔ Rust. زبان
+برنامه‌نویسی Rust به شما کمک می‌کند نرم‌افزارهایی سریع‌تر و قابل اعتمادتر
+بنویسید. در طراحی زبان‌های برنامه‌نویسی، راحتی استفاده در سطح بالا و کنترل در
+سطح پایین اغلب در برابر هم قرار می‌گیرند؛ Rust این تقابل را به چالش می‌کشد. Rust
+با ایجاد تعادل میان توان فنی قدرتمند و تجربهٔ خوب توسعه‌دهنده، به شما امکان
+می‌دهد جزئیات سطح پایین، مانند مصرف حافظه، را کنترل کنید، بدون دردسرهایی که
+معمولا با چنین کنترلی همراه بوده‌اند.
 
-## Who Rust Is For
+## Rust برای چه کسانی است
 
-Rust is ideal for many people for a variety of reasons. Let’s look at a few of
-the most important groups.
+Rust به دلایل گوناگون برای افراد زیادی مناسب است. بیایید چند گروه مهم را بررسی
+کنیم.
 
-### Teams of Developers
+### تیم‌های توسعه‌دهنده
 
-Rust is proving to be a productive tool for collaborating among large teams of
-developers with varying levels of systems programming knowledge. Low-level code
-is prone to various subtle bugs, which in most other languages can only be
-caught through extensive testing and careful code review by experienced
-developers. In Rust, the compiler plays a gatekeeper role by refusing to
-compile code with these elusive bugs, including concurrency bugs. By working
-alongside the compiler, the team can spend its time focusing on the program’s
-logic rather than chasing down bugs.
+Rust دارد نشان می‌دهد ابزاری پربازده برای همکاری در تیم‌های بزرگ توسعه‌دهنده
+است؛ تیم‌هایی که اعضایشان سطح‌های متفاوتی از دانش برنامه‌نویسی سیستم‌ها دارند.
+کد سطح پایین مستعد خطاهای ظریف گوناگونی است که در بیشتر زبان‌های دیگر فقط با
+آزمون‌نویسی گسترده و بازبینی دقیق کد توسط توسعه‌دهندگان باتجربه پیدا می‌شوند. در
+Rust، کامپایلر نقش نگهبان را بازی می‌کند و از کامپایل کدی که چنین خطاهای
+گریزپایی، از جمله خطاهای همزمانی، دارد جلوگیری می‌کند. با کار کردن در کنار
+کامپایلر، تیم می‌تواند به جای تعقیب خطاها، وقت خود را روی منطق برنامه بگذارد.
 
-Rust also brings contemporary developer tools to the systems programming world:
+Rust ابزارهای امروزی توسعه را نیز به دنیای برنامه‌نویسی سیستم‌ها می‌آورد:
 
-- Cargo, the included dependency manager and build tool, makes adding,
-  compiling, and managing dependencies painless and consistent across the Rust
-  ecosystem.
-- The `rustfmt` formatting tool ensures a consistent coding style across
-  developers.
-- The Rust Language Server powers integrated development environment (IDE)
-  integration for code completion and inline error messages.
+- Cargo، مدیر وابستگی و ابزار ساخت همراه Rust، افزودن، کامپایل و مدیریت
+  وابستگی‌ها را در سراسر زیست‌بوم Rust بی‌دردسر و یکدست می‌کند.
+- ابزار قالب‌بندی `rustfmt` سبک کدنویسی یکسانی را میان توسعه‌دهندگان تضمین
+  می‌کند.
+- Rust Language Server امکان یکپارچه‌سازی با محیط‌های توسعهٔ یکپارچه (IDE) را
+  برای کامل‌سازی کد و نمایش پیام‌های خطا درون خط فراهم می‌کند.
 
-By using these and other tools in the Rust ecosystem, developers can be
-productive while writing systems-level code.
+با استفاده از این ابزارها و ابزارهای دیگر در زیست‌بوم Rust، توسعه‌دهندگان می‌توانند
+هنگام نوشتن کد سطح سیستم نیز پربازده باشند.
 
-### Students
+### دانشجویان
 
-Rust is for students and those who are interested in learning about systems
-concepts. Using Rust, many people have learned about topics like operating
-systems development. The community is very welcoming and happy to answer
-students’ questions. Through efforts such as this book, the Rust teams want to
-make systems concepts more accessible to more people, especially those new to
-programming.
+Rust برای دانشجویان و کسانی است که به یادگیری مفاهیم سیستم‌ها علاقه دارند. افراد
+زیادی با استفاده از Rust دربارهٔ موضوع‌هایی مانند توسعهٔ سیستم‌عامل آموخته‌اند.
+جامعهٔ Rust بسیار خوش‌برخورد است و با میل به پرسش‌های دانشجویان پاسخ می‌دهد. تیم‌های
+Rust با تلاش‌هایی مانند این کتاب می‌خواهند مفاهیم سیستم‌ها را برای افراد بیشتری
+دسترس‌پذیر کنند، به‌ویژه برای کسانی که تازه وارد برنامه‌نویسی شده‌اند.
 
-### Companies
+### شرکت‌ها
 
-Hundreds of companies, large and small, use Rust in production for a variety of
-tasks, including command line tools, web services, DevOps tooling, embedded
-devices, audio and video analysis and transcoding, cryptocurrencies,
-bioinformatics, search engines, Internet of Things applications, machine
-learning, and even major parts of the Firefox web browser.
+صدها شرکت کوچک و بزرگ از Rust در محیط تولید و برای کارهای گوناگون استفاده
+می‌کنند؛ از ابزارهای خط فرمان، سرویس‌های وب، ابزارهای DevOps، دستگاه‌های توکار،
+تحلیل و تبدیل audio و video، رمزارزها، bioinformatics، موتورهای جست‌وجو،
+برنامه‌های Internet of Things و machine learning گرفته تا حتی بخش‌های مهمی از
+مرورگر وب Firefox.
 
-### Open Source Developers
+### توسعه‌دهندگان متن‌باز
 
-Rust is for people who want to build the Rust programming language, community,
-developer tools, and libraries. We’d love to have you contribute to the Rust
-language.
+Rust برای کسانی است که می‌خواهند زبان برنامه‌نویسی Rust، جامعهٔ آن، ابزارهای
+توسعه و کتابخانه‌هایش را بسازند. خوشحال می‌شویم شما هم در زبان Rust مشارکت کنید.
 
-### People Who Value Speed and Stability
+### کسانی که سرعت و پایداری را ارزشمند می‌دانند
 
-Rust is for people who crave speed and stability in a language. By speed, we
-mean both how quickly Rust code can run and the speed at which Rust lets you
-write programs. The Rust compiler’s checks ensure stability through feature
-additions and refactoring. This is in contrast to the brittle legacy code in
-languages without these checks, which developers are often afraid to modify. By
-striving for zero-cost abstractions—higher-level features that compile to
-lower-level code as fast as code written manually—Rust endeavors to make safe
-code be fast code as well.
+Rust برای کسانی است که در یک زبان به سرعت و پایداری نیاز دارند. منظور ما از
+سرعت، هم سرعت اجرای کد Rust است و هم سرعتی که Rust برای نوشتن برنامه‌ها در
+اختیار شما می‌گذارد. بررسی‌های کامپایلر Rust هنگام افزودن ویژگی‌ها و بازآرایی
+کد، پایداری را تضمین می‌کنند. این در تضاد با کدهای قدیمی و شکننده در زبان‌هایی
+است که چنین بررسی‌هایی ندارند و توسعه‌دهندگان اغلب از تغییر دادنشان می‌ترسند.
+Rust با تلاش برای ارائهٔ انتزاع‌های بدون هزینه، یعنی ویژگی‌های سطح بالایی که به
+کدی سطح پایین و به همان سرعت کد دست‌نویس کامپایل می‌شوند، می‌کوشد کد ایمن را به
+کدی سریع نیز تبدیل کند.
 
-The Rust language hopes to support many other users as well; those mentioned
-here are merely some of the biggest stakeholders. Overall, Rust’s greatest
-ambition is to eliminate the trade-offs that programmers have accepted for
-decades by providing safety _and_ productivity, speed _and_ ergonomics. Give
-Rust a try, and see if its choices work for you.
+زبان Rust امیدوار است از کاربران بسیار دیگری هم پشتیبانی کند؛ گروه‌هایی که اینجا
+نام بردیم فقط برخی از بزرگ‌ترین ذی‌نفعان آن هستند. در مجموع، بزرگ‌ترین آرزوی Rust
+این است که مصالحه‌هایی را که برنامه‌نویسان دهه‌ها پذیرفته‌اند حذف کند، با فراهم
+کردن ایمنی _و_ بهره‌وری، سرعت _و_ راحتی استفاده. Rust را امتحان کنید و ببینید
+انتخاب‌هایش برای شما کار می‌کنند یا نه.
 
-## Who This Book Is For
+## این کتاب برای چه کسانی است
 
-This book assumes that you’ve written code in another programming language, but
-it doesn’t make any assumptions about which one. We’ve tried to make the
-material broadly accessible to those from a wide variety of programming
-backgrounds. We don’t spend a lot of time talking about what programming _is_
-or how to think about it. If you’re entirely new to programming, you would be
-better served by reading a book that specifically provides an introduction to
-programming.
+این کتاب فرض می‌کند که شما در یک زبان برنامه‌نویسی دیگر کد نوشته‌اید، اما فرضی
+دربارهٔ اینکه آن زبان کدام بوده ندارد. تلاش کرده‌ایم مطالب برای افرادی با
+پیش‌زمینه‌های برنامه‌نویسی گوناگون دسترس‌پذیر باشد. زمان زیادی را صرف توضیح
+اینکه برنامه‌نویسی _چیست_ یا چگونه باید دربارهٔ آن فکر کرد نمی‌کنیم. اگر کاملا
+تازه‌کار هستید، بهتر است کتابی بخوانید که مشخصا مقدمه‌ای بر برنامه‌نویسی ارائه
+می‌دهد.
 
-## How to Use This Book
+## چگونه از این کتاب استفاده کنید
 
-In general, this book assumes that you’re reading it in sequence from front to
-back. Later chapters build on concepts in earlier chapters, and earlier
-chapters might not delve into details on a particular topic but will revisit
-the topic in a later chapter.
+به‌طور کلی، این کتاب فرض می‌کند که آن را از ابتدا تا انتها و به‌ترتیب می‌خوانید.
+فصل‌های بعدی بر پایهٔ مفهوم‌های فصل‌های پیشین ساخته می‌شوند، و فصل‌های ابتدایی
+ممکن است وارد جزئیات یک موضوع خاص نشوند اما بعدا دوباره به آن موضوع برگردند.
 
-You’ll find two kinds of chapters in this book: concept chapters and project
-chapters. In concept chapters, you’ll learn about an aspect of Rust. In project
-chapters, we’ll build small programs together, applying what you’ve learned so
-far. Chapter 2, Chapter 12, and Chapter 21 are project chapters; the rest are
-concept chapters.
+در این کتاب دو نوع فصل خواهید دید: فصل‌های مفهومی و فصل‌های پروژه‌ای. در فصل‌های
+مفهومی، دربارهٔ یکی از جنبه‌های Rust یاد می‌گیرید. در فصل‌های پروژه‌ای، با هم
+برنامه‌های کوچکی می‌سازیم و آموخته‌های قبلی را به کار می‌گیریم. فصل ۲، فصل ۱۲ و
+فصل ۲۱ فصل‌های پروژه‌ای هستند؛ بقیه فصل‌ها مفهومی‌اند.
 
-**Chapter 1** explains how to install Rust, how to write a “Hello, world!”
-program, and how to use Cargo, Rust’s package manager and build tool. **Chapter
-2** is a hands-on introduction to writing a program in Rust, having you build
-up a number-guessing game. Here, we cover concepts at a high level, and later
-chapters will provide additional detail. If you want to get your hands dirty
-right away, Chapter 2 is the place for that. If you’re a particularly
-meticulous learner who prefers to learn every detail before moving on to the
-next, you might want to skip Chapter 2 and go straight to **Chapter 3**, which
-covers Rust features that are similar to those of other programming languages;
-then, you can return to Chapter 2 when you’d like to work on a project applying
-the details you’ve learned.
+**فصل ۱** توضیح می‌دهد چگونه Rust را نصب کنید، چگونه یک برنامهٔ “Hello, world!”
+بنویسید، و چگونه از Cargo، مدیر بسته و ابزار ساخت Rust، استفاده کنید. **فصل ۲**
+مقدمه‌ای عملی برای نوشتن برنامه در Rust است و شما را قدم‌به‌قدم به ساخت یک بازی
+حدس عدد می‌برد. در آنجا مفهوم‌ها را در سطحی کلی پوشش می‌دهیم و فصل‌های بعدی
+جزئیات بیشتری ارائه خواهند کرد. اگر می‌خواهید سریع دست به کد شوید، فصل ۲ جای
+خوبی برای شروع است. اگر یادگیرنده‌ای بسیار دقیق هستید و ترجیح می‌دهید پیش از
+رفتن به موضوع بعدی، همهٔ جزئیات را یاد بگیرید، شاید بخواهید فصل ۲ را فعلا رد
+کنید و مستقیم به **فصل ۳** بروید؛ فصلی که ویژگی‌های Rust مشابه زبان‌های
+برنامه‌نویسی دیگر را پوشش می‌دهد. سپس هر وقت خواستید روی پروژه‌ای کار کنید که
+جزئیات آموخته‌شده را به کار می‌گیرد، می‌توانید به فصل ۲ برگردید.
 
-In **Chapter 4**, you’ll learn about Rust’s ownership system. **Chapter 5**
-discusses structs and methods. **Chapter 6** covers enums, `match` expressions,
-and the `if let` and `let...else` control flow constructs. You’ll use structs
-and enums to make custom types.
+در **فصل ۴** با سیستم مالکیت Rust آشنا می‌شوید. **فصل ۵** دربارهٔ structها و
+methodها است. **فصل ۶** enumها، عبارت‌های `match` و سازه‌های گردش کنترل
+`if let` و `let...else` را پوشش می‌دهد. از structها و enumها برای ساخت نوع‌های
+سفارشی استفاده خواهید کرد.
 
-In **Chapter 7**, you’ll learn about Rust’s module system and about privacy
-rules for organizing your code and its public application programming interface
-(API). **Chapter 8** discusses some common collection data structures that the
-standard library provides: vectors, strings, and hash maps. **Chapter 9**
-explores Rust’s error-handling philosophy and techniques.
+در **فصل ۷** دربارهٔ سیستم module در Rust و دربارهٔ قوانین privacy برای سازمان‌دهی
+کد و رابط برنامه‌نویسی کاربردی عمومی آن (API) یاد می‌گیرید. **فصل ۸** چند ساختار
+دادهٔ رایج از کتابخانهٔ استاندارد را بررسی می‌کند: vectorها، stringها و hash mapها.
+**فصل ۹** فلسفه و روش‌های Rust برای مدیریت خطا را بررسی می‌کند.
 
-**Chapter 10** digs into generics, traits, and lifetimes, which give you the
-power to define code that applies to multiple types. **Chapter 11** is all
-about testing, which even with Rust’s safety guarantees is necessary to ensure
-that your program’s logic is correct. In **Chapter 12**, we’ll build our own
-implementation of a subset of functionality from the `grep` command line tool
-that searches for text within files. For this, we’ll use many of the concepts
-we discussed in the previous chapters.
+**فصل ۱۰** وارد generics، traitها و lifetimeها می‌شود؛ ابزارهایی که به شما قدرت
+می‌دهند کدی تعریف کنید که روی چندین نوع قابل اعمال باشد. **فصل ۱۱** کاملا دربارهٔ
+آزمون‌نویسی است؛ چیزی که حتی با تضمین‌های ایمنی Rust نیز برای اطمینان از درست
+بودن منطق برنامه ضروری است. در **فصل ۱۲** پیاده‌سازی خودمان از زیرمجموعه‌ای از
+قابلیت‌های ابزار خط فرمان `grep` را می‌سازیم؛ ابزاری که در فایل‌ها دنبال متن
+می‌گردد. برای این کار از بسیاری از مفهوم‌هایی که در فصل‌های پیشین درباره‌شان
+گفت‌وگو کردیم استفاده خواهیم کرد.
 
-**Chapter 13** explores closures and iterators: features of Rust that come from
-functional programming languages. In **Chapter 14**, we’ll examine Cargo in
-more depth and talk about best practices for sharing your libraries with
-others. **Chapter 15** discusses smart pointers that the standard library
-provides and the traits that enable their functionality.
+**فصل ۱۳** closureها و iteratorها را بررسی می‌کند؛ ویژگی‌هایی از Rust که از
+زبان‌های برنامه‌نویسی تابعی می‌آیند. در **فصل ۱۴** Cargo را عمیق‌تر بررسی می‌کنیم
+و دربارهٔ بهترین روش‌ها برای اشتراک‌گذاری کتابخانه‌هایتان با دیگران حرف می‌زنیم.
+**فصل ۱۵** دربارهٔ smart pointerهایی است که کتابخانهٔ استاندارد ارائه می‌دهد و
+traitهایی که قابلیت‌های آن‌ها را ممکن می‌کنند.
 
-In **Chapter 16**, we’ll walk through different models of concurrent
-programming and talk about how Rust helps you program in multiple threads
-fearlessly. In **Chapter 17**, we build on that by exploring Rust’s async and
-await syntax, along with tasks, futures, and streams, and the lightweight
-concurrency model they enable.
+در **فصل ۱۶** مدل‌های گوناگون برنامه‌نویسی همزمان را مرور می‌کنیم و دربارهٔ این
+حرف می‌زنیم که Rust چگونه به شما کمک می‌کند بی‌هراس در چند thread برنامه بنویسید.
+در **فصل ۱۷** بر همین پایه جلو می‌رویم و syntax مربوط به async و await در Rust،
+به‌همراه taskها، futureها و streamها و مدل همزمانی سبک‌وزنی را که فراهم می‌کنند
+بررسی می‌کنیم.
 
-**Chapter 18** looks at how Rust idioms compare to object-oriented programming
-principles you might be familiar with. **Chapter 19** is a reference on
-patterns and pattern matching, which are powerful ways of expressing ideas
-throughout Rust programs. **Chapter 20** contains a smorgasbord of advanced
-topics of interest, including unsafe Rust, macros, and more about lifetimes,
-traits, types, functions, and closures.
+**فصل ۱۸** به این می‌پردازد که idiomهای Rust در مقایسه با اصول برنامه‌نویسی
+شیءگرا که شاید با آن‌ها آشنا باشید چگونه‌اند. **فصل ۱۹** مرجعی برای patternها و
+pattern matching است؛ روش‌هایی قدرتمند برای بیان ایده‌ها در سراسر برنامه‌های
+Rust. **فصل ۲۰** مجموعه‌ای رنگارنگ از موضوع‌های پیشرفتهٔ جذاب را در بر دارد؛ از
+جمله unsafe Rust، macroها و مطالب بیشتری دربارهٔ lifetimeها، traitها، typeها،
+functionها و closureها.
 
-In **Chapter 21**, we’ll complete a project in which we’ll implement a
-low-level multithreaded web server!
+در **فصل ۲۱** پروژه‌ای را کامل می‌کنیم که در آن یک web server چندریسمانی سطح
+پایین را پیاده‌سازی خواهیم کرد!
 
-Finally, some appendixes contain useful information about the language in a
-more reference-like format. **Appendix A** covers Rust’s keywords, **Appendix
-B** covers Rust’s operators and symbols, **Appendix C** covers derivable traits
-provided by the standard library, **Appendix D** covers some useful development
-tools, and **Appendix E** explains Rust editions. In **Appendix F**, you can
-find translations of the book, and in **Appendix G** we’ll cover how Rust is
-made and what nightly Rust is.
+در پایان، چند پیوست اطلاعات مفیدی دربارهٔ زبان در قالبی مرجع‌گونه ارائه می‌کنند.
+**پیوست الف** کلیدواژه‌های Rust را پوشش می‌دهد، **پیوست ب** عملگرها و نمادهای
+Rust را، **پیوست ج** traitهای قابل derive ارائه‌شده توسط کتابخانهٔ استاندارد را،
+**پیوست د** چند ابزار مفید توسعه را، و **پیوست ه** editionهای Rust را توضیح
+می‌دهد. در **پیوست و** می‌توانید ترجمه‌های کتاب را پیدا کنید، و در **پیوست ز**
+دربارهٔ اینکه Rust چگونه ساخته می‌شود و nightly Rust چیست حرف خواهیم زد.
 
-There is no wrong way to read this book: If you want to skip ahead, go for it!
-You might have to jump back to earlier chapters if you experience any
-confusion. But do whatever works for you.
+راه نادرستی برای خواندن این کتاب وجود ندارد: اگر می‌خواهید جلوتر بروید، بروید!
+اگر گیج شدید شاید لازم شود به فصل‌های قبلی برگردید. اما هر روشی که برای شما جواب
+می‌دهد همان را انجام دهید.
 
 <span id="ferris"></span>
 
-An important part of the process of learning Rust is learning how to read the
-error messages the compiler displays: These will guide you toward working code.
-As such, we’ll provide many examples that don’t compile along with the error
-message the compiler will show you in each situation. Know that if you enter
-and run a random example, it may not compile! Make sure you read the
-surrounding text to see whether the example you’re trying to run is meant to
-error. In most situations, we’ll lead you to the correct version of any code
-that doesn’t compile. Ferris will also help you distinguish code that isn’t
-meant to work:
+بخش مهمی از فرایند یادگیری Rust، یاد گرفتن خواندن پیام‌های خطایی است که کامپایلر
+نمایش می‌دهد: این پیام‌ها شما را به سمت کد درست راهنمایی می‌کنند. به همین دلیل،
+نمونه‌های زیادی ارائه می‌کنیم که کامپایل نمی‌شوند و پیام خطایی را هم که کامپایلر
+در هر وضعیت نشان می‌دهد همراهشان می‌آوریم. بدانید اگر یک نمونهٔ تصادفی را وارد و
+اجرا کنید، ممکن است کامپایل نشود! حتما متن اطراف نمونه را بخوانید تا ببینید آیا
+نمونه‌ای که می‌خواهید اجرا کنید قرار است خطا بدهد یا نه. در بیشتر موقعیت‌ها، شما
+را به نسخهٔ درست هر کدی که کامپایل نمی‌شود هدایت می‌کنیم. Ferris هم به شما کمک
+می‌کند کدی را که قرار نیست کار کند تشخیص دهید:
 
-| Ferris                                                                                                           | Meaning                                          |
-| ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Ferris with a question mark"/>            | This code does not compile!                      |
-| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | This code panics!                                |
-| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | This code does not produce the desired behavior. |
+| Ferris                                                                                                           | معنی |
+| ---------------------------------------------------------------------------------------------------------------- | --- |
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Ferris with a question mark"/>            | این کد کامپایل نمی‌شود! |
+| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | این کد panic می‌کند! |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | این کد رفتار مطلوب را تولید نمی‌کند. |
 
-In most situations, we’ll lead you to the correct version of any code that
-doesn’t compile.
+در بیشتر موقعیت‌ها، شما را به نسخهٔ درست هر کدی که کامپایل نمی‌شود هدایت خواهیم کرد.
 
-## Source Code
+## کد منبع
 
-The source files from which this book is generated can be found on
-[GitHub][book].
+فایل‌های منبعی که این کتاب از آن‌ها ساخته می‌شود در [GitHub][book] پیدا می‌شوند.
 
 [book]: https://github.com/rust-lang/book/tree/main/src

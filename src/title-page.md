@@ -1,23 +1,23 @@
-# The Rust Programming Language
+# زبان برنامه‌نویسی Rust
 
-*by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the Rust Community*
+*نوشتهٔ Steve Klabnik، Carol Nichols و Chris Krycho، با مشارکت جامعهٔ Rust*
 
-*(and with experimental modifications!)*
+*(به‌همراه تغییرات آزمایشی!)*
 
-This version of the text assumes you’re using Rust 1.90.0 (released 2025-09-18)
-or later with `edition = "2024"` in the *Cargo.toml* file of all projects to
-configure them to use Rust 2024 Edition idioms. See the [“Installation” section
-of Chapter 1][install]<!-- ignore --> for instructions on installing or
-updating Rust, and see [Appendix E][appendix-e]<!-- ignore --> for information
-on editions.
+این نسخه از متن فرض می‌کند که از Rust 1.90.0، منتشرشده در 2025-09-18، یا نسخه‌ای
+جدیدتر استفاده می‌کنید و در فایل *Cargo.toml* همهٔ پروژه‌ها مقدار
+`edition = "2024"` را قرار داده‌اید تا پروژه‌ها با شیوه‌های Rust 2024 Edition
+تنظیم شوند. برای راهنمای نصب یا به‌روزرسانی Rust، بخش [«نصب» از فصل ۱][install]<!-- ignore -->
+را ببینید، و برای اطلاعات بیشتر دربارهٔ editionها به [پیوست ه][appendix-e]<!-- ignore -->
+مراجعه کنید.
 
-The experimental version is only available online and in English. 
-The non-experimental version is available offline with installations of Rust made with `rustup`; run `rustup doc
---book` to open.
+نسخهٔ آزمایشی در اصل فقط به‌صورت آنلاین و به زبان انگلیسی منتشر شده است.
+نسخهٔ غیرآزمایشی همراه نصب‌های Rust که با `rustup` انجام شده‌اند، به‌صورت آفلاین
+در دسترس است؛ برای باز کردن آن دستور `rustup doc --book` را اجرا کنید.
 
-Several community [translations] of the non-experimental version are also available.
-The non-experimental text is available in [paperback and ebook format from No Starch
-Press][nsprust].
+چندین [ترجمهٔ جامعه‌محور][translations] از نسخهٔ غیرآزمایشی نیز موجود است.
+متن غیرآزمایشی از [No Starch Press][nsprust] به شکل کتاب کاغذی و کتاب الکترونیکی
+هم منتشر شده است.
 
 [install]: ch01-01-installation.html
 [appendix-e]: appendix-05-editions.html

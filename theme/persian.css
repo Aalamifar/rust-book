@@ -1,0 +1,31 @@
+:root {
+  direction: rtl;
+}
+
+body,
+.content,
+.chapter,
+.sidebar,
+.searchbar-outer,
+.searchresults-outer {
+  direction: rtl;
+  text-align: right;
+}
+
+code,
+pre,
+.hljs,
+.language-rust,
+.language-console,
+.language-text {
+  direction: ltr;
+  text-align: left;
+}
+
+.content main {
+  line-height: 1.9;
+}
+
+.content table {
+  direction: rtl;
+}

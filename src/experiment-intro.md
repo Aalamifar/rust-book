@@ -1,8 +1,8 @@
-# What's Different About This Book?
+# این کتاب چه تفاوتی دارد؟
 
 <div style="display: flex; gap: 2em"> 
 
-This book is an experimental fork of [*The Rust Programming Language*](http://doc.rust-lang.org/book/) created by researchers at the <a href="https://cel.cs.brown.edu/">Cognitive Engineering Lab</a> at Brown University. If you're curious, this page explains what makes this book different from the original TRPL book. But if you just want to get started learning Rust, then feel free to skip this page and come back later.
+این کتاب یک fork آزمایشی از [*The Rust Programming Language*](http://doc.rust-lang.org/book/) است که پژوهشگران <a href="https://cel.cs.brown.edu/">Cognitive Engineering Lab</a> در دانشگاه Brown آن را ساخته‌اند. اگر کنجکاو هستید، این صفحه توضیح می‌دهد این کتاب چه تفاوتی با کتاب اصلی TRPL دارد. اما اگر فقط می‌خواهید یادگیری Rust را شروع کنید، می‌توانید این صفحه را رد کنید و بعدا به آن برگردید.
 
 <div style="display: flex; flex-direction: column; justify-content: center">
   <img src="img/experiment/brown-logo.png" style="min-width: 150px" />
@@ -11,23 +11,23 @@ This book is an experimental fork of [*The Rust Programming Language*](http://do
 </div>
 
 
-## Interactive Mechanics
+## سازوکارهای تعاملی
 
-This book introduces mechanics for you to actively engage with Rust while learning. First, you'll see quizzes like the one below. Try it out by clicking "Start".
+این کتاب سازوکارهایی معرفی می‌کند تا هنگام یادگیری، فعالانه با Rust درگیر شوید. نخست، آزمون‌هایی مانند آزمون زیر خواهید دید. با کلیک روی «Start» آن را امتحان کنید.
 
 {{#quiz ../quizzes/example-quiz.toml}}
 
-If you get a question incorrect, you can choose to either retry the quiz, or see the correct answers. We encourage you to retry the quiz until you get 100% &mdash; feel free to review the content before retrying the quiz. Note that once you see the correct answers, you cannot retry the quiz.
+اگر به پرسشی پاسخ نادرست بدهید، می‌توانید آزمون را دوباره انجام دهید یا پاسخ‌های درست را ببینید. پیشنهاد می‌کنیم آزمون را آن‌قدر تکرار کنید تا به ۱۰۰٪ برسید &mdash; پیش از تلاش دوباره، آزادانه متن را مرور کنید. توجه کنید که پس از دیدن پاسخ‌های درست، دیگر نمی‌توانید همان آزمون را دوباره انجام دهید.
 
-Second, you can also annotate any piece of text to record your thoughts about it. Once you select some text, click the ✏️ button, and leave an optional comment.
+دوم، می‌توانید هر بخش از متن را حاشیه‌نویسی کنید و یادداشت‌های خود را دربارهٔ آن ثبت کنید. وقتی بخشی از متن را انتخاب کردید، روی دکمهٔ ✏️ کلیک کنید و اگر خواستید دیدگاهی بنویسید.
 
-👉 Try highlighting this text! 👈
+👉 این متن را هایلایت کنید! 👈
 
-> **Note:** your highlights will disappear if we change the content that you've highlighted. Also, your highlights are stored as a cookie. If you block cookies or change browsers, then you won't see your previous highlights.
+> **نکته:** اگر محتوایی را که هایلایت کرده‌اید تغییر دهیم، هایلایت‌های شما ناپدید می‌شوند. همچنین هایلایت‌ها به‌صورت cookie ذخیره می‌شوند. اگر cookieها را مسدود کنید یا مرورگر خود را تغییر دهید، هایلایت‌های قبلی را نخواهید دید.
 
-## Content Changes
+## تغییرات محتوا
 
-This book's content is mostly similar to TRPL, and we synchronize the books every few months. The biggest difference is the chapter on [Understanding Ownership][understanding-ownership]. This book explains ownership using ideas and visualizations that our research has demonstrated can better improve your understanding of Rust compared to the original book. You will see many diagrams like the ones below, which visualize the compile-time and run-time behavior of Rust using [Aquascope][aquascope]:
+محتوای این کتاب بیشتر شبیه TRPL است و هر چند ماه یک‌بار این دو کتاب را همگام می‌کنیم. بزرگ‌ترین تفاوت در فصل [درک مالکیت][understanding-ownership] است. این کتاب مالکیت را با ایده‌ها و تصویرسازی‌هایی توضیح می‌دهد که پژوهش ما نشان داده در مقایسه با کتاب اصلی، می‌توانند درک شما از Rust را بهتر کنند. در سراسر کتاب نمودارهای زیادی شبیه نمونهٔ زیر خواهید دید که با استفاده از [Aquascope][aquascope] رفتار زمان کامپایل و زمان اجرای Rust را نمایش می‌دهند:
 
 ```aquascope,interpreter,horizontal
 #fn main() {
@@ -38,14 +38,14 @@ drop(s);`[]`
 #}
 ```
 
-Beyond ownership, we've made a number of small edits to the book to target misconceptions observed in the quiz responses. If you spot an issue in a quiz or other part of the book, you can file an issue on our Github repository: <https://github.com/cognitive-engineering-lab/rust-book>
+فراتر از مالکیت، چند ویرایش کوچک دیگر هم در کتاب انجام داده‌ایم تا برداشت‌های نادرستی را که در پاسخ‌های آزمون‌ها دیده‌ایم هدف بگیریم. اگر در یک آزمون یا بخش دیگری از کتاب مشکلی دیدید، می‌توانید در مخزن GitHub ما issue ثبت کنید: <https://github.com/cognitive-engineering-lab/rust-book>
 
-_Interested in participating in other experiments about making Rust easier to learn and use? Please sign up here:_ <https://forms.gle/U3jEUkb2fGXykp1DA>
+_دوست دارید در آزمایش‌های دیگری دربارهٔ آسان‌تر کردن یادگیری و استفاده از Rust شرکت کنید؟ از اینجا نام‌نویسی کنید:_ <https://forms.gle/U3jEUkb2fGXykp1DA>
 
 
-## Publications
+## انتشارهای علمی
 
-Thus far, this experiment has led to two open-access publications. Check them out if you're interested to see the academic research behind this book:
+تا اینجا، این آزمایش به دو مقالهٔ دسترسی‌آزاد منجر شده است. اگر می‌خواهید پژوهش دانشگاهی پشت این کتاب را ببینید، آن‌ها را بخوانید:
 
 * ["Profiling Programming Language Learning"](https://dl.acm.org/doi/10.1145/3649812) <br />
   [Will Crichton][will] and [Shriram Krishnamurthi][shriram]. OOPSLA 2024. (Distinguished Paper.)
@@ -53,9 +53,9 @@ Thus far, this experiment has led to two open-access publications. Check them ou
 * ["A Grounded Conceptual Model for Ownership Types in Rust"](https://dl.acm.org/doi/10.1145/3622841) <br />
   [Will Crichton][will], [Gavin Gray][gavin], and [Shriram Krishnamurthi][shriram]. OOPSLA 2023. (SIGPLAN Research Highlight and Communications of the ACM Research Highlight.)
 
-## Acknowledgments
+## سپاسگزاری
 
-This work was partially supported by the DARPA under Agreement No. HR00112420354, partially supported by the NSF under Award No. CCF-2227863, and partially supported by Amazon Web Services. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not reflect the views of our funders. We are grateful to Carol Nichols and the Rust Foundation for helping publicize the experiment. TRPL is the product of many people's hard work before we started this experiment.
+این کار بخشی با پشتیبانی DARPA تحت Agreement No. HR00112420354، بخشی با پشتیبانی NSF تحت Award No. CCF-2227863، و بخشی با پشتیبانی Amazon Web Services انجام شده است. هر نظر، یافته، نتیجه‌گیری یا پیشنهادی که در این متن آمده، متعلق به نویسندگان است و لزوما بازتاب‌دهندهٔ دیدگاه پشتیبانان مالی ما نیست. از Carol Nichols و Rust Foundation برای کمک به معرفی این آزمایش سپاسگزاریم. TRPL پیش از آغاز این آزمایش، حاصل تلاش سخت افراد بسیاری بوده است.
 
 [understanding-ownership]: ch04-00-understanding-ownership.html
 [aquascope]: https://cognitive-engineering-lab.github.io/aquascope/
