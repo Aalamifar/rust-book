@@ -15,6 +15,7 @@ body,
 code,
 pre,
 .hljs,
+.aquascope,
 .language-rust,
 .language-console,
 .language-text {
@@ -27,5 +28,5 @@ pre,
 }
 
 .content table {
-  direction: rtl;
+  direction: ltr;
 }
