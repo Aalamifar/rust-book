@@ -1,101 +1,68 @@
-# Contributing
+# راهنمای مشارکت
+از کمک شما استقبال می‌کنیم! از اینکه به فکر این کتاب هستید، متشکریم.
 
-We'd love your help! Thanks for caring about the book.
+## محل ویرایش
 
-## Where to Edit
+همه ویرایش‌ها باید در دایرکتوری `src` انجام شوند.
 
-All edits should be made in the `src` directory.
+پوشه `nostarch` شامل snapshot‌هایی است که برای ارسال ویرایش‌ها به ناشر نسخه چاپی استفاده می‌شود. این فایل‌ها نشان می‌دهند چه چیزی ارسال شده یا نشده، پس فقط زمانی به‌روز می‌شوند که ویرایش‌ها به No Starch فرستاده شوند. **هیچ pull request‌ای که فایل‌های پوشه `nostarch` را تغییر دهد قبول نمی‌شود و بسته خواهد شد.**
 
-The `nostarch` directory contains snapshots for sending edits to the publishers
-of the print version. The snapshot files reflect what has been sent or not, so
-they only get updated when edits are sent to No Starch. **Do not submit pull
-requests changing files in the `nostarch` directory, they will be closed.**
-
-We use [`rustfmt`][rustfmt] to apply standard formatting to Rust code in the
-repo and [`dprint`][dprint] to apply standard formatting to the Markdown source
-and the non-Rust code in the project.
+ما از [`rustfmt`][rustfmt] برای قالب‌بندی استاندارد کدهای Rust و از [`dprint`][dprint] برای قالب‌بندی فایل‌های Markdown و کدهای غیر-Rust استفاده می‌کنیم.
 
 [rustfmt]: https://github.com/rust-lang/rustfmt
 [dprint]: https://dprint.dev
 
-You will normally have `rustfmt` installed if you have a Rust toolchain
-installed; if for some reason you do not have a copy of `rustfmt`, you can add
-it by running the following command:
+اگر toolchain راست نصب داشته باشید، معمولاً `rustfmt` هم دارید؛ اگر نه، با این دستور اضافه کنید:
 
 ```sh
 rustup component add rustfmt
 ```
 
-To install `dprint`, you can run the following command:
+برای نصب `dprint`:
 
 ```sh
 cargo install dprint
 ```
 
-Or follow the [instructions][install-dprint] on the `dprint` website.
+یا طبق [راهنمای نصب][install-dprint] روی سایت `dprint` عمل کنید.
 
 [install-dprint]: https://dprint.dev/install/
 
-To format Rust code, you can run `rustfmt <path to file>`, and to format other
-files, you can pass `dprint fmt <path to file>`. Many text editors also have native
-support or extensions for both `rustfmt` and `dprint`.
+برای قالب‌بندی کد Rust از `rustfmt <مسیر فایل>` و برای بقیه فایل‌ها از `dprint fmt <مسیر فایل>` استفاده کنید. بسیاری از ویرایشگرها نیز از هر دو ابزار به‌صورت محلی یا از طریق افزونه پشتیبانی می‌کنند.
 
-## Checking for Fixes
+## بررسی رفع اشکال‌ها
 
-The book rides the Rust release trains. Therefore, if you see a problem on
-https://doc.rust-lang.org/stable/book, it may already be fixed on the `main`
-branch in this repo, but the fix hasn't gone through nightly -> beta -> stable
-yet. Please check the `main` branch in this repo before reporting an issue.
+این کتاب همگام با چرخه انتشار Rust توسعه می‌یابد. بنابراین اگر در نسخه پایدار کتاب در سایت رسمی Rust مشکلی مشاهده کردید، ممکن است آن مشکل قبلاً در شاخه `main` این مخزن برطرف شده باشد، اما هنوز مسیر انتشار `nightly → beta → stable` را طی نکرده باشد.
 
-Looking at the history for a particular file can also give more information on
-how or whether an issue has been fixed or not if you're trying to figure that
-out.
+پیش از ثبت یک Issue جدید، ابتدا شاخه `main` را بررسی کنید. همچنین مشاهده تاریخچه تغییرات فایل‌ها می‌تواند به شما نشان دهد که آیا مشکل موردنظر قبلاً رفع شده است یا خیر.
 
-Please also search open and closed issues and open and closed PRs before
-reporting a new issue or opening a new PR.
+لطفاً پیش از ایجاد Issue یا Pull Request جدید، در میان Issueها و Pull Requestهای باز و بسته نیز جستجو کنید.
 
-## Licensing
+## مجوز
 
-This repository is under the same license as Rust itself, MIT/Apache2. You
-can find the full text of each license in the `LICENSE-*` files in this
-repository.
+این مخزن تحت همان مجوز Rust، یعنی MIT/Apache2، قرار دارد. می‌توانید متن کامل هر مجوز را در فایل‌های `LICENSE-*` در این مخزن پیدا کنید.
 
-## Code of Conduct
+## آیین‌نامه رفتاری
 
-The Rust project has [a code of conduct](http://rust-lang.org/policies/code-of-conduct)
-that governs all sub-projects, including this one. Please respect it!
+پروژه Rust دارای یک [آیین‌نامه رفتاری](http://rust-lang.org/policies/code-of-conduct) است که بر تمام زیرپروژه‌های آن، از جمله این کتاب، حاکم است. لطفاً به آن احترام بگذارید.
 
-## Expectations
+## انتظارات
 
-Because the book is [printed][nostarch], and because we want
-to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
-or pull request.
+از آنجا که کتاب [به صورت چاپی][nostarch] منتشر می‌شود و می‌خواهیم نسخه آنلاین تا حد امکان با نسخه چاپی هم‌راستا باشد، رسیدگی به issue یا pull request شما ممکن است بیشتر از معمول طول بکشد.
 
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
-So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
-revisions, we will only be correcting errors. If your issue or pull request
-isn't strictly fixing an error, it might sit until the next time that we're
-working on a large revision: expect on the order of months or years. Thank you
-for your patience!
+تاکنون بازبینی‌های بزرگ‌تر را منطبق با [نسخه‌های Rust](https://doc.rust-lang.org/edition-guide/) انجام داده‌ایم. بین این بازبینی‌های بزرگ، فقط خطاها را اصلاح می‌کنیم. اگر issue یا PR شما صرفاً رفع یک خطا نیست، ممکن است تا بازبینی بزرگ بعدی معلق بماند که می‌تواند ماه‌ها یا سال‌ها طول بکشد. ممنون از صبر شما!
 
-## Help wanted
+## به کمک نیاز داریم
 
-If you're looking for ways to help that don't involve large amounts of
-reading or writing, check out the [open issues with the E-help-wanted
-label][help-wanted]. These might be small fixes to the text, Rust code,
-frontend code, or shell scripts that would help us be more efficient or
-enhance the book in some way!
+اگر دنبال راهی برای مشارکت هستید که نیاز به خواندن یا نوشتن زیاد نداشته باشد، [issue‌های باز با برچسب E-help-wanted][help-wanted] را ببینید. اینها ممکن است شامل اصلاحات کوچک در متن، کد Rust، کد فرانت‌اند، یا اسکریپت‌های shell باشند که به بهبود کارایی یا کیفیت کتاب کمک می‌کنند.
 
 [help-wanted]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3AE-help-wanted
 
-## Translations
+## ترجمه‌ها
 
-We'd love help translating the book! See the [Translations] label to join in
-efforts that are currently in progress. Open a new issue to start working on
-a new language! We're waiting on [mdbook support] for multiple languages
-before we merge any in, but feel free to start!
+خوشحال می‌شیم در ترجمه کتاب کمک کنید! برچسب [Translations] را ببینید تا به تلاش‌های در جریان بپیوندید. برای شروع ترجمه به یک زبان جدید، یک issue باز کنید! منتظر [پشتیبانی mdbook][mdbook support] از چند زبان هستیم تا ترجمه‌ها را ادغام کنیم، اما می‌توانید همین الان شروع کنید!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/rust-lang/mdBook/issues/5

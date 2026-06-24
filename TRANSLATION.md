@@ -1,6 +1,6 @@
 # برنامهٔ ترجمهٔ فارسی
 
-این مخزن نسخهٔ فارسی کتاب آزمایشی Rust Book از Brown است. منبع اصلی:
+این مخزن نسخهٔ فارسی کتاب تجربی Rust Book از Brown است. منبع اصلی:
 
 - [cognitive-engineering-lab/rust-book](https://github.com/cognitive-engineering-lab/rust-book)
 - [rust-lang/book](https://github.com/rust-lang/book)
@@ -14,25 +14,27 @@
 - [x] ترجمهٔ «این کتاب چه تفاوتی دارد؟»
 - [x] ترجمهٔ پیش‌گفتار
 - [x] ترجمهٔ مقدمه
+- [x] ترجمهٔ README، style-guide و TODO
 - [x] آماده‌سازی GitHub Actions برای انتشار روی GitHub Pages
 - [ ] ترجمهٔ فصل‌های ۱ تا ۲۱
 - [ ] ترجمهٔ پیوست‌ها
 
 ## واژه‌نامهٔ پیشنهادی
 
-| English | فارسی |
-| --- | --- |
-| ownership | مالکیت |
-| borrowing | امانت‌گیری |
-| reference | ارجاع |
-| mutable | تغییرپذیر |
-| immutable | تغییرناپذیر |
-| lifetime | طول‌عمر |
-| trait | Trait |
-| crate | Crate |
-| package | Package |
-| enum | Enum |
-| pattern matching | تطبیق الگو |
+| English          | فارسی       |
+| ---------------- | ----------- |
+| ownership        | مالکیت      |
+| borrowing        | امانت‌گیری  |
+| reference        | ارجاع       |
+| mutable          | تغییرپذیر   |
+| immutable        | تغییرناپذیر |
+| lifetime         | طول‌عمر     |
+| trait            | Trait       |
+| crate            | Crate       |
+| package          | Package     |
+| struct             | struct        |
+| enum             | enum        |
+| pattern matching | تطبیق الگو  |
 
 ## قاعده‌های ترجمه
 

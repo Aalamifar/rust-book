@@ -2,14 +2,14 @@
 
 [![Deploy Persian Rust Book](https://github.com/Aalamifar/rust-book/actions/workflows/pages.yml/badge.svg)](https://github.com/Aalamifar/rust-book/actions/workflows/pages.yml)
 
-نسخهٔ فارسی [کتاب آزمایشی Rust Book](https://rust-book.cs.brown.edu/) از Cognitive Engineering Lab،
+نسخهٔ فارسی [کتاب تجربی Rust Book](https://rust-book.cs.brown.edu/) از Cognitive Engineering Lab،
 بر پایهٔ [The Rust Programming Language](https://github.com/rust-lang/book).
 
 **خواندن آنلاین:** [https://aalamifar.github.io/rust-book/](https://aalamifar.github.io/rust-book/)
 
 ## دربارهٔ این پروژه
 
-این مخزن ترجمهٔ فارسی کتاب Rust است و شامل ویژگی‌های تعاملی نسخهٔ آزمایشی (آزمون‌ها، Aquascope و …) می‌شود.
+این مخزن ترجمهٔ فارسی کتاب Rust است و شامل ویژگی‌های تعاملی نسخهٔ تجربی (آزمون‌ها، Aquascope و …) می‌شود.
 متن اصلی به انگلیسی از [rust-lang/book](https://github.com/rust-lang/book) و
 [cognitive-engineering-lab/rust-book](https://github.com/cognitive-engineering-lab/rust-book) گرفته شده است.
 
@@ -72,5 +72,5 @@ mdbook serve --open
 ## منابع
 
 - [کتاب رسمی Rust (انگلیسی)](https://doc.rust-lang.org/book/)
-- [نسخهٔ آزمایشی (انگلیسی)](https://rust-book.cs.brown.edu/)
+- [نسخهٔ تجربی (انگلیسی)](https://rust-book.cs.brown.edu/)
 - [No Starch Press](https://nostarch.com/rust-programming-language-3rd-edition)

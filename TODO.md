@@ -1,17 +1,14 @@
-# In each chapter
+# در هر فصل
 
-- [ ] Manual regeneration
-- [ ] Check for upstream changes from last snapshot
-- [ ] Propagate updated output to docx
-- [ ] Extract docx and check diff
-- [ ] Answer all comments
-- [ ] Check cross references
-- [ ] Check indentation of --snip--
-- [ ] Numbered lines, Gray out unchanged lines
-- [ ] Check line wrapping
-- [ ] Check for unneeded command/compiling/running output
-- [ ] Check println style and error messages
-- [ ] Add alt text to images
-- [ ] Index tags
-  - [ ] search for "convention" conventions:naming:of blah
-  - [ ] check for double spaces, spaces at the end of paragraphs
+- [ ] بازسازی دستی
+- [ ] بررسی تغییرات upstream از آخرین نقطه snapshot
+- [ ] استخراج md و بررسی تفاوت‌ها (diff)
+- [ ] پاسخ به تمام کامنت‌ها
+- [ ] بررسی ارجاعات و لینک‌ها (cross references)
+- [ ] بررسی تورفتگی (indentation) در `--snip--`
+- [ ] بررسی خطوط شکسته شده (line wrapping)
+- [ ] بررسی و حذف خروجی‌های غیرضروری، دستور/کامپایل/اجرا
+- [ ] افزودن متن جایگزین (alt text) به تصاویر
+- [ ] تگ‌های فهرست (Index tags)
+  - [ ] جستجو برای "convention" به شکل `conventions:naming:of blah`
+- [ ] بررسی فاصله‌های دوگانه و فاصله‌های انتهای پاراگراف‌ها
