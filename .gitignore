@@ -34,3 +34,6 @@ tmp/
 # Environment and secrets
 .env
 .env.*
+
+# Obsidian settings
+.obsidian/
