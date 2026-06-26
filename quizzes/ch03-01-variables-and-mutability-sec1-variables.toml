@@ -1,24 +1,24 @@
 [[questions]]
 id = "8bd8d8bc-e61e-48c7-ba78-0c89339e5995"
 type = "MultipleChoice"
-prompt.prompt = "Which statement best describes what it means if a variable `x` is immutable?"
-answer.answer = "`x` cannot be changed after being assigned a value."
+prompt.prompt = "کدام عبارت بهتر توضیح می‌دهد اگر یک متغیر `x` «غیرقابل‌تغییر» (immutable) باشد یعنی چه؟"
+answer.answer = "`x` بعد از اینکه مقداردهی شد دیگر نمی‌تواند تغییر کند."
 prompt.distractors = [
-  "`x` is stored in the immutable region of memory.",
-  "After being defined, `x` can be changed at most once.",
-  "You cannot create a reference to `x`."
+  "`x` در ناحیهٔ غیرقابل‌تغییر حافظه ذخیره می‌شود.",
+  "بعد از تعریف شدن، `x` حداکثر یک بار می‌تواند تغییر کند.",
+  "نمی‌توانید یک ارجاع (reference) به `x` ایجاد کنید."
 ]
 context = """
-Immutable means "not mutable", or not changeable.
+Immutable یعنی «غیرقابل‌تغییر» (not mutable) یا غیرقابل تغییر.
 """
 
 [[questions]]
 id = "dcf53c67-b3c9-4c54-8da0-90749cc669e8"
 type = "ShortAnswer"
-prompt.prompt = "What is the keyword used after `let` to indicate that a variable can be mutated?"
+prompt.prompt = "برای اینکه نشان دهیم یک متغیر قابل تغییر (mutate) است، بعد از `let` از چه کلمهٔ کلیدی استفاده می‌شود؟"
 answer.answer = "mut"
 context = """
-For example, you can make a mutable variable `x` by writing: `let mut x = 1`.
+مثلاً می‌توانید یک متغیر قابل تغییر `x` را با نوشتن این کد بسازید: `let mut x = 1`.
 """
 
 [[questions]]
@@ -35,5 +35,5 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 4
 context = """
-This is a compiler error because line 4 tries to mutate `x` when `x` is not marked as `mut`.
+این یک خطای کامپایلر است چون خط ۴ سعی می‌کند `x` را تغییر دهد، در حالی که `x` با `mut` مشخص نشده است.
 """

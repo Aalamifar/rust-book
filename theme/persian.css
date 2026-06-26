@@ -1,5 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap");
+
 :root {
   direction: rtl;
+}
+
+ol {
+    list-style-type: arabic-indic;
 }
 
 body,
@@ -24,9 +30,15 @@ pre,
 }
 
 .content main {
+  font-family: "Vazirmatn", Arial, sans-serif;
   line-height: 1.9;
+  text-align: justify;
 }
 
 .content table {
   direction: ltr;
+}
+
+.sidebar-scrollbox {
+    font-family: "Vazirmatn", Arial, sans-serif;
 }

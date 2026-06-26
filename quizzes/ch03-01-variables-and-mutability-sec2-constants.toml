@@ -1,12 +1,12 @@
 [[questions]]
 id = "a48e524e-852c-400c-ae68-5c76a6761596"
 type = "MultipleChoice"
-prompt.prompt = "Which of the following statements is correct about the difference between using `let` and `const` to declare a variable?"
-answer.answer = "`const` can be used in the global scope, and `let` can only be used in a function"
+prompt.prompt = "کدام‌یک از عبارت‌های زیر درباره تفاوت استفاده از `let` و `const` برای اعلان یک متغیر درست است؟"
+answer.answer = "`const` را می‌توان در سطح سراسری (global) استفاده کرد، اما `let` فقط درون یک تابع قابل استفاده است."
 prompt.distractors = [
-  "They are just different syntaxes for declaring variables with the same semantics",
-  "The compiler will error if a `const` variable's name is not using `UPPER_SNAKE_CASE`",
-  "A `const` can only be assigned to a literal, not an expression involving computation"
+  "این‌ها فقط دو نوع سینتکس متفاوت برای اعلان متغیر هستند با همان معنا (semantics)",
+  "کامپایلر خطا می‌دهد اگر نام یک متغیر `const` از الگوی `UPPER_SNAKE_CASE` استفاده نکند",
+  "یک `const` فقط می‌تواند به یک مقدار (literal) اختصاص داده شود، نه به یک عبارتِ شامل محاسبه"
 ]
 
 [[questions]]
@@ -21,5 +21,5 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "2"
 context = """
-`const` variables are allowed to be defined outside of a function and to do limited forms of computation.
+متغیرهای `const` اجازه دارند خارج از یک تابع تعریف شوند و همچنین می‌توانند انواع محدودی از محاسبات را انجام دهند.
 """
