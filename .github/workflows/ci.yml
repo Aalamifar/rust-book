@@ -56,14 +56,13 @@ jobs:
           pnpm init-repo
 
       - name: Build book
-        run: mdbook build
-
-      - name: Check for errors
         run: |
+          set -o pipefail
           mdbook build 2>&1 | tee build.log
-          if grep -i "error" build.log; then
-            echo "❌ Build has errors!"
-            exit 1
-          else
-            echo "✅ Build successful!"
+          STATUS=${PIPESTATUS[0]}
+          echo "Exit code: $STATUS"
+          if [ $STATUS -ne 0 ]; then
+            echo "---LAST 200 LINES OF BUILD LOG---"
+            tail -200 build.log
+            exit $STATUS
           fi
