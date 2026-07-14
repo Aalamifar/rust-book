@@ -1,34 +1,25 @@
-# Style Guide
+# راهنمای سبک نوشتاری
 
-## Prose
+## متن (Prose)
 
-- Prefer title case for chapter/section headings, ex: `## Generating a Secret
-  Number` rather than `## Generating a secret number`.
-- Prefer italics over single quotes when calling out a term, ex: `is an
-  *associated function* of` rather than `is an ‘associated function’ of`.
-- When talking about a method in prose, DO NOT include the parentheses, ex:
-  `read_line` rather than `read_line()`.
-- Hard wrap at 80 chars
-- Prefer not mixing code and not-code in one word, ex: ``Remember when we wrote
-  `use std::io`?`` rather than ``Remember when we `use`d `std::io`?``
+- برای عنوان فصل‌ها و بخش‌ها به انگلیسی از **Title Case** استفاده کنید، به عنوان مثال: `## Generating a Secret Number` به‌جای `## Generating a secret number`
+-  برای برجسته‌سازی یک اصطلاح، از **ایتالیک** به جای **علامت نقل قول تکی** استفاده کنید، به عنوان مثال: `is an *associated function* of` را به `is an ‘associated function’ of` ترجیح دهید.
+- هنگامی که در مورد یک متد در متن صحبت می‌کنید، **پرانتز** را قید نکنید، به عنوان مثال: `read_line` را به `read_line()` ترجیح دهید.
+- خطوط متن را حداکثر در **۸۰ کاراکتر** بشکنید (Hard Wrap).
+- از ترکیب کد و غیرکد در یک کلمه پرهیز کنید، مثلاً: ``Remember when we wrote `use std::io`?`` به‌جای ``Remember when we `use`d `std::io`?``
 
-## Code
+## کد (Code)
 
-- Add the file name before markdown blocks to make it clear which file we're
-  talking about, when applicable.
-- When making changes to code, make it clear which parts of the code changed
-  and which stayed the same... not sure how to do this yet
-- Split up long lines as appropriate to keep them under 80 chars if possible
-- Use `bash` syntax highlighting for command line output code blocks
+- در صورت نیاز، قبل از بلوک‌های کد نام فایل را ذکر کنید تا مشخص باشد دربارهٔ کدام فایل صحبت می‌کنیم.
+- وقتی تغییری در کد ایجاد می‌شود، مشخص کنید کدام بخش‌ها تغییر کرده‌اند و کدام‌ها ثابت مانده‌اند (هنوز روش مشخصی برای این کار تعریف نشده).
+- خطوط طولانی را در صورت امکان **شکسته** تا کمتر از ۸۰ کاراکتر باقی بمانند.
+- برای بلوک‌های کد خروجی خط فرمان از هایلایت سینتکس `bash` استفاده کنید.
 
-## Links
+## لینک‌ها (Links)
 
-Once all the scripts are done:
+پس از تکمیل همهٔ اسکریپت‌ها:
 
-- If a link shouldn't be printed, mark it to be ignored
-  - This includes all "Chapter XX" intra-book links, which _should_ be links
-    for the HTML version
-- Make intra-book links and stdlib API doc links relative so they work whether
-  the book is read offline or on docs.rust-lang.org
-- Use markdown links and keep in mind that they will be changed into `text at
-  *url*` in print, so word them in a way that it reads well in that format
+- اگر لینکی نباید در نسخه چاپی ظاهر شود، آن را علامت‌گذاری کنید که نادیده گرفته شود.
+  - این شامل تمام لینک‌های داخل کتاب به شکل «فصل XX» می‌شود که باید فقط در نسخه HTML به صورت لینک باشند.
+- لینک‌های داخلی کتاب و لینک‌های مستندات API کتابخانهٔ استاندارد Rust را به‌صورت نسبی (Relative) بنویسید تا هم در حالت آفلاین و هم روی docs.rust-lang.org به‌درستی کار کنند.
+- از لینک‌های Markdown استفاده کنید و به خاطر داشته باشید که در نسخه چاپی به شکل `text at *url*` تبدیل می‌شوند، بنابراین آنها را به گونه‌ای بنویسید که در آن قالب نیز به خوبی خوانده شوند.
