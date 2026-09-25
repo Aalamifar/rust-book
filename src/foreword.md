@@ -1,47 +1,15 @@
-# Foreword
+# پیشگفتار
 
-The Rust programming language has come a long way in a few short years, from
-its creation and incubation by a small and nascent community of enthusiasts, to
-becoming one of the most loved and in-demand programming languages in the
-world. Looking back, it was inevitable that the power and promise of Rust would
-turn heads and gain a foothold in systems programming. What was not inevitable
-was the global growth in interest and innovation that permeated through open
-source communities and catalyzed wide-scale adoption across industries.
+زبان برنامه‌نویسی Rust در سال‌های کوتاهی، راه زیادی را پیموده است؛ از ساخت و پرورش آن توسط جمع کوچک و نوپایی از علاقه‌مندان تا تبدیل شدن به یکی از دوست‌داشتنی‌ترین و پرتقاضاترین زبان‌های برنامه‌نویسی دنیا. اگر به عقب نگاه کنیم، مشخص است که قدرت و نوید Rust دیر یا زود چشم‌ها را برمی‌گرداند و جای خود را در برنامه‌نویسی سیستمی باز می‌کند. اما آنچه اصلاً بدیهی نبود، موجی بود که از دل جامعه‌های متن‌باز برخاست، نوآوری را در سراسر دنیا گسترش داد و Rust را از محدوده‌ی یک صنعت به صنایع دیگر رساند.
 
-At this point in time, it is easy to point to the wonderful features that Rust
-has to offer to explain this explosion in interest and adoption. Who doesn’t
-want memory safety, *and* fast performance, *and* a friendly compiler, *and*
-great tooling, among a host of other wonderful features? The Rust language you
-see today combines years of research in systems programming with the practical
-wisdom of a vibrant and passionate community. This language was designed with
-purpose and crafted with care, offering developers a tool that makes it easier
-to write safe, fast, and reliable code.
+امروز که می‌خواهیم علت این همه توجه و استقبال را توضیح دهیم، راحت می‌توان به امکانات عالی Rust اشاره کرد. مگر کسی حاضر است از ایمنی حافظه، سرعت بالا، کامپایلر خوش‌رفتار و ابزارهای قدرتمند چشم‌پوشی کند؟ زبانی که امروز می‌بینید، حاصل سال‌ها پژوهش در برنامه‌نویسی سیستمی و تجربه‌ی عملی جامعه‌ای پرجنب‌وجوش و پرشور است. Rust با هدف ساخته شده و با وسواس طراحی شده است؛ ابزاری برای توسعه‌دهنده‌ها که نوشتن کد امن، سریع و قابل‌اعتماد را راحت‌تر می‌کند.
 
-But what makes Rust truly special is its roots in empowering you, the user, to
-achieve your goals. This is a language that wants you to succeed, and the
-principle of empowerment runs through the core of the community that builds,
-maintains, and advocates for this language. Since the previous edition of this
-definitive text, Rust has further developed into a truly global and trusted
-language. The Rust Project is now robustly supported by the Rust Foundation,
-which also invests in key initiatives to ensure that Rust is secure, stable,
-and sustainable.
+اما چیزی که واقعاً Rust را خاص می‌کند، ریشه‌اش در اعتماد به شماست، به‌عنوان کاربر، برای رسیدن به هدفتان. این زبانی است که می‌خواهد شما موفق شوید، و اصل «قدرت بخشیدن به کاربر» در قلب جامعه‌ای جاری است که این زبان را می‌سازد، نگهداری می‌کند و برایش پا به پای مردم دفاع می‌کند. از ویرایش قبلی این متن مرجع تاکنون، Rust به زبانی واقعاً جهانی و مورداعتماد تبدیل شده است. اکنون پروژه‌ی Rust از بنیاد Rust حمایت محکمی می‌شود؛ بنیادی که در طرح‌های کلیدی سرمایه‌گذاری می‌کند تا Rust امن، پایدار و ماندگار بماند.
 
-This edition of *The Rust Programming Language* is a comprehensive update,
-reflecting the language’s evolution over the years and providing valuable new
-information. But it is not just a guide to syntax and libraries—it’s an
-invitation to join a community that values quality, performance, and thoughtful
-design. Whether you’re a seasoned developer looking to explore Rust for the
-first time or an experienced Rustacean looking to refine your skills, this
-edition offers something for everyone.
+این ویرایش از *The Rust Programming Language* به‌روزرسانی جامعی است؛ هم تکامل زبان در طول سال‌ها را منعکس می‌کند و هم اطلاعات تازه و ارزشمندی را در خود دارد. اما فقط راهنمای سینتکس و کتابخانه‌ها نیست؛ دعوتی است برای پیوستن به جامعه‌ای که کیفیت، کارایی و طراحیِ فکرشده را جدی می‌گیرد. چه توسعه‌دهنده‌ای باتجربه باشید و تازه می‌خواهید Rust را کشف کنید، چه یک Rustacean قدیمی که دنبال تیزتر کردن مهارت‌هایش است، این ویرایش برای هر کسی چیزی برای گفتن دارد.
 
-The Rust journey has been one of collaboration, learning, and iteration. The
-growth of the language and its ecosystem is a direct reflection of the vibrant,
-diverse community behind it. The contributions of thousands of developers, from
-core language designers to casual contributors, are what make Rust such a
-unique and powerful tool. By picking up this book, you’re not just learning a
-new programming language—you’re joining a movement to make software better,
-safer, and more enjoyable to work with.
+سفر Rust، قصه‌ی همکاری، یادگیری و تکرار و اصلاح است. رشد زبان و اکوسیستمش تصویر مستقیمی از جامعه‌ای زنده و متنوع پشت آن است. مشارکت هزاران توسعه‌دهنده — از طراحان اصلی زبان تا کسانی که گاه‌به‌گاه چیزی اضافه می‌کنند — همان چیزی است که Rust را ابزاری کم‌نظیر و قدرتمند کرده است. با برداشتن این کتاب، فقط یک زبان جدید یاد نمی‌گیرید؛ به جنبشی می‌پیوندید که می‌خواهد نرم‌افزار را بهتر، امن‌تر و لذت‌بخش‌تر کند.
 
-Welcome to the Rust community!
+به جامعه‌ی Rust خوش آمدید!
 
-- Bec Rumbul, Executive Director of the Rust Foundation
+- Bec Rumbul، مدیر اجرایی بنیاد Rust

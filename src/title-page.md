@@ -1,23 +1,21 @@
-# The Rust Programming Language
+# زبان برنامه‌نویسی Rust
 
-*by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the Rust Community*
+*اثر Steve Klabnik، Carol Nichols و Chris Krycho، با مشارکت جامعه‌ی Rust*
 
-*(and with experimental modifications!)*
+*(و با تغییراتی آزمایشی!)*
 
-This version of the text assumes you’re using Rust 1.90.0 (released 2025-09-18)
-or later with `edition = "2024"` in the *Cargo.toml* file of all projects to
-configure them to use Rust 2024 Edition idioms. See the [“Installation” section
-of Chapter 1][install]<!-- ignore --> for instructions on installing or
-updating Rust, and see [Appendix E][appendix-e]<!-- ignore --> for information
-on editions.
+این نسخه از متن، این‌طور فرض می‌کند که از Rust نسخه‌ی 1.90.0 (منتشرشده در 2025-09-18)
+یا نسخه‌های بعدی آن استفاده می‌کنید و در فایل *Cargo.toml* همه‌ی پروژه‌ها `edition = "2024"`
+را قرار داده‌اید تا پروژه‌ها با قراردادهای Rust 2024 Edition سازگار شوند. برای نصب یا ارتقای Rust به
+[بخش «Installation» در فصل ۱][install]<!-- ignore --> مراجعه کنید؛ برای اطلاعات بیشتر درباره‌ی editionها هم
+[پیوست E][appendix-e]<!-- ignore --> را ببینید.
 
-The experimental version is only available online and in English. 
-The non-experimental version is available offline with installations of Rust made with `rustup`; run `rustup doc
---book` to open.
+نسخه‌ی آزمایشی فقط به‌صورت آنلاین و به زبان انگلیسی در دسترس است.
+نسخه‌ی غیرآزمایشی را می‌توانید آفلاین هم داشته باشید؛ کافی است Rust را با `rustup` نصب کرده باشید و دستور
+`rustup doc --book` را اجرا کنید تا کتاب باز شود.
 
-Several community [translations] of the non-experimental version are also available.
-The non-experimental text is available in [paperback and ebook format from No Starch
-Press][nsprust].
+چند [ترجمه‌ی جامعه‌محور][translations] از نسخه‌ی غیرآزمایشی هم موجود است.
+متن غیرآزمایشی را می‌توانید [به‌صورت جلد نرم و کتاب الکترونیک از No Starch Press تهیه کنید][nsprust].
 
 [install]: ch01-01-installation.html
 [appendix-e]: appendix-05-editions.html

@@ -1,72 +1,63 @@
-# The Rust Programming Language
+## کتاب برنامه‌نویسی Rust
 
-![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
+[![Deploy Persian Rust Book](https://github.com/Aalamifar/rust-book/actions/workflows/pages.yml/badge.svg)](https://github.com/Aalamifar/rust-book/actions/workflows/pages.yml)
 
-This repository contains the source of "The Rust Programming Language" book, specifically an experimental branch that supports interactive features like quizzes.
+این مخزن شامل منبع کتاب **«The Rust Programming Language»** است؛ به‌ویژه یک شاخهٔ آزمایشی که ویژگی‌های تعاملی مانند آزمون‌ها (quizzes) را پشتیبانی می‌کند.
 
-**If you discovered an issue in at <https://rust-book.cs.brown.edu/>, PLEASE report the issue on THIS REPOSITORY and not elsewhere.**
+**اگر مشکلی را در <https://aalamifar.github.io/rust-book/> کشف کردید، لطفاً آن را در این مخزن گزارش کنید، نه در جای دیگری.**
 
-[The book is available in dead-tree form from No Starch Press][nostarch].
+[این کتاب به‌صورت چاپی توسط No Starch Press به انگلیسی موجود است][nostarch].
 
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
-You can also read the book for free online. Please see the book as shipped with
-the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues
-in those versions may have been fixed in this repository already, as those
-releases are updated less frequently.
+همچنین می‌توانید [کتاب تعاملی][book_fa] را به‌صورت رایگان آنلاین به فارسی بخوانید. همینطور می‌توانید کتاب را مطابق آخرین نسخه‌های Rustا [stable]، [beta] یا [nightly] استفاده کنید. توجه داشته باشید که ممکن است مشکلاتی که در این نسخه‌ها وجود دارد، در این مخزن اصلاح شده باشد، زیرا این انتشار‌ها به‌صورت کمتری به‌روز می‌شوند.
 
+[book_fa]:https://aalamifar.github.io/rust-book/
 [stable]: https://doc.rust-lang.org/stable/book/
 [beta]: https://doc.rust-lang.org/beta/book/
 [nightly]: https://doc.rust-lang.org/nightly/book/
 
-See the [releases] to download just the code of all the code listings that appear in the book.
+برای دریافت کدهای تمام مثال‌های کتاب، به [releases] مراجعه کنید.
 
 [releases]: https://github.com/rust-lang/book/releases
 
-## Requirements
+## پیش‌نیازها
 
-Building the book requires [mdBook], ideally the same version that
-rust-lang/rust uses in [this file][rust-mdbook]. To get it:
-
-[mdBook]: https://github.com/rust-lang/mdBook
-[rust-mdbook]: https://github.com/rust-lang/rust/blob/HEAD/src/tools/rustbook/Cargo.toml
+برای ساخت کتاب به [mdBook](https://github.com/rust-lang/mdBook) نیاز دارید؛ ترجیحاً همان نسخه‌ای که در این کتاب استفاده شده در [این فایل](https://github.com/Aalamifar/rust-book/blob/main/book.toml) استفاده می‌کند استفاده کنید. برای دریافت آن:
 
 ```bash
-$ cargo install mdbook --locked --version <version_num>
+$ cargo install mdbook --locked --version <شماره_نسخه>
 ```
 
-This fork also requires a few mdBook preprocessors to support our experimental extensions. Follow the installation instructions at each link below.
+این فورک همچنین به چند پیش‌پردازندهٔ mdBook برای پشتیبانی از افزونه‌های آزمایشی ما نیاز دارد. دستورالعمل نصب هر کدام در لینک‌های زیر آمده است:
 
 * `mdbook-aquascope`: <https://github.com/cognitive-engineering-lab/aquascope#installation>
 * `mdbook-quiz`: <https://github.com/cognitive-engineering-lab/mdbook-quiz#installation>
 
-You should install the same version of each preprocessor [used in CI](https://github.com/cognitive-engineering-lab/rust-book/blob/main/.github/workflows/main.yml).
+نسخهٔ دقیق هر پیش‌پردازنده را می‌توانید در [CD این مخزن](https://github.com/Aalamifar/rust-book/blob/main/.github/workflows/pages.yml) ببینید.
 
-Finally, you need [pnpm](https://pnpm.io/installation).
+و در نهایت به [pnpm](https://pnpm.io/installation) نیاز دارید.
 
-The book also uses two mdbook plugins which are part of this repository. If you
-do not install them, you will see warnings when building and the output will not
-look right, but you *will* still be able to build the book. To use the plugins,
-you should run:
+کتاب دو افزونهٔ mdbook دارد که در این مخزن قرار دارند. اگر آن‌ها را نصب نکنید، هشدارهایی هنگام ساخت می‌بینید و خروجی به‌درستی نمایش داده نمی‌شود، اما همچنان می‌توانید کتاب را بسازید. برای استفاده از این افزونه‌ها اجرا کنید:
 
 ```bash
 $ cargo install --locked --path packages/mdbook-trpl-listing
 $ cargo install --locked --path packages/mdbook-trpl-note
 ```
 
-## Building
+## ساخت کتاب
 
-### With cargo-make
+### با `cargo-make`
 
-If you have [`cargo-make`] installed, then run:
+اگر [`cargo-make`] نصب شده باشد، کافی است اجرا کنید:
 
 ```bash
 $ cargo make build
 ```
 
-### Without cargo-make
+### بدون `cargo-make`
 
-First, build the Javascript extensions.
+ابتدا افزونه‌های جاوااسکریپت را بسازید:
 
 ```bash
 $ cd js-extensions
@@ -74,76 +65,63 @@ $ pnpm init-repo
 $ cd ..
 ```
 
-Then to build the book, type:
+سپس کتاب را می‌توانید با دستور زیر بسازید:
 
 ```bash
 $ mdbook build
 ```
 
-### Output
+### خروجی
 
-The output will be in the `book` subdirectory. To check it out, open it in
-your web browser.
+خروجی در پوشهٔ `book` قرار می‌گیرد. برای مشاهده آن در مرورگر وب، فایل `index.html` را باز کنید.
 
 _Firefox:_
+
 ```bash
 $ firefox book/index.html                       # Linux
-$ open -a "Firefox" book/index.html             # OS X
+$ open -a "Firefox" book/index.html             # macOS
 $ Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
 $ start firefox.exe .\book\index.html           # Windows (Cmd)
 ```
 
 _Chrome:_
+
 ```bash
 $ google-chrome book/index.html                 # Linux
-$ open -a "Google Chrome" book/index.html       # OS X
+$ open -a "Google Chrome" book/index.html       # macOS
 $ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
 $ start chrome.exe .\book\index.html            # Windows (Cmd)
 ```
 
-To run the tests:
+برای اجرای تست‌ها:
 
 ```bash
 $ cd packages/trpl
 $ mdbook test --library-path packages/trpl/target/debug/deps
 ```
 
-## Contributing
+### اجرای سریع تر کتاب
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
-kinds of contributions we're looking for.
+برای اجرای سریع تر کتاب می توانید بعد از ساخت کتاب با استفاده از دستور زیر در دایرکتوری کتاب آن را اجرا کنید:
 
-[contrib]: https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md
+```bash
+$ mdbook serve --open
+```
 
-Because the book is [printed][nostarch], and because we want
-to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
-or pull request.
+## مشارکت
 
-So far, we've been doing a larger revision to coincide with [Rust
-Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
-revisions, we will only be correcting errors. If your issue or pull request
-isn't strictly fixing an error, it might sit until the next time that we're
-working on a large revision: expect on the order of months or years. Thank you
-for your patience!
+ما مشتاق کمک‌های شما هستیم! لطفاً برای آشنایی با انواع مشارکت‌های موردنیاز، به [CONTRIBUTING.md][contrib] و [CONTRIBUTING_fa.md][contrib_fa] مراجعه کنید.
 
-### Translations
+[contrib]: https://github.com/Aalamifar/rust-book/blob/main/CONTRIBUTING.md
+[contrib_fa]: https://github.com/Aalamifar/rust-book/blob/main/CONTRIBUTING_fa.md
 
-We'd love help translating the book! See the [Translations] label to join in
-efforts that are currently in progress. Open a new issue to start working on
-a new language! We're waiting on [mdbook support] for multiple languages
-before we merge any in, but feel free to start!
+### درباره ترجمه‌
 
-[Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
-[mdbook support]: https://github.com/rust-lang/mdBook/issues/5
+این مخزن ترجمهٔ فارسی کتاب Rust است و شامل ویژگی‌های تعاملی نسخهٔ آزمایشی (آزمون‌ها، Aquascope و …) می‌شود. متن اصلی به انگلیسی از [rust-lang/book](https://github.com/rust-lang/book) و  
+ا[cognitive-engineering-lab/rust-book](https://github.com/cognitive-engineering-lab/rust-book) گرفته شده است و برای ترجمه و کار در هر قسمت از کتاب یک issues در repositorie باز میشود و در آخر به شاخه اصلی ادغام می‌شود
 
-## Spellchecking
+## بررسی املایی
 
-To scan source files for spelling errors, you can use the `spellcheck.sh`
-script available in the `ci` directory. It needs a dictionary of valid words,
-which is provided in `ci/dictionary.txt`. If the script produces a false
-positive (say, you used the word `BTreeMap` which the script considers invalid),
-you need to add this word to `ci/dictionary.txt` (keep the sorted order for
-consistency).
+برای اسکن فایل‌های منبع به‌منظور یافتن خطاهای املایی، می‌توانید اسکریپت `spellcheck.sh` موجود در پوشهٔ `ci` را استفاده کنید. این اسکریپت به یک واژه‌نامهٔ معتبر نیاز دارد که در `ci/dictionary.txt` فراهم شده است. اگر اسکریپت یک **false positive** تولید کرد (مثلاً واژه‌ای مثل `BTreeMap` که در واژه‌نامه وجود ندارد)، کافی است آن واژه را به `ci/dictionary.txt` اضافه کنید (به ترتیب حروف الفبا برای حفظ سازگاری).
 
 [`cargo-make`]: https://github.com/sagiegurari/cargo-make
