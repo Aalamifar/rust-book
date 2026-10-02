@@ -1,46 +1,56 @@
-# Smart Pointers
+# اشاره‌گرهای هوشمند (Smart Pointers)
 
-A pointer is a general concept for a variable that contains an address in
-memory. This address refers to, or “points at,” some other data. The most
-common kind of pointer in Rust is a reference, which you learned about in
-Chapter 4. References are indicated by the `&` symbol and borrow the value they
-point to. They don’t have any special capabilities other than referring to
-data, and they have no overhead.
+اشاره‌گر (Pointer) مفهومی کلی برای متغیری است که یک نشانی در حافظه را در خود
+نگه می‌دارد. این نشانی به داده‌ای دیگر «اشاره» می‌کند. رایج‌ترین نوع
+اشاره‌گر در Rust، ارجاع (Reference) است که در فصل ۴ با آن آشنا شدید. ارجاع‌ها
+با نماد `&` مشخص می‌شوند و مقداری را که به آن اشاره دارند، قرض می‌گیرند. آن‌ها
+هیچ قابلیت ویژه‌ای جز اشاره به داده ندارند و هیچ سربار (overhead) اضافی هم
+ایجاد نمی‌کنند.
 
-_Smart pointers_, on the other hand, are data structures that act like a
-pointer but also have additional metadata and capabilities. The concept of
-smart pointers isn’t unique to Rust: Smart pointers originated in C++ and exist
-in other languages as well. Rust has a variety of smart pointers defined in the
-standard library that provide functionality beyond that provided by references.
-To explore the general concept, we’ll look at a couple of different examples of
-smart pointers, including a _reference counting_ smart pointer type. This
-pointer enables you to allow data to have multiple owners by keeping track of
-the number of owners and, when no owners remain, cleaning up the data.
+در مقابل، _اشاره‌گرهای هوشمند_ ساختارهای داده‌ای هستند که مانند اشاره‌گر عمل
+می‌کنند، اما علاوه بر آن فراداده (metadata) و قابلیت‌های بیشتری نیز دارند.
+مفهوم اشاره‌گر هوشمند مختص Rust نیست: این ایده نخستین بار در ++C پدید آمد و
+در زبان‌های دیگر هم وجود دارد. Rust در کتابخانه‌ی استاندارد خود انواع
+مختلفی از اشاره‌گرهای هوشمند را تعریف کرده که قابلیت‌هایی فراتر از آنچه
+ارجاع‌ها ارائه می‌دهند، در اختیار می‌گذارند. برای بررسی این مفهوم به‌طور
+کلی، چند نمونه‌ی مختلف از اشاره‌گرهای هوشمند را بررسی می‌کنیم، از جمله نوعی
+اشاره‌گر هوشمند مبتنی بر شمارش ارجاع (Reference Counting). این نوع
+اشاره‌گر به شما اجازه می‌دهد یک داده چند مالک داشته باشد؛ چراکه تعداد
+مالک‌ها را پیگیری می‌کند و زمانی که دیگر هیچ مالکی باقی نماند، داده را
+پاک‌سازی می‌کند.
 
-In Rust, with its concept of ownership and borrowing, there is an additional
-difference between references and smart pointers: While references only borrow
-data, in many cases smart pointers _own_ the data they point to.
+در Rust، با توجه به مفهوم مالکیت (Ownership) و قرض‌گیری (Borrowing)، تفاوت
+مهم دیگری هم میان ارجاع‌ها و اشاره‌گرهای هوشمند وجود دارد: ارجاع‌ها فقط
+داده را قرض می‌گیرند، در حالی که اشاره‌گرهای هوشمند در بسیاری از موارد
+_مالک_ داده‌ای هستند که به آن اشاره می‌کنند.
 
-Smart pointers are usually implemented using structs. Unlike an ordinary
-struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref`
-trait allows an instance of the smart pointer struct to behave like a reference
-so that you can write your code to work with either references or smart
-pointers. The `Drop` trait allows you to customize the code that’s run when an
-instance of the smart pointer goes out of scope. In this chapter, we’ll discuss
-both of these traits and demonstrate why they’re important to smart pointers.
+اشاره‌گرهای هوشمند معمولاً با استفاده از ساختار (struct) پیاده‌سازی
+می‌شوند. برخلاف یک ساختار معمولی، اشاره‌گرهای هوشمند ویژگی‌های (Traits)
+`Deref` و `Drop` را پیاده‌سازی می‌کنند. ویژگی `Deref` به نمونه‌ای از ساختار
+اشاره‌گر هوشمند اجازه می‌دهد مانند یک ارجاع رفتار کند، به طوری که بتوانید
+کدتان را طوری بنویسید که هم با ارجاع‌ها و هم با اشاره‌گرهای هوشمند کار
+کند. ویژگی `Drop` هم به شما اجازه می‌دهد کدی را که هنگام خروج نمونه‌ی
+اشاره‌گر هوشمند از محدوده (Scope) اجرا می‌شود، سفارشی‌سازی کنید. در این
+فصل هر دو ویژگی را بررسی می‌کنیم و نشان می‌دهیم چرا برای اشاره‌گرهای
+هوشمند اهمیت دارند.
 
-Given that the smart pointer pattern is a general design pattern used
-frequently in Rust, this chapter won’t cover every existing smart pointer. Many
-libraries have their own smart pointers, and you can even write your own. We’ll
-cover the most common smart pointers in the standard library:
+از آنجا که الگوی اشاره‌گر هوشمند یک الگوی طراحی (Design Pattern) عمومی و
+پرکاربرد در Rust است، این فصل تمام اشاره‌گرهای هوشمند موجود را پوشش
+نمی‌دهد. بسیاری از کتابخانه‌ها اشاره‌گرهای هوشمند مخصوص خود را دارند و شما
+هم می‌توانید اشاره‌گر هوشمند خودتان را بنویسید. در این فصل رایج‌ترین
+اشاره‌گرهای هوشمند کتابخانه‌ی استاندارد را بررسی می‌کنیم:
 
-- `Box<T>`, for allocating values on the heap
-- `Rc<T>`, a reference counting type that enables multiple ownership
-- `Ref<T>` and `RefMut<T>`, accessed through `RefCell<T>`, a type that enforces
-  the borrowing rules at runtime instead of compile time
+- `Box<T>`، برای تخصیص مقادیر روی هیپ (Heap)
+- `Rc<T>`، نوعی اشاره‌گر مبتنی بر شمارش ارجاع که مالکیت چندگانه را ممکن
+  می‌کند
+- `Ref<T>` و `RefMut<T>`، که از طریق `RefCell<T>` در دسترس هستند؛ نوعی که
+  قوانین قرض‌گیری را در زمان اجرا (Runtime) به‌جای زمان کامپایل اعمال
+  می‌کند
 
-In addition, we’ll cover the _interior mutability_ pattern where an immutable
-type exposes an API for mutating an interior value. We’ll also discuss
-reference cycles: how they can leak memory and how to prevent them.
+علاوه بر این‌ها، الگوی _تغییرپذیری درونی_ (Interior Mutability) را نیز
+بررسی می‌کنیم؛ الگویی که در آن یک نوع تغییرناپذیر (Immutable)، رابطی (API)
+برای تغییر مقدار درونی خود ارائه می‌دهد. همچنین درباره‌ی چرخه‌های ارجاع
+(Reference Cycles) صحبت خواهیم کرد: اینکه این چرخه‌ها چگونه می‌توانند باعث
+نشت حافظه شوند و چطور می‌توان از وقوعشان جلوگیری کرد.
 
-Let’s dive in!
+بیایید شروع کنیم!
