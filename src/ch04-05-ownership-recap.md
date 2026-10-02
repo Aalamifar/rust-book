@@ -1,16 +1,14 @@
-## Ownership Recap
+## مرورِ مالکیت
 
-This chapter introduced a lot of new concepts like ownership, borrowing, and slices.
-If you aren't familiar with systems programming, this chapter also introduced new concepts like memory allocation, the stack vs. the heap, pointers, and undefined behavior. Before we move on to the rest of Rust, let's first stop and take a breath. We'll review and practice with the key concepts from this chapter.
+این فصل مفاهیمِ جدیدِ زیادی مانندِ مالکیت، قرض گرفتن و اسلایس‌ها را معرفی کرد. اگر با برنامه‌نویسیِ سیستمی آشنا نیستید، این فصل همچنین مفاهیمِ جدیدی مانندِ تخصیصِ حافظه، پشته در برابرِ هیپ، اشاره‌گرها و رفتار نامشخص را معرفی کرد. قبل از اینکه به بقیه‌ی راست بپردازیم، بیایید اول توقف کنیم و نفسی بکشیم. مفاهیمِ کلیدیِ این فصل را مرور و تمرین می‌کنیم.
 
-### Ownership versus Garbage Collection
+### مالکیت در برابرِ گردآوریِ زباله
 
-To put ownership into context, we should talk about **garbage collection**.
-Most programming languages use a garbage collector to manage memory, such as in Python, Javascript, Java, and Go. A garbage collector works at runtime adjacent to a running program (a tracing collector, at least). The collector scans through memory to find data that's no longer used &mdash; that is, the running program can no longer reach that data from a function-local variable. Then the collector deallocates the unused memory for later use.
+برای قرار دادنِ مالکیت در بافتش، باید درباره‌ی **گردآوریِ زباله (garbage collection)** صحبت کنیم. بیشترِ زبان‌های برنامه‌نویسی، مانندِ پایتون، جاوااسکریپت، جاوا و گو، از یک گردآورِ زباله برایِ مدیریتِ حافظه استفاده می‌کنند. یک گردآورِ زباله (دستِ‌کم یک گردآورِ ردیاب) در زمانِ اجرا، همراه با برنامه‌ی در حالِ اجرا کار می‌کند. گردآورنده حافظه را می‌کاود تا داده‌ای را پیدا کند که دیگر استفاده نمی‌شود — یعنی برنامه‌ی در حالِ اجرا دیگر نمی‌تواند از یک متغیرِ محلیِ تابع به آن داده برسد. سپس گردآورنده حافظه‌ی استفاده‌نشده را برایِ استفاده‌ی بعدی آزاد می‌کند.
 
-The key benefit of a garbage collector is that it avoids undefined behavior (such as using freed memory), as can happen in C or C++. Garbage collection also avoids the need for a complex type system to check for undefined behavior, like in Rust. However, there are a few drawbacks to garbage collection. One obvious drawback is performance, as garbage collection incurs either frequent small overheads (for reference-counting, like in Python and Swift) or infrequent large overheads (for tracing, like in all other GC'd languages). 
+مزیتِ کلیدیِ یک گردآورِ زباله این است که از رفتار نامشخص (مانندِ استفاده از حافظه‌ی آزادشده) جلوگیری می‌کند، که در C یا ++C ممکن است رخ دهد. گردآوریِ زباله همچنین نیاز به یک سیستمِ نوعیِ پیچیده برایِ بررسیِ رفتار نامشخص، مانندِ آنچه در راست هست، را از بین می‌برد. با این حال، گردآوریِ زباله چند نقطه‌ضعف دارد. یک نقطه‌ضعفِ آشکار، عملکرد است، چون گردآوریِ زباله یا سربارهایِ کوچکِ مکرر دارد (برایِ شمارشِ مرجع، مانندِ پایتون و سوئیفت)، یا سربارهایِ بزرگِ نامکرر (برایِ ردیابی، مانندِ همه‌ی زبان‌های دیگرِ دارایِ گردآورِ زباله).
 
-But another less obvious drawback is that **garbage collection can be unpredictable**. To illustrate the point, say we are implementing a `Document` type that represents a mutable list of words. We could implement `Document` in a garbage-collected language such as Python in this way:
+اما نقطه‌ضعفِ کمترآشکارِ دیگر این است که **گردآوریِ زباله می‌تواند غیرقابل‌پیش‌بینی باشد**. برایِ نشان دادنِ این نکته، فرض کنید در حالِ پیاده‌سازیِ نوعی به نامِ `Document` هستیم که فهرستی تغییرپذیر از کلمات را نمایندگی می‌کند. می‌توانیم `Document` را در زبانی دارایِ گردآورِ زباله مانندِ پایتون، این‌طور پیاده‌سازی کنیم:
 
 ```python
 class Document:     
@@ -27,7 +25,7 @@ class Document:
         return self.words
 ```
 
-Here's one way we could use this `Document` class that creates a document `d`, copies it into a new document `d2`, and then mutates `d2`.
+در ادامه یک روشِ استفاده از این کلاسِ `Document` می‌آید که یک سندِ `d` می‌سازد، آن را در سندِ جدیدِ `d2` کپی می‌کند، و سپس `d2` را تغییر می‌دهد.
 
 ```python
 words = ["Hello"]
@@ -37,17 +35,17 @@ d2 = Document(d.get_words())
 d2.add_word("world")
 ```
 
-Consider two key questions about this example:
+دو پرسشِ کلیدی درباره‌ی این مثال را در نظر بگیرید:
 
-1. **When is the words array deallocated?** 
-This program has created three pointers to the same array. The variables `words`, `d`, and `d2` all contain a pointer to the words array allocated on the heap. Therefore Python will only deallocate the words array when all three variables are out of scope. More generally, it's often difficult to predict where data will be garbage-collected just by reading the source code.
+۱. **آرایه‌ی کلمات چه زمانی آزاد می‌شود؟**
+این برنامه سه اشاره‌گر به آرایه‌ی یکسانی ساخته است. متغیرهایِ `words`، `d` و `d2` هرکدام اشاره‌گری به آرایه‌ی کلماتِ تخصیص‌یافته روی هیپ دارند. بنابراین پایتون فقط زمانی آرایه‌ی کلمات را آزاد می‌کند که هر سه متغیر از قلمرو خارج شده باشند. به‌طورِ کلی‌تر، اغلب سخت است که فقط با خواندنِ کدِ منبع پیش‌بینی کنیم داده چه زمانی گردآوری می‌شود.
 
-2. **What are the contents of the document `d`?** 
-Because `d2` contains a pointer to the same words array as `d`, then `d2.add_word("world")` also mutates the document `d`. Therefore in this example, the words in `d` are `["Hello", "world"]`. This happens because `d.get_words()` returns a mutable reference to the words array in `d`. Pervasive, implicit mutable references can easily lead to unpredictable bugs when data structures can leak their internals[^ownership-originally]. Here, it is probably not intended behavior that a change to `d2` can change `d`.
+۲. **محتویاتِ سندِ `d` چیست؟**
+چون `d2` اشاره‌گری به همان آرایه‌ی کلماتِ `d` دارد، `d2.add_word("world")` سندِ `d` را هم تغییر می‌دهد. بنابراین در این مثال، کلماتِ درونِ `d` برابرِ `["Hello", "world"]` هستند. این اتفاق می‌افتد چون `d.get_words()` ارجاعی تغییرپذیر به آرایه‌ی کلماتِ درونِ `d` برمی‌گرداند. ارجاع‌های تغییرپذیرِ فراگیر و ضمنی، وقتی ساختارهایِ داده بتوانند جزئیاتِ درونی‌شان را نشت دهند، به‌راحتی می‌توانند به باگ‌هایِ غیرقابل‌پیش‌بینی منجر شوند[^ownership-originally]. اینجا، احتمالاً رفتارِ موردنظر این نبوده که تغییری در `d2` بتواند `d` را هم تغییر دهد.
 
-This problem is not unique to Python &mdash; you can encounter similar behavior in C#, Java, Javascript, and so on. In fact, most programming languages actually have a concept of pointers. It's just a question of how the language exposes pointers to the programmer. Garbage collection makes it difficult to see which variable points to which data. For example, it wasn't obvious that `d.get_words()` produced a pointer to data within `d`. 
+این مشکل مختصِ پایتون نیست — می‌توانید رفتارِ مشابهی را در سی‌شارپ، جاوا، جاوااسکریپت و امثالِ آن هم ببینید. در واقع، بیشترِ زبان‌های برنامه‌نویسی مفهومی از اشاره‌گرها دارند. فقط این پرسش مطرح است که زبان چگونه اشاره‌گرها را به برنامه‌نویس نشان می‌دهد. گردآوریِ زباله باعث می‌شود دیدنِ اینکه کدام متغیر به کدام داده اشاره می‌کند، سخت شود. برای مثال، معلوم نبود که `d.get_words()` اشاره‌گری به داده‌ی درونِ `d` تولید می‌کند.
 
-By contrast, Rust's ownership model puts pointers front-and-center. We can see that by translating the `Document` type into a Rust data structure. Normally we would use a `struct`, but we haven't covered those yet, so we'll just use a type alias:
+در مقابل، مدلِ مالکیتِ راست اشاره‌گرها را در کانونِ توجه قرار می‌دهد. می‌توانیم این را با ترجمه‌ی نوعِ `Document` به یک ساختارِ داده‌ی راست ببینیم. معمولاً از یک `struct` استفاده می‌کردیم، اما هنوز آن را پوشش نداده‌ایم، پس فقط از یک نامِ مستعارِ نوع استفاده می‌کنیم:
 
 ```rust
 type Document = Vec<String>;
@@ -65,13 +63,13 @@ fn get_words(this: &Document) -> &[String] {
 }
 ```
 
-This Rust API differs from the Python API in a few key ways:
+این رابطِ برنامه‌نویسیِ راست، از چند جهتِ کلیدی، با رابطِ برنامه‌نویسیِ پایتون تفاوت دارد:
 
-* The function `new_document` consumes ownership of the input vector `words`. That means the `Document` *owns* the word vector. The word vector will be predictably deallocated when its owning `Document` goes out of scope.
+* تابعِ `new_document` مالکیتِ وکتورِ ورودیِ `words` را مصرف می‌کند. یعنی `Document` *مالکِ* وکتورِ کلمات است. وکتورِ کلمات به‌طورِ قابل‌پیش‌بینی، وقتی `Document` مالکش از قلمرو خارج شود، آزاد خواهد شد.
 
-* The function `add_word` requires a mutable reference `&mut Document` to be able to mutate a document. It also consumes ownership of the input `word`, meaning no one else can mutate the individual words of the document.
+* تابعِ `add_word` برایِ اینکه بتواند سندی را تغییر دهد، به یک ارجاعِ تغییرپذیرِ `&mut Document` نیاز دارد. همچنین مالکیتِ `word` ورودی را هم مصرف می‌کند، یعنی هیچ‌کسِ دیگری نمی‌تواند کلماتِ منفردِ سند را تغییر دهد.
 
-* The function `get_words` returns an explicit immutable reference to strings within the document. The only way to create a new document from this word vector is to deep-copy its contents, like this:
+* تابعِ `get_words` ارجاعِ صریحِ تغییرناپذیری به رشته‌های درونِ سند برمی‌گرداند. تنها راه برایِ ساختنِ سندی جدید از این وکتورِ کلمات، کپیِ عمیقِ محتوایِ آن است، مثلِ این:
 
 ```rust,ignore
 fn main() {
@@ -88,20 +86,20 @@ fn main() {
 }
 ```
 
-The point of this example is to say: if Rust is not your first language, then you already have experience working with memory and pointers! Rust just makes those concepts explicit. This has the dual benefit of (1) improving runtime performance by avoiding garbage collection, and (2) improving predictability by preventing accidental "leaks" of data.
+نکته‌ی این مثال این است: اگر راست اولین زبانِ شما نباشد، پس شما از پیش تجربه‌ی کار کردن با حافظه و اشاره‌گرها را دارید! راست فقط این مفاهیم را صریح می‌کند. این کار مزیتِ دوگانه‌ای دارد: (۱) بهبودِ عملکردِ زمانِ اجرا با اجتناب از گردآوریِ زباله، و (۲) بهبودِ قابلیتِ پیش‌بینی با جلوگیری از «نشتِ» تصادفیِ داده‌ها.
 
-### The Concepts of Ownership
+### مفاهیمِ مالکیت
 
-Next, let's review the concepts of ownership. This review will be quick &mdash; the goal is to remind you of the relevant concepts. If you realize you forgot or didn't understand a concept, then we will link you to the relevant chapters which you can review.
+حالا بیایید مفاهیمِ مالکیت را مرور کنیم. این مرور سریع خواهد بود — هدف این است که مفاهیمِ مربوطه را به شما یادآوری کنیم. اگر متوجه شدید مفهومی را فراموش کرده‌اید یا نفهمیده‌اید، شما را به فصل‌های مربوطه ارجاع می‌دهیم تا آن‌ها را مرور کنید.
 
-#### Ownership at Runtime
+#### مالکیت در زمانِ اجرا
 
-We'll start by reviewing how Rust uses memory at runtime: 
-* Rust allocates local variables in stack frames, which are allocated when a function is called and deallocated when the call ends. 
-* Local variables can hold either data (like numbers, booleans, tuples, etc.) or pointers. 
-* Pointers can be created either through boxes (pointers owning data on the heap) or references (non-owning pointers).
+اول بیایید مرور کنیم که راست چگونه از حافظه در زمانِ اجرا استفاده می‌کند:
+* راست متغیرهایِ محلی را در قاب‌های پشته تخصیص می‌دهد، که هنگامِ فراخوانیِ یک تابع تخصیص داده می‌شوند و هنگامِ پایانِ فراخوانی آزاد می‌شوند.
+* متغیرهایِ محلی می‌توانند یا داده (مانندِ اعداد، بولین‌ها، تاپل‌ها و غیره) نگه دارند یا اشاره‌گر.
+* اشاره‌گرها یا از طریقِ باکس‌ها (اشاره‌گرهایِ مالکِ داده روی هیپ) و یا از طریقِ ارجاع‌ها (اشاره‌گرهایِ غیرمالک) ساخته می‌شوند.
 
-This diagram illustrates how each concept looks at runtime:
+این دیاگرام نشان می‌دهد هر مفهوم در زمانِ اجرا چگونه به نظر می‌رسد:
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -121,14 +119,14 @@ fn inner(x: &mut i32) {
 }
 ```
 
-Review this diagram and make sure you understand each part. For example, you should be able to answer:
-* Why does `a_box_stack_ref` point to the stack, while `a_box_heap_ref` point to the heap? 
-* Why is the value `2` no longer on the heap at L2? 
-* Why does `a_num` have the value `5` at L2?
+این دیاگرام را مرور کنید و مطمئن شوید هر بخش را می‌فهمید. برای مثال، باید بتوانید به این‌ها پاسخ دهید:
+* چرا `a_box_stack_ref` به پشته اشاره می‌کند، درحالی‌که `a_box_heap_ref` به هیپ اشاره می‌کند؟
+* چرا مقدارِ `2` دیگر در L2 روی هیپ نیست؟
+* چرا `a_num` در L2 مقدارِ `5` دارد؟
 
-If you want to review boxes, re-read [Chapter 4.1][ch04-01]. If you want to review references, re-read [Chapter 4.2][ch04-02]. If you want to see case studies involving boxes and references, re-read [Chapter 4.3][ch04-03].
+اگر می‌خواهید باکس‌ها را مرور کنید، [فصلِ ۴.۱][ch04-01] را دوباره بخوانید. اگر می‌خواهید ارجاع‌ها را مرور کنید، [فصلِ ۴.۲][ch04-02] را دوباره بخوانید. اگر می‌خواهید مطالعه‌های موردیِ مرتبط با باکس‌ها و ارجاع‌ها را ببینید، [فصلِ ۴.۳][ch04-03] را دوباره بخوانید.
 
-Slices are a special kind of reference that refer to a contiguous sequence of data in memory. This diagram illustrates how a slice refers to a subsequence of characters in a string:
+اسلایس‌ها نوعِ خاصی از ارجاع هستند که به یک دنباله‌ی پیوسته از داده در حافظه اشاره می‌کنند. این دیاگرام نشان می‌دهد یک اسلایس چگونه به زیردنباله‌ای از کاراکترها در یک رشته اشاره می‌کند:
 
 ```aquascope,interpreter
 fn main() {
@@ -137,12 +135,12 @@ fn main() {
 }
 ```
 
-If you want to review slices, re-read [Chapter 4.4][ch04-04].
+اگر می‌خواهید اسلایس‌ها را مرور کنید، [فصلِ ۴.۴][ch04-04] را دوباره بخوانید.
 
 
-#### Ownership at Compile-time
+#### مالکیت در زمانِ کامپایل
 
-Rust tracks @Perm{read} (read), @Perm{write} (write), and @Perm{own} (own) permissions on each variable. Rust requires that a variable has appropriate permissions to perform a given operation. As a basic example, if a variable is not declared as `let mut`, then it is missing the @Perm{write} permission and cannot be mutated:
+راست اجازه‌های @Perm{read} (خواندن)، @Perm{write} (نوشتن) و @Perm{own} (مالکیت) را روی هر متغیر ردیابی می‌کند. راست الزام دارد که یک متغیر برای انجامِ یک عملیاتِ مشخص، اجازه‌های مناسب را داشته باشد. به‌عنوانِ یک مثالِ ساده، اگر متغیری با `let mut` اعلام نشده باشد، آن‌گاه اجازه‌ی @Perm{write} را ندارد و نمی‌تواند تغییر کند:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 fn main() {
@@ -151,7 +149,7 @@ fn main() {
 }
 ```
 
-A variable's permissions can be changed if it is **moved** or **borrowed**. A move of a variable with a non-copyable type (like `Box<T>` or `String`) requires the @Perm{read}@Perm{own} permissions, and the move eliminates all permissions on the variable. That rule prevents the use of moved variables:
+اجازه‌های یک متغیر می‌توانند اگر آن متغیر **جابه‌جا (move)** یا **قرض داده (borrow)** شود، تغییر کنند. جابه‌جاییِ متغیری با نوعِ غیرقابل‌کپی (مانندِ `Box<T>` یا `String`) به اجازه‌های @Perm{read}@Perm{own} نیاز دارد، و این جابه‌جایی همه‌ی اجازه‌ها را روی آن متغیر حذف می‌کند. این قاعده از استفاده‌ی متغیرهایِ جابه‌جاشده جلوگیری می‌کند:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 fn main() {
@@ -165,9 +163,9 @@ fn consume_a_string(_s: String) {
 }
 ```
 
-If you want to review how moves work, re-read [Chapter 4.1][ch04-01].
+اگر می‌خواهید مرور کنید جابه‌جایی‌ها چگونه کار می‌کنند، [فصلِ ۴.۱][ch04-01] را دوباره بخوانید.
 
-Borrowing a variable (creating a reference to it) temporarily removes some of the variable's permissions. An immutable borrow creates an immutable reference, and also disables the borrowed data from being mutated or moved. For example, printing an immutable reference is ok:
+قرض گرفتنِ یک متغیر (ساختنِ ارجاعی به آن) به‌طورِ موقت برخی از اجازه‌های آن متغیر را حذف می‌کند. یک قرضِ تغییرناپذیر، ارجاعی تغییرناپذیر می‌سازد، و همچنین جلویِ تغییر یا جابه‌جاییِ داده‌ی قرض‌داده‌شده را می‌گیرد. برای مثال، چاپ کردنِ یک ارجاعِ تغییرناپذیر مشکلی ندارد:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -178,7 +176,7 @@ println!("{s}");
 #}
 ```
 
-But mutating an immutable reference is not ok:
+اما تغییر دادنِ یک ارجاعِ تغییرناپذیر مشکلی دارد:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -189,7 +187,7 @@ println!("{s}");
 #}
 ```
 
-And mutating the immutably borrowed data is not ok:
+و تغییر دادنِ داده‌ای که به‌طورِ تغییرناپذیر قرض داده شده هم مشکلی دارد:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -200,7 +198,7 @@ println!("{s_ref}");
 #}
 ```
 
-And moving data out of the reference is not ok:
+و خارج کردنِ داده از ارجاع هم مشکلی دارد:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -211,7 +209,7 @@ println!("{s}");
 #}
 ```
 
-A mutable borrow creates a mutable reference, which disables the borrowed data from being read, written, or moved. For example, mutating a mutable reference is ok:
+یک قرضِ تغییرپذیر، ارجاعی تغییرپذیر می‌سازد، که جلویِ خواندن، نوشتن یا جابه‌جاییِ داده‌ی قرض‌داده‌شده را می‌گیرد. برای مثال، تغییر دادنِ یک ارجاعِ تغییرپذیر مشکلی ندارد:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -222,7 +220,7 @@ println!("{s}");
 #}
 ```
 
-But accessing the mutably borrowed data is not ok:
+اما دسترسی به داده‌ای که به‌طورِ تغییرپذیر قرض داده شده، مشکلی دارد:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -233,11 +231,11 @@ s_ref.push_str(" world");
 #}
 ```
 
-If you want to review permissions and references, re-read [Chapter 4.2][ch04-02].
+اگر می‌خواهید اجازه‌ها و ارجاع‌ها را مرور کنید، [فصلِ ۴.۲][ch04-02] را دوباره بخوانید.
 
-#### Connecting Ownership between Compile-time and Runtime
+#### پیوند دادنِ مالکیت بینِ زمانِ کامپایل و زمانِ اجرا
 
-Rust's permissions are designed to prevent undefined behavior. For example, one kind of undefined behavior is a **use-after-free** where freed memory is read or written. Immutable borrows remove the @Perm{write} permission to avoid use-after-free, like in this case:
+اجازه‌های راست طوری طراحی شده‌اند که از رفتار نامشخص جلوگیری کنند. برای مثال، یک نوعِ رفتار نامشخص، **استفاده‌-پس-از-آزادسازی (use-after-free)** است که در آن حافظه‌ی آزادشده خوانده یا نوشته می‌شود. قرض‌های تغییرناپذیر اجازه‌ی @Perm{write} را حذف می‌کنند تا از استفاده‌-پس-از-آزادسازی جلوگیری شود، مثلِ این مورد:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #fn main() {
@@ -248,7 +246,7 @@ println!("{n}");`[]`
 #}
 ```
 
-Another kind of undefined behavior is a **double-free** where memory is freed twice. Dereferences of references to non-copyable data do not have the @Perm{own} permission to avoid double-frees, like in this case:
+نوعِ دیگری از رفتار نامشخص، **آزادسازیِ دوگانه (double-free)** است که در آن حافظه دو بار آزاد می‌شود. واکردنِ ارجاع‌ها به داده‌ی غیرقابل‌کپی، اجازه‌ی @Perm{own} را ندارد تا از آزادسازیِ دوگانه جلوگیری شود، مثلِ این مورد:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #fn main() {
@@ -260,20 +258,20 @@ drop(v);`[]`
 #}
 ```
 
-If you want to review undefined behavior, re-read [Chapter 4.1][ch04-01] and [Chapter 4.3][ch04-03].
+اگر می‌خواهید رفتار نامشخص را مرور کنید، [فصلِ ۴.۱][ch04-01] و [فصلِ ۴.۳][ch04-03] را دوباره بخوانید.
 
 
-### The Rest of Ownership
+### باقیِ مالکیت
 
-As we introduce additional features like structs, enums, and traits, those features will have specific interactions with ownership. This chapter provides the essential foundation for understanding those interactions &mdash; the concepts of memory, pointers, undefined behavior, and permissions will help us talk about the more advanced parts of Rust in future chapters.
+همان‌طور که ویژگی‌های بیشتری مانندِ ساختارها (structs)، شمارش‌پذیرها (enums) و traitها را معرفی می‌کنیم، این ویژگی‌ها تعامل‌هایِ خاصی با مالکیت خواهند داشت. این فصل، پایه‌ی اساسیِ لازم برایِ فهمیدنِ آن تعامل‌ها را فراهم می‌کند — مفاهیمِ حافظه، اشاره‌گرها، رفتار نامشخص و اجازه‌ها به ما کمک می‌کنند تا درباره‌ی بخش‌های پیشرفته‌ترِ راست در فصل‌های آینده صحبت کنیم.
 
-And don't forget to take the quizzes if you want to check your understanding!
+و فراموش نکنید اگر می‌خواهید فهمِ خود را بسنجید، آزمون‌ها را انجام دهید!
 
 {{#quiz ../quizzes/ch04-05-ownership-recap.toml}}
 
 
 
-[^ownership-originally]: In fact, the original invention of ownership types wasn't about memory safety at all. It was about preventing leaks of mutable references to data structure internals in Java-like languages. If you're curious to learn more about the history of ownership types, check out the paper ["Ownership Types for Flexible Alias Protection"](https://dl.acm.org/doi/abs/10.1145/286936.286947) (Clarke et al. 1998).
+[^ownership-originally]: در واقع، اختراعِ اولیه‌ی نوع‌های مالکیتی اصلاً درباره‌ی امنیتِ حافظه نبود. درباره‌ی جلوگیری از نشتِ ارجاع‌های تغییرپذیر به جزئیاتِ درونیِ ساختارهایِ داده در زبان‌های شبیهِ جاوا بود. اگر کنجکاوید بیشتر درباره‌ی تاریخچه‌ی نوع‌های مالکیتی بدانید، به مقاله‌ی [«نوع‌های مالکیتی برایِ محافظتِ منعطف در برابرِ نام‌مستعارسازی»](https://dl.acm.org/doi/abs/10.1145/286936.286947) (کلارک و همکاران، ۱۹۹۸) نگاه کنید.
 
 [ch04-01]: ch04-01-what-is-ownership.html
 [ch04-02]: ch04-02-references-and-borrowing.html
