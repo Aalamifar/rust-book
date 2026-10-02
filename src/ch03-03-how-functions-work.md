@@ -1,13 +1,8 @@
-## Functions
+## توابع
 
-Functions are prevalent in Rust code. You’ve already seen one of the most
-important functions in the language: the `main` function, which is the entry
-point of many programs. You’ve also seen the `fn` keyword, which allows you to
-declare new functions.
+توابع در کد Rust همه‌جا حضور دارند. یکی از مهم‌ترین توابع این زبان را قبلاً دیده‌اید: تابع `main`، که نقطه‌ی ورود بیشتر برنامه‌ها است. کلیدواژه‌ی `fn` را هم دیده‌اید، که به شما اجازه می‌دهد توابع جدیدی اعلان کنید.
 
-Rust code uses _snake case_ as the conventional style for function and variable
-names, in which all letters are lowercase and underscores separate words.
-Here’s a program that contains an example function definition:
+کد Rust از _snake case_ به‌عنوان سبک قراردادی برای نام توابع و متغیرها استفاده می‌کند، که در آن همه‌ی حروف کوچک هستند و زیرخط بین کلمات را از هم جدا می‌کند. این‌جا برنامه‌ای می‌بینید که یک مثال از تعریف یک تابع را در خودش دارد:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -15,40 +10,23 @@ Here’s a program that contains an example function definition:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-16-functions/src/main.rs}}
 ```
 
-We define a function in Rust by entering `fn` followed by a function name and a
-set of parentheses. The curly brackets tell the compiler where the function
-body begins and ends.
+ما یک تابع را در Rust با نوشتن `fn`، دنبال شده با نام تابع و یک جفت پرانتز، تعریف می‌کنیم. آکولادها به کامپایلر می‌گویند بدنه‌ی تابع از کجا شروع می‌شود و کجا تمام می‌شود.
 
-We can call any function we’ve defined by entering its name followed by a set
-of parentheses. Because `another_function` is defined in the program, it can be
-called from inside the `main` function. Note that we defined `another_function`
-_after_ the `main` function in the source code; we could have defined it before
-as well. Rust doesn’t care where you define your functions, only that they’re
-defined somewhere in a scope that can be seen by the caller.
+می‌توانیم هر تابعی که تعریف کرده‌ایم را با نوشتن نامش و بعد یک جفت پرانتز صدا بزنیم. چون `another_function` در برنامه تعریف شده، می‌تواند از داخل تابع `main` صدا زده شود. توجه کنید که `another_function` را _بعد_ از تابع `main` در کد سورس تعریف کردیم؛ می‌توانستیم آن را قبل از آن هم تعریف کنیم. برای Rust مهم نیست کجا توابعتان را تعریف می‌کنید، فقط مهم است که آن‌ها جایی در یک اسکوپ که فراخوان (caller) بتواند آن‌ها را ببیند، تعریف شده باشند.
 
-Let’s start a new binary project named _functions_ to explore functions
-further. Place the `another_function` example in _src/main.rs_ and run it. You
-should see the following output:
+بیایید یک پروژه‌ی باینری جدید به نام _functions_ راه بیندازیم تا توابع را بیشتر بررسی کنیم. مثال `another_function` را در _src/main.rs_ بگذارید و آن را اجرا کنید. باید خروجی زیر را ببینید:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
 ```
 
-The lines execute in the order in which they appear in the `main` function.
-First the “Hello, world!” message prints, and then `another_function` is called
-and its message is printed.
+خط‌ها به همان ترتیبی که در تابع `main` می‌آیند اجرا می‌شوند. اول پیام «Hello, world!» چاپ می‌شود، و بعد `another_function` صدا زده می‌شود و پیامش چاپ می‌شود.
 
-### Parameters
+### پارامترها
 
-We can define functions to have _parameters_, which are special variables that
-are part of a function’s signature. When a function has parameters, you can
-provide it with concrete values for those parameters. Technically, the concrete
-values are called _arguments_, but in casual conversation, people tend to use
-the words _parameter_ and _argument_ interchangeably for either the variables
-in a function’s definition or the concrete values passed in when you call a
-function.
+می‌توانیم توابعی تعریف کنیم که _پارامتر_ (parameters) داشته باشند، که متغیرهای خاصی هستند و بخشی از امضای (signature) یک تابع محسوب می‌شوند. وقتی یک تابع پارامتر دارد، می‌توانید مقادیر مشخصی برای آن پارامترها فراهم کنید. از نظر فنی، به این مقادیر مشخص _آرگومان_ (arguments) می‌گویند، اما در گفت‌وگوی روزمره، افراد معمولاً کلمه‌های _پارامتر_ و _آرگومان_ را به‌جای هم استفاده می‌کنند، هم برای متغیرهایی در تعریف یک تابع و هم برای مقادیر مشخصی که موقع صدا زدن یک تابع پاس می‌دهید.
 
-In this version of `another_function` we add a parameter:
+در این نسخه از `another_function`، یک پارامتر اضافه می‌کنیم:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -56,25 +34,17 @@ In this version of `another_function` we add a parameter:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/src/main.rs}}
 ```
 
-Try running this program; you should get the following output:
+سعی کنید این برنامه را اجرا کنید؛ باید خروجی زیر را بگیرید:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/output.txt}}
 ```
 
-The declaration of `another_function` has one parameter named `x`. The type of
-`x` is specified as `i32`. When we pass `5` in to `another_function`, the
-`println!` macro puts `5` where the pair of curly brackets containing `x` was
-in the format string.
+تعریف `another_function` یک پارامتر به نام `x` دارد. تایپ `x` به‌شکل `i32` مشخص شده. وقتی `5` را به `another_function` پاس می‌دهیم، ماکرو `println!` مقدار `5` را جایی که جفت آکولادهای حاوی `x` در رشته‌ی فرمت بودند، می‌گذارد.
 
-In function signatures, you _must_ declare the type of each parameter. This is
-a deliberate decision in Rust’s design: Requiring type annotations in function
-definitions means the compiler almost never needs you to use them elsewhere in
-the code to figure out what type you mean. The compiler is also able to give
-more-helpful error messages if it knows what types the function expects.
+در امضای توابع، _باید_ تایپ هر پارامتر را اعلان کنید. این یک تصمیم سنجیده در طراحی Rust است: نیاز به annotationهای تایپ در تعریف توابع باعث می‌شود کامپایلر تقریباً هیچ‌وقت نیاز نداشته باشد جای دیگری در کد از شما بخواهد که تایپی که منظورتان است را مشخص کنید. کامپایلر همچنین می‌تواند پیام‌های خطای مفیدتری بدهد، اگر بداند تابع چه تایپ‌هایی را انتظار دارد.
 
-When defining multiple parameters, separate the parameter declarations with
-commas, like this:
+وقتی چند پارامتر تعریف می‌کنید، اعلان پارامترها را با کاما از هم جدا کنید، این‌طور:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -82,44 +52,28 @@ commas, like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/src/main.rs}}
 ```
 
-This example creates a function named `print_labeled_measurement` with two
-parameters. The first parameter is named `value` and is an `i32`. The second is
-named `unit_label` and is type `char`. The function then prints text containing
-both the `value` and the `unit_label`.
+این مثال یک تابع به نام `print_labeled_measurement` با دو پارامتر می‌سازد. پارامتر اول به نام `value` است و یک `i32` است. پارامتر دوم به نام `unit_label` است و از تایپ `char` است. بعد این تابع متنی چاپ می‌کند که هم `value` و هم `unit_label` را در خودش دارد.
 
-Let’s try running this code. Replace the program currently in your _functions_
-project’s _src/main.rs_ file with the preceding example and run it using `cargo
-run`:
+بیایید این کد را اجرا کنیم. برنامه‌ای که الان در فایل _src/main.rs_ پروژه‌ی _functions_ خودتان است را با مثال قبلی جایگزین کنید و آن را با `cargo run` اجرا کنید:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
-Because we called the function with `5` as the value for `value` and `'h'` as
-the value for `unit_label`, the program output contains those values.
+چون تابع را با `5` به‌عنوان مقدار `value` و `'h'` به‌عنوان مقدار `unit_label` صدا زدیم، خروجی برنامه این مقادیر را در خودش دارد.
 
 {{#quiz ../quizzes/ch03-03-functions-sec1-parameters.toml}}
 
-### Statements and Expressions
+### Statementها و Expressionها
 
-Function bodies are made up of a series of statements optionally ending in an
-expression. So far, the functions we’ve covered haven’t included an ending
-expression, but you have seen an expression as part of a statement. Because
-Rust is an expression-based language, this is an important distinction to
-understand. Other languages don’t have the same distinctions, so let’s look at
-what statements and expressions are and how their differences affect the bodies
-of functions.
+بدنه‌ی توابع از یک سری statement تشکیل شده که به‌صورت اختیاری با یک expression تمام می‌شوند. تا این‌جا، توابعی که بررسی کردیم یک expression پایانی نداشته‌اند، اما یک expression را به‌عنوان بخشی از یک statement دیده‌اید. چون Rust یک زبان expression-based است، این یک تفاوت مهم است که باید بفهمید. زبان‌های دیگر همین تفاوت‌ها را ندارند، پس بیایید ببینیم statementها و expressionها چه هستند و تفاوتشان چطور روی بدنه‌ی توابع اثر می‌گذارد.
 
-- _Statements_ are instructions that perform some action and do not return
-  a value.
-- _Expressions_ evaluate to a resultant value.
+- _statementها_ دستوراتی هستند که یک کاری انجام می‌دهند و هیچ مقداری برنمی‌گردانند.
+- _expressionها_ به یک مقدار نتیجه محاسبه می‌شوند.
 
-Let’s look at some examples.
-We’ve actually already used statements and expressions. Creating a variable and
-assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
-`let y = 6;` is a statement.
+بیایید چند مثال را ببینیم. در واقع قبلاً هم از statementها و expressionها استفاده کرده‌ایم. ساختن یک متغیر و اختصاص یک مقدار به آن با کلیدواژه‌ی `let` یک statement است. در Listing 3-1، `let y = 6;` یک statement است.
 
-<Listing number="3-1" file-name="src/main.rs" caption="A `main` function declaration containing one statement">
+<Listing number="3-1" file-name="src/main.rs" caption="یک اعلان تابع `main` که یک statement در خودش دارد">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-01/src/main.rs}}
@@ -127,12 +81,9 @@ assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 
 </Listing>
 
-Function definitions are also statements; the entire preceding example is a
-statement in itself. (As we’ll see shortly, calling a function is not a
-statement, though.)
+تعریف توابع هم statement هستند؛ کل مثال قبلی خودش یک statement است. (همان‌طور که به‌زودی می‌بینیم، صدا زدن یک تابع اما یک statement نیست.)
 
-Statements do not return values. Therefore, you can’t assign a `let` statement
-to another variable, as the following code tries to do; you’ll get an error:
+statementها مقداری برنمی‌گردانند. به همین دلیل، نمی‌توانید یک statement مربوط به `let` را به متغیر دیگری اختصاص دهید، همان‌طور که کد زیر سعی می‌کند این کار را انجام دهد؛ خطا خواهید گرفت:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -140,25 +91,15 @@ to another variable, as the following code tries to do; you’ll get an error:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
 ```
 
-When you run this program, the error you’ll get looks like this:
+وقتی این برنامه را اجرا کنید، خطایی که می‌گیرید این‌طور است:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
 ```
 
-The `let y = 6` statement does not return a value, so there isn’t anything for
-`x` to bind to. This is different from what happens in other languages, such as
-C and Ruby, where the assignment returns the value of the assignment. In those
-languages, you can write `x = y = 6` and have both `x` and `y` have the value
-`6`; that is not the case in Rust.
+statement `let y = 6` هیچ مقداری برنمی‌گرداند، پس چیزی برای `x` وجود ندارد که به آن مقید شود. این با اتفاقی که در زبان‌های دیگر، مثل C و Ruby، رخ می‌دهد فرق دارد، جایی که یک عبارت اختصاص (assignment) مقدار همان اختصاص را برمی‌گرداند. در آن زبان‌ها، می‌توانید `x = y = 6` بنویسید و هم `x` و هم `y` مقدار `6` را داشته باشند؛ در Rust این‌طور نیست.
 
-Expressions evaluate to a value and make up most of the rest of the code that
-you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
-expression that evaluates to the value `11`. Expressions can be part of
-statements: In Listing 3-1, the `6` in the statement `let y = 6;` is an
-expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. A new scope block created with
-curly brackets is an expression, for example:
+expressionها به یک مقدار محاسبه می‌شوند و بیشتر بقیه‌ی کدی که در Rust می‌نویسید را تشکیل می‌دهند. یک عملیات ریاضی را در نظر بگیرید، مثل `5 + 6`، که یک expression است که به مقدار `11` محاسبه می‌شود. expressionها می‌توانند بخشی از statementها باشند: در Listing 3-1، `6` در statement `let y = 6;` یک expression است که به مقدار `6` محاسبه می‌شود. صدا زدن یک تابع یک expression است. صدا زدن یک ماکرو یک expression است. یک بلوک اسکوپ جدید که با آکولادها ساخته شده یک expression است، برای مثال:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -166,7 +107,7 @@ curly brackets is an expression, for example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-blocks-are-expressions/src/main.rs}}
 ```
 
-This expression:
+این expression:
 
 ```rust,ignore
 {
@@ -175,22 +116,11 @@ This expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note the `x + 1` line without a semicolon at
-the end, which is unlike most of the lines you’ve seen so far. Expressions do
-not include ending semicolons. If you add a semicolon to the end of an
-expression, you turn it into a statement, and it will then not return a value.
-Keep this in mind as you explore function return values and expressions next.
+یک بلوک است که در این مورد، به `4` محاسبه می‌شود. آن مقدار به `y` مقید می‌شود، به‌عنوان بخشی از statement `let`. توجه کنید که خط `x + 1` بدون علامت نقطه‌ویرگول در انتها آمده، که برخلاف بیشتر خط‌هایی است که تا الان دیده‌اید. expressionها علامت نقطه‌ویرگول پایانی ندارند. اگر یک علامت نقطه‌ویرگول به انتهای یک expression اضافه کنید، آن را به یک statement تبدیل می‌کنید، و در آن صورت دیگر هیچ مقداری برنمی‌گرداند. همین موضوع را در ذهن داشته باشید وقتی در ادامه مقادیر بازگشتی توابع و expressionها را بررسی می‌کنیم.
 
-### Functions with Return Values
+### توابع با مقادیر بازگشتی
 
-Functions can return values to the code that calls them. We don’t name return
-values, but we must declare their type after an arrow (`->`). In Rust, the
-return value of the function is synonymous with the value of the final
-expression in the block of the body of a function. You can return early from a
-function by using the `return` keyword and specifying a value, but most
-functions return the last expression implicitly. Here’s an example of a
-function that returns a value:
+توابع می‌توانند مقادیری را به کدی که آن‌ها را صدا زده برگردانند. ما مقادیر بازگشتی را نام‌گذاری نمی‌کنیم، اما باید تایپشان را بعد از یک پیکان (`->`) اعلان کنیم. در Rust، مقدار بازگشتی یک تابع معادل مقدار آخرین expression در بلوک بدنه‌ی آن تابع است. می‌توانید با استفاده از کلیدواژه‌ی `return` و مشخص کردن یک مقدار، زودتر از یک تابع خارج شوید، اما بیشتر توابع آخرین expression را به‌صورت implicit برمی‌گردانند. این‌جا یک مثال از تابعی که یک مقدار برمی‌گرداند را می‌بینید:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -198,30 +128,21 @@ function that returns a value:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/src/main.rs}}
 ```
 
-There are no function calls, macros, or even `let` statements in the `five`
-function—just the number `5` by itself. That’s a perfectly valid function in
-Rust. Note that the function’s return type is specified too, as `-> i32`. Try
-running this code; the output should look like this:
+هیچ فراخوانی تابع، ماکرو، یا حتی statement مربوط به `let`ای در تابع `five` وجود ندارد — فقط خودِ عدد `5` به‌تنهایی. این یک تابع کاملاً معتبر در Rust است. توجه کنید که تایپ بازگشتی تابع هم مشخص شده، به‌شکل `-> i32`. سعی کنید این کد را اجرا کنید؛ خروجی باید این‌طور باشد:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
 ```
 
-The `5` in `five` is the function’s return value, which is why the return type
-is `i32`. Let’s examine this in more detail. There are two important bits:
-First, the line `let x = five();` shows that we’re using the return value of a
-function to initialize a variable. Because the function `five` returns a `5`,
-that line is the same as the following:
+`5` در `five` مقدار بازگشتی تابع است، به همین دلیل تایپ بازگشتی `i32` است. بیایید این را با جزئیات بیشتری بررسی کنیم. دو نکته‌ی مهم هست: اول، خط `let x = five();` نشان می‌دهد که از مقدار بازگشتی یک تابع برای مقداردهی اولیه‌ی یک متغیر استفاده می‌کنیم. چون تابع `five` مقدار `5` را برمی‌گرداند، آن خط با خط زیر یکسان است:
 
 ```rust
 let x = 5;
 ```
 
-Second, the `five` function has no parameters and defines the type of the
-return value. The body of the function is a lonely `5` with no semicolon
-because it’s an expression whose value we want to return.
+دوم، تابع `five` هیچ پارامتری ندارد و تایپ مقدار بازگشتی را تعریف می‌کند. بدنه‌ی تابع فقط یک `5` تنهاست بدون هیچ علامت نقطه‌ویرگولی، چون این یک expression است که می‌خواهیم مقدارش را برگردانیم.
 
-Let’s look at another example:
+بیایید یک مثال دیگر را ببینیم:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -229,9 +150,7 @@ Let’s look at another example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-22-function-parameter-and-return/src/main.rs}}
 ```
 
-Running this code will print `The value of x is: 6`. But what happens if we
-place a semicolon at the end of the line containing `x + 1`, changing it from
-an expression to a statement?
+اجرای این کد `The value of x is: 6` را چاپ می‌کند. اما اگر یک علامت نقطه‌ویرگول به انتهای خطی که `x + 1` را دارد اضافه کنیم چه اتفاقی می‌افتد، و آن را از یک expression به یک statement تبدیل کنیم؟
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -239,18 +158,12 @@ an expression to a statement?
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/src/main.rs}}
 ```
 
-Compiling this code will produce an error, as follows:
+کامپایل کردن این کد یک خطا تولید می‌کند، این‌طور:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 
-The main error message, `mismatched types`, reveals the core issue with this
-code. The definition of the function `plus_one` says that it will return an
-`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
-the unit type. Therefore, nothing is returned, which contradicts the function
-definition and results in an error. In this output, Rust provides a message to
-possibly help rectify this issue: It suggests removing the semicolon, which
-would fix the error.
+پیام اصلی خطا، `mismatched types`، مشکل اصلی این کد را نشان می‌دهد. تعریف تابع `plus_one` می‌گوید که یک `i32` برمی‌گرداند، اما statementها به یک مقدار محاسبه نمی‌شوند، که با `()`، تایپ unit، بیان می‌شود. به همین دلیل، هیچ چیزی برگردانده نمی‌شود، که با تعریف تابع در تناقض است و منجر به یک خطا می‌شود. در این خروجی، Rust پیامی می‌دهد که احتمالاً به رفع این مشکل کمک می‌کند: پیشنهاد می‌دهد که علامت نقطه‌ویرگول را حذف کنید، که خطا را برطرف می‌کند.
 
 {{#quiz ../quizzes/ch03-03-functions-sec2-expressions.toml}}

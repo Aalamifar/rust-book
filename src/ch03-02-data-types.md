@@ -1,138 +1,78 @@
-## Data Types
+## تایپ‌های داده
 
-Every value in Rust is of a certain _data type_, which tells Rust what kind of
-data is being specified so that it knows how to work with that data. We’ll look
-at two data type subsets: scalar and compound.
+هر مقدار در Rust از یک _تایپ داده_ (data type) خاص است، که به Rust می‌گوید چه نوع داده‌ای مشخص شده تا بداند چطور باید با آن داده کار کند. به دو زیرمجموعه از تایپ‌های داده نگاه می‌کنیم: scalar و compound.
 
-Keep in mind that Rust is a _statically typed_ language, which means that it
-must know the types of all variables at compile time. The compiler can usually
-infer what type we want to use based on the value and how we use it. In cases
-when many types are possible, such as when we converted a `String` to a numeric
-type using `parse` in the [“Comparing the Guess to the Secret
-Number”][comparing-the-guess-to-the-secret-number]<!-- ignore --> section in
-Chapter 2, we must add a type annotation, like this:
+یادتان باشد که Rust یک زبان _استاتیک‌تایپ_ (statically typed) است، یعنی باید در زمان کامپایل تایپ همه‌ی متغیرها را بداند. کامپایلر معمولاً می‌تواند بر اساس مقدار و نحوه‌ی استفاده از آن، تایپی که می‌خواهیم استفاده کنیم را استنتاج کند. در مواردی که چند تایپ ممکن است، مثل وقتی که یک `String` را با استفاده از `parse` به یک تایپ عددی تبدیل کردیم، در بخش [«مقایسه‌ی حدس با عدد مخفی»][comparing-the-guess-to-the-secret-number]<!-- ignore --> در فصل ۲، باید یک annotation تایپ اضافه کنیم، این‌طور:
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the `: u32` type annotation shown in the preceding code, Rust
-will display the following error, which means the compiler needs more
-information from us to know which type we want to use:
+اگر آن annotation تایپ `: u32` که در کد بالا نشان داده شده را اضافه نکنیم، Rust خطای زیر را نمایش می‌دهد، که یعنی کامپایلر برای فهمیدن کدام تایپ را می‌خواهیم استفاده کنیم، به اطلاعات بیشتری از ما نیاز دارد:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
 ```
 
-You’ll see different type annotations for other data types.
+برای تایپ‌های داده‌ی دیگر، annotationهای تایپ متفاوتی خواهید دید.
 
-### Scalar Types
+### تایپ‌های Scalar
 
-A _scalar_ type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, Booleans, and characters. You may recognize
-these from other programming languages. Let’s jump into how they work in Rust.
+یک تایپ _scalar_ نماینده‌ی یک مقدار تکی است. Rust چهار تایپ scalar اصلی دارد: عدد صحیح (integer)، عدد اعشاری (floating-point)، بولین، و کاراکتر. احتمالاً این‌ها را از زبان‌های برنامه‌نویسی دیگر می‌شناسید. بیایید ببینیم در Rust چطور کار می‌کنند.
 
-#### Integer Types
+#### تایپ‌های Integer
 
-An _integer_ is a number without a fractional component. We used one integer
-type in Chapter 2, the `u32` type. This type declaration indicates that the
-value it’s associated with should be an unsigned integer (signed integer types
-start with `i` instead of `u`) that takes up 32 bits of space. Table 3-1 shows
-the built-in integer types in Rust. We can use any of these variants to declare
-the type of an integer value.
+یک _integer_ عددی بدون بخش اعشاری است. در فصل ۲ از یک تایپ integer استفاده کردیم، تایپ `u32`. این اعلان تایپ نشان می‌دهد که مقداری که به آن نسبت داده شده باید یک عدد صحیح بدون علامت (unsigned) باشد (تایپ‌های عدد صحیح با علامت با `i` شروع می‌شوند، نه `u`) که ۳۲ بیت فضا می‌گیرد. جدول ۳-۱ تایپ‌های integer از‌پیش‌ساخته‌ی Rust را نشان می‌دهد. می‌توانیم از هر کدام از این نسخه‌ها برای اعلان تایپ یک مقدار integer استفاده کنیم.
 
-<span class="caption">Table 3-1: Integer Types in Rust</span>
+<span class="caption">جدول ۳-۱: تایپ‌های Integer در Rust</span>
 
-| Length  | Signed  | Unsigned |
+| طول | با علامت | بدون علامت |
 | ------- | ------- | -------- |
-| 8-bit   | `i8`    | `u8`     |
-| 16-bit  | `i16`   | `u16`    |
-| 32-bit  | `i32`   | `u32`    |
-| 64-bit  | `i64`   | `u64`    |
-| 128-bit | `i128`  | `u128`   |
-| Architecture-dependent | `isize` | `usize`  |
+| ۸ بیتی   | `i8`    | `u8`     |
+| ۱۶ بیتی  | `i16`   | `u16`    |
+| ۳۲ بیتی  | `i32`   | `u32`    |
+| ۶۴ بیتی  | `i64`   | `u64`    |
+| ۱۲۸ بیتی | `i128`  | `u128`   |
+| بسته به معماری | `isize` | `usize`  |
 
-Each variant can be either signed or unsigned and has an explicit size.
-_Signed_ and _unsigned_ refer to whether it’s possible for the number to be
-negative—in other words, whether the number needs to have a sign with it
-(signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: When
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
---> representation.
+هر نسخه می‌تواند یا با علامت باشد یا بدون علامت، و اندازه‌ی صریحی دارد. _با علامت_ (signed) و _بدون علامت_ (unsigned) به این اشاره می‌کنند که آیا امکان دارد آن عدد منفی باشد یا نه — به عبارت دیگر، آیا آن عدد نیاز دارد یک علامت همراه خودش داشته باشد (با علامت) یا این‌که همیشه فقط مثبت خواهد بود و به همین دلیل می‌تواند بدون علامت نمایش داده شود (بدون علامت). این شبیه نوشتن عدد روی کاغذ است: وقتی علامت مهم است، یک عدد با علامت مثبت یا علامت منفی نشان داده می‌شود؛ اما وقتی امن است فرض کنیم عدد مثبت است، بدون هیچ علامتی نشان داده می‌شود. اعداد با علامت با استفاده از نمایش [two's complement][twos-complement]<!-- ignore --> ذخیره می‌شوند.
 
-Each signed variant can store numbers from −(2<sup>n − 1</sup>) to 2<sup>n −
-1</sup> − 1 inclusive, where _n_ is the number of bits that variant uses. So, an
-`i8` can store numbers from −(2<sup>7</sup>) to 2<sup>7</sup> − 1, which equals
-−128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> − 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> − 1, which equals 0 to 255.
+هر نسخه‌ی با علامت می‌تواند اعدادی از −(۲<sup>n − 1</sup>) تا ۲<sup>n − 1</sup> − ۱ (شامل هر دو سر بازه) را ذخیره کند، که در آن _n_ تعداد بیت‌هایی است که آن نسخه استفاده می‌کند. پس، یک `i8` می‌تواند اعدادی از −(۲<sup>۷</sup>) تا ۲<sup>۷</sup> − ۱ را ذخیره کند، که برابر است با −۱۲۸ تا ۱۲۷. نسخه‌های بدون علامت می‌توانند اعدادی از ۰ تا ۲<sup>n</sup> − ۱ را ذخیره کنند، پس یک `u8` می‌تواند اعدادی از ۰ تا ۲<sup>۸</sup> − ۱ را ذخیره کند، که برابر است با ۰ تا ۲۵۵.
 
-Additionally, the `isize` and `usize` types depend on the architecture of the
-computer your program is running on: 64 bits if you’re on a 64-bit architecture
-and 32 bits if you’re on a 32-bit architecture.
+علاوه بر این، تایپ‌های `isize` و `usize` به معماری کامپیوتری که برنامه‌ی شما روی آن اجرا می‌شود بستگی دارند: ۶۴ بیت اگر روی یک معماری ۶۴ بیتی باشید، و ۳۲ بیت اگر روی یک معماری ۳۲ بیتی باشید.
 
-You can write integer literals in any of the forms shown in Table 3-2. Note
-that number literals that can be multiple numeric types allow a type suffix,
-such as `57u8`, to designate the type. Number literals can also use `_` as a
-visual separator to make the number easier to read, such as `1_000`, which will
-have the same value as if you had specified `1000`.
+می‌توانید literalهای integer را به هر کدام از فرم‌هایی که در جدول ۳-۲ نشان داده شده بنویسید. توجه کنید که literalهای عددی‌ای که می‌توانند چند تایپ عددی مختلف باشند، اجازه دارند یک پسوند تایپ (type suffix) داشته باشند، مثل `57u8`، تا تایپ را مشخص کند. literalهای عددی همچنین می‌توانند از `_` به‌عنوان یک جداکننده‌ی بصری استفاده کنند تا خواندن عدد راحت‌تر شود، مثل `1_000`، که همان مقدار `1000` را دارد.
 
-<span class="caption">Table 3-2: Integer Literals in Rust</span>
+<span class="caption">جدول ۳-۲: Literalهای Integer در Rust</span>
 
-| Number literals  | Example       |
+| literal عددی | مثال       |
 | ---------------- | ------------- |
-| Decimal          | `98_222`      |
-| Hex              | `0xff`        |
-| Octal            | `0o77`        |
-| Binary           | `0b1111_0000` |
-| Byte (`u8` only) | `b'A'`        |
+| دهدهی (Decimal)          | `98_222`      |
+| هگزادسیمال (Hex)              | `0xff`        |
+| اکتال (Octal)            | `0o77`        |
+| باینری (Binary)           | `0b1111_0000` |
+| بایت (فقط `u8`) | `b'A'`        |
 
-So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good places to start: Integer types default to `i32`.
-The primary situation in which you’d use `isize` or `usize` is when indexing
-some sort of collection.
+پس چطور می‌فهمید کدام تایپ integer را استفاده کنید؟ اگر مطمئن نیستید، مقادیر پیش‌فرض Rust معمولاً نقطه‌ی شروع خوبی هستند: تایپ‌های integer به‌صورت پیش‌فرض `i32` هستند. اصلی‌ترین وضعیتی که از `isize` یا `usize` استفاده می‌کنید، وقتی است که می‌خواهید یک نوع collection را ایندکس بزنید.
 
-> ##### Integer Overflow
+> ##### سرریز Integer (Integer Overflow)
 >
-> Let’s say you have a variable of type `u8` that can hold values between 0 and
-> 255. If you try to change the variable to a value outside that range, such as
-> 256, _integer overflow_ will occur, which can result in one of two behaviors.
-> When you’re compiling in debug mode, Rust includes checks for integer overflow
-> that cause your program to _panic_ at runtime if this behavior occurs. Rust
-> uses the term _panicking_ when a program exits with an error; we’ll discuss
-> panics in more depth in the [“Unrecoverable Errors with
-> `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in Chapter
-> 9.
+> فرض کنید یک متغیر از تایپ `u8` دارید که می‌تواند مقادیری بین ۰ و ۲۵۵ نگه دارد. اگر سعی کنید آن متغیر را به مقداری خارج از این بازه تغییر دهید، مثل ۲۵۶، _integer overflow_ (سرریز عدد صحیح) رخ می‌دهد، که می‌تواند یکی از دو رفتار را نتیجه دهد. وقتی در حالت debug کامپایل می‌کنید، Rust شامل بررسی‌هایی برای integer overflow است که اگر این رفتار رخ دهد، باعث می‌شود برنامه‌ی شما در زمان اجرا _panic_ کند. Rust از اصطلاح _panicking_ استفاده می‌کند وقتی یک برنامه با یک خطا خارج می‌شود؛ درباره‌ی panicها با جزئیات بیشتری در بخش [«خطاهای غیرقابل‌بازیابی با `panic!`»][unrecoverable-errors-with-panic]<!-- ignore --> در فصل ۹ صحبت می‌کنیم.
 >
-> When you’re compiling in release mode with the `--release` flag, Rust does
-> _not_ include checks for integer overflow that cause panics. Instead, if
-> overflow occurs, Rust performs _two’s complement wrapping_. In short, values
-> greater than the maximum value the type can hold “wrap around” to the minimum
-> of the values the type can hold. In the case of a `u8`, the value 256 becomes
-> 0, the value 257 becomes 1, and so on. The program won’t panic, but the
-> variable will have a value that probably isn’t what you were expecting it to
-> have. Relying on integer overflow’s wrapping behavior is considered an error.
+> وقتی در حالت release و با پرچم `--release` کامپایل می‌کنید، Rust بررسی‌هایی برای integer overflow که باعث panic شوند را شامل _نمی‌شود_. در عوض، اگر overflow رخ دهد، Rust عمل _two's complement wrapping_ را انجام می‌دهد. به‌طور خلاصه، مقادیری که از بالاترین مقداری که آن تایپ می‌تواند نگه دارد بیشتر هستند، به پایین‌ترین مقداری که آن تایپ می‌تواند نگه دارد «برمی‌گردند» (wrap around). در مورد یک `u8`، مقدار ۲۵۶ به ۰ تبدیل می‌شود، مقدار ۲۵۷ به ۱ تبدیل می‌شود، و همین‌طور ادامه دارد. برنامه panic نمی‌کند، اما متغیر مقداری خواهد داشت که احتمالاً همان چیزی نیست که انتظارش را داشتید. تکیه کردن روی این رفتار wrapping در integer overflow، یک خطا در نظر گرفته می‌شود.
 >
-> To explicitly handle the possibility of overflow, you can use these families
-> of methods provided by the standard library for primitive numeric types:
+> برای مدیریت صریح احتمال overflow، می‌توانید از این خانواده‌های متد که کتابخانه‌ی استاندارد برای تایپ‌های عددی primitive فراهم کرده استفاده کنید:
 >
-> - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
-> - Return the `None` value if there is overflow with the `checked_*` methods.
-> - Return the value and a Boolean indicating whether there was overflow with
->   the `overflowing_*` methods.
-> - Saturate at the value’s minimum or maximum values with the `saturating_*`
->   methods.
+> - در همه‌ی حالت‌ها wrap کنید با متدهای `wrapping_*`، مثل `wrapping_add`.
+> - اگر overflowای رخ داد مقدار `None` را برگردانید با متدهای `checked_*`.
+> - مقدار و یک بولین که نشان می‌دهد آیا overflowای رخ داده یا نه را برگردانید با متدهای `overflowing_*`.
+> - در بالاترین یا پایین‌ترین مقدار آن تایپ اشباع (saturate) شوید با متدهای `saturating_*`.
 
-#### Floating-Point Types
+#### تایپ‌های Floating-Point
 
-Rust also has two primitive types for _floating-point numbers_, which are
-numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
-which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because on modern CPUs, it’s roughly the same speed as `f32` but is capable of
-more precision. All floating-point types are signed.
+Rust همچنین دو تایپ primitive برای _اعداد اعشاری_ (floating-point numbers) دارد، که اعدادی با نقطه‌ی اعشار هستند. تایپ‌های floating-point در Rust `f32` و `f64` هستند، که به‌ترتیب ۳۲ بیت و ۶۴ بیت اندازه دارند. تایپ پیش‌فرض `f64` است، چون روی CPUهای مدرن، سرعتش تقریباً همان سرعت `f32` است اما دقت بیشتری هم دارد. تمام تایپ‌های floating-point با علامت هستند.
 
-Here’s an example that shows floating-point numbers in action:
+این‌جا یک مثال می‌بینید که اعداد floating-point را در عمل نشان می‌دهد:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -140,14 +80,11 @@ Here’s an example that shows floating-point numbers in action:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-06-floating-point/src/main.rs}}
 ```
 
-Floating-point numbers are represented according to the IEEE-754 standard.
+اعداد floating-point بر اساس استاندارد IEEE-754 نمایش داده می‌شوند.
 
-#### Numeric Operations
+#### عملیات عددی
 
-Rust supports the basic mathematical operations you’d expect for all the number
-types: addition, subtraction, multiplication, division, and remainder. Integer
-division truncates toward zero to the nearest integer. The following code shows
-how you’d use each numeric operation in a `let` statement:
+Rust از عملیات ریاضی پایه‌ای که برای همه‌ی تایپ‌های عددی انتظارش را دارید پشتیبانی می‌کند: جمع، تفریق، ضرب، تقسیم، و باقی‌مانده (remainder). تقسیم integer به‌سمت صفر به نزدیک‌ترین عدد صحیح truncate می‌شود. کد زیر نشان می‌دهد چطور از هر عملیات عددی در یک عبارت `let` استفاده می‌کنید:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -155,16 +92,11 @@ how you’d use each numeric operation in a `let` statement:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-07-numeric-operations/src/main.rs}}
 ```
 
-Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. [Appendix
-B][appendix_b]<!-- ignore --> contains a list of all operators that Rust
-provides.
+هر عبارت در این statementها از یک عملگر ریاضی استفاده می‌کند و به یک مقدار تکی محاسبه می‌شود، که بعد به یک متغیر مقید می‌شود. [پیوست B][appendix_b]<!-- ignore --> لیستی از تمام عملگرهایی که Rust فراهم می‌کند را دارد.
 
-#### The Boolean Type
+#### تایپ بولین
 
-As in most other programming languages, a Boolean type in Rust has two possible
-values: `true` and `false`. Booleans are one byte in size. The Boolean type in
-Rust is specified using `bool`. For example:
+مثل بیشتر زبان‌های برنامه‌نویسی دیگر، یک تایپ بولین در Rust دو مقدار ممکن دارد: `true` و `false`. بولین‌ها یک بایت اندازه دارند. تایپ بولین در Rust با استفاده از `bool` مشخص می‌شود. برای مثال:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -172,14 +104,11 @@ Rust is specified using `bool`. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-08-boolean/src/main.rs}}
 ```
 
-The main way to use Boolean values is through conditionals, such as an `if`
-expression. We’ll cover how `if` expressions work in Rust in the [“Control
-Flow”][control-flow]<!-- ignore --> section.
+اصلی‌ترین راه استفاده از مقادیر بولین از طریق شرط‌ها (conditionals) است، مثل یک عبارت `if`. درباره‌ی این‌که عبارت‌های `if` در Rust چطور کار می‌کنند در بخش [«Control Flow»][control-flow]<!-- ignore --> صحبت می‌کنیم.
 
-#### The Character Type
+#### تایپ کاراکتر
 
-Rust’s `char` type is the language’s most primitive alphabetic type. Here are
-some examples of declaring `char` values:
+تایپ `char` در Rust ابتدایی‌ترین تایپ الفبایی زبان است. این‌جا چند مثال از اعلان مقادیر `char` را می‌بینید:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -187,34 +116,19 @@ some examples of declaring `char` values:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
 ```
 
-Note that we specify `char` literals with single quotation marks, as opposed to
-string literals, which use double quotation marks. Rust’s `char` type is 4
-bytes in size and represents a Unicode scalar value, which means it can
-represent a lot more than just ASCII. Accented letters; Chinese, Japanese, and
-Korean characters; emojis; and zero-width spaces are all valid `char` values in
-Rust. Unicode scalar values range from `U+0000` to `U+D7FF` and `U+E000` to
-`U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
-so your human intuition for what a “character” is may not match up with what a
-`char` is in Rust. We’ll discuss this topic in detail in [“Storing UTF-8
-Encoded Text with Strings”][strings]<!-- ignore --> in Chapter 8.
+توجه کنید که literalهای `char` را با علامت نقل‌قول تکی (single quotation marks) مشخص می‌کنیم، برخلاف literalهای رشته‌ای که از علامت نقل‌قول دوتایی (double quotation marks) استفاده می‌کنند. تایپ `char` در Rust ۴ بایت اندازه دارد و نماینده‌ی یک مقدار scalar یونیکد است، یعنی می‌تواند خیلی بیشتر از فقط ASCII را نمایش دهد. حروف با تلفظ (accented letters)، کاراکترهای چینی، ژاپنی و کره‌ای، ایموجی‌ها، و space‌های با عرض صفر، همگی مقادیر معتبر `char` در Rust هستند. مقادیر scalar یونیکد از `U+0000` تا `U+D7FF` و `U+E000` تا `U+10FFFF` (شامل هر دو سر بازه) هستند. با این حال، «کاراکتر» واقعاً یک مفهوم در یونیکد نیست، پس ممکن است شهود انسانی شما از این‌که یک «کاراکتر» چیست، با چیزی که یک `char` در Rust است هم‌خوانی نداشته باشد. این موضوع را با جزئیات کامل در [«ذخیره‌ی متن کدگذاری‌شده به‌شکل UTF-8 با رشته‌ها»][strings]<!-- ignore --> در فصل ۸ بررسی می‌کنیم.
 
 {{#quiz ../quizzes/ch03-02-data-types-sec1-scalar.toml}}
 
-### Compound Types
+### تایپ‌های Compound
 
-_Compound types_ can group multiple values into one type. Rust has two
-primitive compound types: tuples and arrays.
+_تایپ‌های compound_ می‌توانند چند مقدار را در یک تایپ گروه‌بندی کنند. Rust دو تایپ compound از‌پیش‌ساخته دارد: تاپل‌ها (tuples) و آرایه‌ها (arrays).
 
-#### The Tuple Type
+#### تایپ Tuple
 
-A _tuple_ is a general way of grouping together a number of values with a
-variety of types into one compound type. Tuples have a fixed length: Once
-declared, they cannot grow or shrink in size.
+یک _tuple_ یک روش عمومی برای گروه‌بندی چند مقدار با تایپ‌های مختلف در یک تایپ compound است. تاپل‌ها طول ثابتی دارند: وقتی یک بار اعلان شدند، دیگر نمی‌توانند اندازه‌شان بزرگ‌تر یا کوچک‌تر شود.
 
-We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a type, and the types of the
-different values in the tuple don’t have to be the same. We’ve added optional
-type annotations in this example:
+یک tuple را با نوشتن یک لیست از مقادیر که با کاما از هم جدا شده‌اند، داخل پرانتز می‌سازیم. هر جایگاه در tuple یک تایپ دارد، و تایپ‌های مقادیر مختلف در tuple لازم نیست یکسان باشند. در این مثال، annotationهای تایپ اختیاری هم اضافه کرده‌ایم:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -222,9 +136,7 @@ type annotations in this example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-10-tuples/src/main.rs}}
 ```
 
-The variable `tup` binds to the entire tuple because a tuple is considered a
-single compound element. To get the individual values out of a tuple, we can
-use pattern matching to destructure a tuple value, like this:
+متغیر `tup` به کل tuple مقید می‌شود، چون یک tuple یک المان compound تکی در نظر گرفته می‌شود. برای گرفتن مقادیر تکی از داخل یک tuple، می‌توانیم از pattern matching برای destructure کردن یک مقدار tuple استفاده کنیم، این‌طور:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -232,14 +144,9 @@ use pattern matching to destructure a tuple value, like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-11-destructuring-tuples/src/main.rs}}
 ```
 
-This program first creates a tuple and binds it to the variable `tup`. It then
-uses a pattern with `let` to take `tup` and turn it into three separate
-variables, `x`, `y`, and `z`. This is called _destructuring_ because it breaks
-the single tuple into three parts. Finally, the program prints the value of
-`y`, which is `6.4`.
+این برنامه اول یک tuple می‌سازد و آن را به متغیر `tup` مقید می‌کند. بعد، از یک الگو (pattern) همراه با `let` استفاده می‌کند تا `tup` را بگیرد و آن را به سه متغیر جدا، `x`، `y` و `z`، تبدیل کند. به این کار _destructuring_ می‌گویند، چون tuple تکی را به سه بخش می‌شکند. در نهایت، برنامه مقدار `y` را چاپ می‌کند، که برابر است با `6.4`.
 
-We can also access a tuple element directly by using a period (`.`) followed by
-the index of the value we want to access. For example:
+همچنین می‌توانیم مستقیماً با استفاده از یک نقطه (`.`) به‌همراه ایندکس مقداری که می‌خواهیم به آن دسترسی داشته باشیم، به یک المان tuple دسترسی داشته باشیم. برای مثال:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -247,16 +154,11 @@ the index of the value we want to access. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
 ```
 
-This program creates the tuple `x` and then accesses each element of the tuple
-using their respective indices. As with most programming languages, the first
-index in a tuple is 0.
+این برنامه tuple `x` را می‌سازد و بعد با استفاده از ایندکس مربوط به هر یک، به هر المان tuple دسترسی پیدا می‌کند. مثل بیشتر زبان‌های برنامه‌نویسی، اولین ایندکس در یک tuple برابر با ۰ است.
 
-The tuple without any values has a special name, _unit_. This value and its
-corresponding type are both written `()` and represent an empty value or an
-empty return type. Expressions implicitly return the unit value if they don’t
-return any other value.
+tuple بدون هیچ مقداری یک نام مخصوص دارد، _unit_. این مقدار و تایپ متناظرش هر دو به‌شکل `()` نوشته می‌شوند و نماینده‌ی یک مقدار خالی یا یک تایپ بازگشتی خالی هستند. اگر عبارت‌ها هیچ مقدار دیگری برنگردانند، به‌صورت implicit مقدار unit را برمی‌گردانند.
 
-Additionally, we can modify individual elements of a mutable tuple. For example:
+علاوه بر این، می‌توانیم المان‌های تکی یک tuple قابل تغییر (mutable) را تغییر دهیم. برای مثال:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -268,17 +170,13 @@ fn main() {
 }
 ```
 
-This program sets the first element to zero and adds five to the second element.
-The final value of `x` is `(0, 7)`.
+این برنامه المان اول را صفر می‌کند و پنج را به المان دوم اضافه می‌کند. مقدار نهایی `x` برابر است با `(0, 7)`.
 
-#### The Array Type
+#### تایپ Array
 
-Another way to have a collection of multiple values is with an _array_. Unlike
-a tuple, every element of an array must have the same type. Unlike arrays in
-some other languages, arrays in Rust have a fixed length.
+یک راه دیگر برای داشتن یک collection از چند مقدار، استفاده از یک _array_ است. برخلاف یک tuple، هر المان یک array باید یک تایپ یکسان داشته باشد. برخلاف آرایه‌ها در بعضی زبان‌های دیگر، آرایه‌ها در Rust طول ثابتی دارند.
 
-We write the values in an array as a comma-separated list inside square
-brackets:
+مقادیر یک array را به‌شکل یک لیست که با کاما از هم جدا شده و داخل براکت‌های مربع (square brackets) قرار دارد می‌نویسیم:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -286,56 +184,37 @@ brackets:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-13-arrays/src/main.rs}}
 ```
 
-Arrays are useful when you want your data allocated on the stack, the same as
-the other types we have seen so far, rather than the heap (we will discuss the
-stack and the heap more in [Chapter 4][stack-and-heap]<!-- ignore -->) or when
-you want to ensure that you always have a fixed number of elements. An array
-isn’t as flexible as the vector type, though. A vector is a similar collection
-type provided by the standard library that _is_ allowed to grow or shrink in
-size because its contents live on the heap. If you’re unsure whether to use an
-array or a vector, chances are you should use a vector. [Chapter
-8][vectors]<!-- ignore --> discusses vectors in more detail.
+آرایه‌ها وقتی مفید هستند که می‌خواهید داده‌هایتان روی stack تخصیص داده شوند، دقیقاً مثل تایپ‌های دیگری که تا الان دیده‌ایم، نه روی heap (درباره‌ی stack و heap با جزئیات بیشتری در [فصل ۴][stack-and-heap]<!-- ignore --> صحبت می‌کنیم)، یا وقتی که می‌خواهید مطمئن شوید همیشه یک تعداد ثابت از المان‌ها دارید. با این حال، یک array به‌اندازه‌ی تایپ vector منعطف نیست. یک vector یک تایپ collection مشابه است که کتابخانه‌ی استاندارد فراهم کرده و اجازه دارد در اندازه بزرگ یا کوچک شود، چون محتوایش روی heap زندگی می‌کند. اگر مطمئن نیستید که آرایه یا vector استفاده کنید، احتمالاً باید vector استفاده کنید. [فصل ۸][vectors]<!-- ignore --> درباره‌ی vectorها با جزئیات بیشتری صحبت می‌کند.
 
-However, arrays are more useful when you know the number of elements will not
-need to change. For example, if you were using the names of the month in a
-program, you would probably use an array rather than a vector because you know
-it will always contain 12 elements:
+اما، آرایه‌ها وقتی مفیدتر هستند که می‌دانید تعداد المان‌ها نیازی به تغییر نخواهند داشت. برای مثال، اگر از نام‌های ماه‌ها در یک برنامه استفاده می‌کردید، احتمالاً یک array استفاده می‌کردید نه یک vector، چون می‌دانید همیشه شامل ۱۲ المان خواهد بود:
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-You write an array’s type using square brackets with the type of each element,
-a semicolon, and then the number of elements in the array, like so:
+تایپ یک array را با استفاده از براکت‌های مربع، همراه با تایپ هر المان، یک علامت نقطه‌ویرگول، و بعد تعداد المان‌های آن آرایه می‌نویسید، این‌طور:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
 ```
 
-Here, `i32` is the type of each element. After the semicolon, the number `5`
-indicates the array contains five elements.
+این‌جا، `i32` تایپ هر المان است. بعد از علامت نقطه‌ویرگول، عدد `5` نشان می‌دهد که آرایه پنج المان دارد.
 
-You can also initialize an array to contain the same value for each element by
-specifying the initial value, followed by a semicolon, and then the length of
-the array in square brackets, as shown here:
+همچنین می‌توانید یک آرایه را طوری مقداردهی اولیه (initialize) کنید که هر المانش همان یک مقدار را داشته باشد، با مشخص کردن مقدار اولیه، بعد یک علامت نقطه‌ویرگول، و بعد طول آن آرایه داخل براکت‌های مربع، این‌طور که این‌جا نشان داده شده:
 
 ```rust
 let a = [3; 5];
 ```
 
-The array named `a` will contain `5` elements that will all be set to the value
-`3` initially. This is the same as writing `let a = [3, 3, 3, 3, 3];` but in a
-more concise way.
+آرایه‌ای به نام `a` شامل `5` المان خواهد بود که همه‌شان در ابتدا برابر با مقدار `3` تنظیم شده‌اند. این دقیقاً همان نوشتن `let a = [3, 3, 3, 3, 3];` است، اما به روشی خلاصه‌تر.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="accessing-array-elements"></a>
 
-#### Array Element Access
+#### دسترسی به المان‌های Array
 
-An array is a single chunk of memory of a known, fixed size that can be
-allocated on the stack. You can access elements of an array using indexing,
-like this:
+یک array یک قطعه‌ی تکی از حافظه با اندازه‌ی مشخص و ثابت است که می‌تواند روی stack تخصیص داده شود. می‌توانید با استفاده از indexing به المان‌های یک آرایه دسترسی داشته باشید، این‌طور:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -343,15 +222,11 @@ like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
 ```
 
-In this example, the variable named `first` will get the value `1` because that
-is the value at index `[0]` in the array. The variable named `second` will get
-the value `2` from index `[1]` in the array.
+در این مثال، متغیری به نام `first` مقدار `1` را می‌گیرد، چون این همان مقداری است که در ایندکس `[0]` در آرایه است. متغیری به نام `second` هم مقدار `2` را از ایندکس `[1]` در آرایه می‌گیرد.
 
-#### Invalid Array Element Access
+#### دسترسی نامعتبر به المان‌های Array
 
-Let’s see what happens if you try to access an element of an array that is past
-the end of the array. Say you run this code, similar to the guessing game in
-Chapter 2, to get an array index from the user:
+بیایید ببینیم اگر سعی کنید به المانی از یک آرایه دسترسی داشته باشید که بعد از پایان آن آرایه است، چه اتفاقی می‌افتد. فرض کنید این کد را اجرا می‌کنید، مشابه بازی حدس زدن عدد در فصل ۲، تا یک ایندکس آرایه از کاربر بگیرید:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -359,10 +234,7 @@ Chapter 2, to get an array index from the user:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
-This code compiles successfully. If you run this code using `cargo run` and
-enter `0`, `1`, `2`, `3`, or `4`, the program will print out the corresponding
-value at that index in the array. If you instead enter a number past the end of
-the array, such as `10`, you’ll see output like this:
+این کد با موفقیت کامپایل می‌شود. اگر این کد را با `cargo run` اجرا کنید و `0`، `1`، `2`، `3` یا `4` را وارد کنید، برنامه مقدار متناظر در آن ایندکس از آرایه را چاپ می‌کند. اگر در عوض عددی بعد از پایان آرایه وارد کنید، مثل `10`، خروجی‌ای شبیه این می‌بینید:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access
@@ -376,21 +248,9 @@ index out of bounds: the len is 5 but the index is 10
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-The program resulted in a runtime error at the point of using an invalid
-value in the indexing operation. The program exited with an error message and
-didn’t execute the final `println!` statement. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than or equal to the length,
-Rust will panic. This check has to happen at runtime, especially in this case,
-because the compiler can’t possibly know what value a user will enter when they
-run the code later.
+این برنامه در نقطه‌ی استفاده از یک مقدار نامعتبر در عملیات indexing، به یک خطای زمان اجرا (runtime error) رسید. برنامه با یک پیام خطا خارج شد و عبارت `println!` نهایی را اجرا نکرد. وقتی سعی می‌کنید با استفاده از indexing به یک المان دسترسی داشته باشید، Rust بررسی می‌کند که ایندکسی که مشخص کرده‌اید کمتر از طول آرایه باشد. اگر ایندکس بزرگ‌تر یا مساوی با آن طول باشد، Rust panic می‌کند. این بررسی باید در زمان اجرا اتفاق بیفتد، به‌خصوص در این مورد، چون کامپایلر به هیچ‌وجه نمی‌تواند بداند کاربر بعداً، وقتی کد را اجرا می‌کند، چه مقداری وارد خواهد کرد.
 
-This is an example of Rust’s memory safety principles in action. In many
-low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling and how you can
-write readable, safe code that neither panics nor allows invalid memory access.
+این یک مثال از اصول امنیت حافظه‌ی Rust در عمل است. در بسیاری از زبان‌های سطح‌پایین، این نوع بررسی انجام نمی‌شود، و وقتی یک ایندکس نادرست بدهید، ممکن است به حافظه‌ی نامعتبر دسترسی پیدا شود. Rust شما را در برابر این نوع خطا محافظت می‌کند، با این‌که فوراً خارج می‌شود، به‌جای این‌که اجازه بدهد دسترسی به حافظه ادامه پیدا کند. فصل ۹ بیشتر درباره‌ی مدیریت خطا در Rust و این‌که چطور می‌توانید کدی بنویسید که خوانا و امن باشد و نه panic کند و نه اجازه‌ی دسترسی نامعتبر به حافظه را بدهد، صحبت می‌کند.
 
 {{#quiz ../quizzes/ch03-02-data-types-sec2-compound.toml}}
 

@@ -1,23 +1,11 @@
-# Common Programming Concepts
+# مفاهیم رایج برنامه‌نویسی
 
-This chapter covers concepts that appear in almost every programming language
-and how they work in Rust. Many programming languages have much in common at
-their core. None of the concepts presented in this chapter are unique to Rust,
-but we’ll discuss them in the context of Rust and explain the conventions
-around using them.
+این فصل مفاهیمی را پوشش می‌دهد که تقریباً در هر زبان برنامه‌نویسی‌ای دیده می‌شوند و بررسی می‌کند که این مفاهیم در Rust چطور کار می‌کنند. خیلی از زبان‌های برنامه‌نویسی در هسته‌ی خودشان چیزهای مشترک زیادی دارند. هیچ‌کدام از مفاهیمی که در این فصل معرفی می‌شوند مخصوص Rust نیستند، اما آن‌ها را در بستر Rust بررسی می‌کنیم و قراردادهای استفاده از آن‌ها را توضیح می‌دهیم.
 
-Specifically, you’ll learn about variables, basic types, functions, comments,
-and control flow. These foundations will be in every Rust program, and learning
-them early will give you a strong core to start from.
+به‌طور مشخص، درباره‌ی متغیرها، تایپ‌های پایه، توابع، کامنت‌ها و control flow یاد خواهید گرفت. این پایه‌ها در هر برنامه‌ی Rustای وجود دارند، و یاد گرفتن‌شان از همین اول یک هسته‌ی قوی به شما می‌دهد تا از آن شروع کنید.
 
-> #### Keywords
+> #### کلیدواژه‌ها (Keywords)
 >
-> The Rust language has a set of _keywords_ that are reserved for use by the
-> language only, much as in other languages. Keep in mind that you cannot use
-> these words as names of variables or functions. Most of the keywords have
-> special meanings, and you’ll be using them to do various tasks in your Rust
-> programs; a few have no current functionality associated with them but have
-> been reserved for functionality that might be added to Rust in the future. You
-> can find the list of the keywords in [Appendix A][appendix_a]<!-- ignore -->.
+> زبان Rust مجموعه‌ای از _کلیدواژه‌ها_ (keywords) دارد که فقط برای استفاده‌ی خود زبان رزرو شده‌اند، دقیقاً مثل خیلی از زبان‌های دیگر. یادتان باشد که نمی‌توانید از این کلمه‌ها به‌عنوان نام متغیرها یا توابع استفاده کنید. بیشتر این کلیدواژه‌ها معنای خاصی دارند و از آن‌ها برای انجام کارهای مختلف در برنامه‌های Rust خودتان استفاده خواهید کرد؛ تعداد کمی از آن‌ها هم فعلاً هیچ قابلیت خاصی ندارند، اما برای قابلیت‌هایی که ممکن است در آینده به Rust اضافه شوند رزرو شده‌اند. لیست این کلیدواژه‌ها را می‌توانید در [پیوست A][appendix_a]<!-- ignore --> پیدا کنید.
 
 [appendix_a]: appendix-01-keywords.md
