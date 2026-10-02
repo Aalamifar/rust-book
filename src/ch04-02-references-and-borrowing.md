@@ -1,6 +1,6 @@
-## References and Borrowing
+## ارجاع‌ها و قرض گرفتن
 
-Ownership, boxes, and moves provide a foundation for safely programming with the heap. However, move-only APIs can be inconvenient to use. For example, say you want to read some strings twice:
+مالکیت، باکس‌ها و جابه‌جایی‌ها (moves) پایه‌ای برای برنامه‌نویسیِ امن با هیپ فراهم می‌کنند. با این حال، رابط‌های برنامه‌نویسیِ فقط-مبتنی‌بر-جابه‌جایی می‌توانند استفاده از آن‌ها را ناخوشایند کنند. برای مثال، فرض کنید می‌خواهید چند رشته را دو بار بخوانید:
 
 ```aquascope,interpreter,shouldFail,horizontal
 fn main() {
@@ -15,7 +15,7 @@ fn greet(g1: String, g2: String) {
 }
 ```
 
-In this example, calling `greet` moves the data from `m1` and `m2` into the parameters of `greet`. Both strings are dropped at the end of `greet`, and therefore cannot be used within `main`. If we try to read them like in the operation `format!(..)`, then that would be undefined behavior. The Rust compiler therefore rejects this program with the same error we saw last section:
+در این مثال، فراخوانی `greet` داده‌های `m1` و `m2` را به پارامترهای `greet` منتقل (move) می‌کند. هر دو رشته در پایان `greet` آزاد (drop) می‌شوند، و به همین دلیل دیگر درون `main` قابل استفاده نیستند. اگر بخواهیم آن‌ها را مثلاً در عملیات `format!(..)` بخوانیم، این کار رفتار نامشخص خواهد بود. به همین دلیل، کامپایلر راست این برنامه را با همان خطایی که در بخش قبل دیدیم، رد می‌کند:
 
 ```text
 error[E0382]: borrow of moved value: `m1`
@@ -23,7 +23,7 @@ error[E0382]: borrow of moved value: `m1`
  (...rest of the error...)
 ```
 
-This move behavior is extremely inconvenient. Programs often need to use a string more than once. An alternative `greet` could return ownership of the strings, like this:
+این رفتار جابه‌جایی بسیار ناخوشایند است. برنامه‌ها اغلب باید یک رشته را بیش از یک بار استفاده کنند. یک `greet` جایگزین می‌تواند مالکیت رشته‌ها را برگرداند، مثل این:
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -39,11 +39,11 @@ fn greet(g1: String, g2: String) -> (String, String) {
 }
 ```
 
-However, this style of program is quite verbose. Rust provides a concise style of reading and writing without moves through references.
+با این حال، این سبک برنامه‌نویسی نسبتاً پرحرف و طولانی است. راست سبکی موجز برای خواندن و نوشتن بدون جابه‌جایی، از طریق ارجاع‌ها (references) فراهم می‌کند.
 
-### References Are Non-Owning Pointers
+### ارجاع‌ها، اشاره‌گرهایی غیرمالک هستند
 
-A **reference** is a kind of pointer. Here's an example of a reference that rewrites our `greet` program in a more convenient manner:
+یک **ارجاع (reference)** نوعی اشاره‌گر است. در ادامه مثالی از یک ارجاع می‌آید که برنامه‌ی `greet` ما را به شکلی راحت‌تر بازنویسی می‌کند:
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -58,21 +58,21 @@ fn greet(g1: &String, g2: &String) { // note the ampersands
 }
 ```
 
-The expression `&m1` uses the ampersand operator to create a reference to (or "borrow") `m1`. The type of the `greet` parameter `g1` is changed to `&String`, meaning "a reference to a `String`".
+عبارت `&m1` از عملگر و (ampersand) برای ساختن یک ارجاع به `m1` (یا «قرض گرفتنِ» آن) استفاده می‌کند. نوع پارامترِ `g1` در `greet` به `&String` تغییر می‌کند، که به معنای «ارجاعی به یک `String`» است.
 
 <!-- At runtime, the references look like this:
 
 <img src="img/experiment/ch04-02-stack1.jpg" class="center" width="350" /> -->
 
-Observe at L2 that there are two steps from `g1` to the string "Hello". `g1` is a reference that points to `m1` on the stack, and `m1` is a String containing a box that points to "Hello" on the heap.
+توجه کنید که در L2، دو مرحله از `g1` تا رشته‌ی "Hello" طی می‌شود. `g1` ارجاعی است که به `m1` روی پشته اشاره می‌کند، و `m1` یک `String` است که حاوی یک باکس است که به "Hello" روی هیپ اشاره می‌کند.
 
-While `m1` owns the heap data "Hello", `g1` does _not_ own either `m1` or "Hello". Therefore after `greet` ends and the program reaches L3, no heap data has been deallocated. Only the stack frame for `greet` disappears. This fact is consistent with our *Box Deallocation Principle*. Because `g1` did not own "Hello", Rust did not deallocate "Hello" on behalf of `g1`.
+درحالی‌که `m1` مالکِ داده‌ی هیپِ "Hello" است، `g1` مالک *نه* `m1` است و *نه* "Hello". بنابراین بعد از پایان `greet` و رسیدن برنامه به L3، هیچ داده‌ی هیپی آزاد نشده است. فقط قاب پشته‌ی `greet` ناپدید می‌شود. این حقیقت با *اصل آزادسازی باکس* ما سازگار است. چون `g1` مالک "Hello" نبود، راست "Hello" را به نمایندگی از `g1` آزاد نکرد.
 
-References are **non-owning pointers**, because they do not own the data they point to.
+ارجاع‌ها **اشاره‌گرهای غیرمالک (non-owning pointers)** هستند، چون مالکِ داده‌ای که به آن اشاره می‌کنند نیستند.
 
-### Dereferencing a Pointer Accesses Its Data
+### واکردنِ یک اشاره‌گر به داده‌اش دسترسی می‌دهد
 
-The previous examples using boxes and strings have not shown how Rust "follows" a pointer to its data. For example, the `println!` macro has mysteriously worked for both owned strings of type `String`, and for string references of type `&String`. The underlying mechanism is the **dereference** operator, written with an asterisk (`*`). For example, here's a program that uses dereferences in a few different ways:
+مثال‌های قبلی که از باکس‌ها و رشته‌ها استفاده کردند، نشان ندادند که راست چگونه یک اشاره‌گر را تا داده‌اش «دنبال می‌کند». برای مثال، ماکروی `println!` به‌طور مرموزی هم برای رشته‌های مالکیت‌دار از نوع `String` و هم برای ارجاع‌های رشته‌ای از نوع `&String` کار کرده است. سازوکار زیربنایی این کار، عملگر **واکردن (dereference)** است، که با یک ستاره (`*`) نوشته می‌شود. برای مثال، در ادامه برنامه‌ای می‌آید که از واکردن به چند شکل مختلف استفاده می‌کند:
 
 ```aquascope,interpreter
 # fn main() {
@@ -89,9 +89,9 @@ let c: i32 = *r2;`[]`    // so only one dereference is needed to read it
 # }
 ```
 
-Observe the difference between `r1` pointing to `x` on the stack, and `r2` pointing to the heap value `2`.
+به تفاوتِ میان `r1` که به `x` روی پشته اشاره می‌کند، و `r2` که مستقیماً به مقدار هیپ یعنی `2` اشاره می‌کند، توجه کنید.
 
-You probably won't see the dereference operator very often when you read Rust code. Rust implicitly inserts dereferences and references in certain cases, such as calling a method with the dot operator. For example, this program shows two equivalent ways of calling the [`i32::abs`](https://doc.rust-lang.org/std/primitive.i32.html#method.abs) (absolute value) and [`str::len`](https://doc.rust-lang.org/std/primitive.str.html#method.len) (string length) functions:
+احتمالاً وقتی کد راست می‌خوانید، زیاد عملگر واکردن را نمی‌بینید. راست در برخی موارد به‌طور ضمنی واکردن و ارجاع‌گیری را وارد می‌کند، مثلاً هنگام فراخوانی یک متد با عملگر نقطه. برای مثال، این برنامه دو روش معادل برای فراخوانی توابع [`i32::abs`](https://doc.rust-lang.org/std/primitive.i32.html#method.abs) (قدر مطلق) و [`str::len`](https://doc.rust-lang.org/std/primitive.str.html#method.len) (طول رشته) را نشان می‌دهد:
 
 ```rust,ignore
 # fn main()  {
@@ -112,26 +112,26 @@ assert_eq!(s_len1, s_len2);
 # }
 ```
 
-This example shows implicit conversions in three ways:
-1. The `i32::abs` function expects an input of type `i32`. To call `abs` with a `Box<i32>`, you can explicitly dereference the box like `i32::abs(*x)`. You can also implicitly dereference the box using method-call syntax like `x.abs()`. The dot syntax is syntactic sugar for the function-call syntax.
+این مثال تبدیل‌های ضمنی را به سه شکل نشان می‌دهد:
+۱. تابع `i32::abs` ورودی‌ای از نوع `i32` انتظار دارد. برای فراخوانی `abs` با یک `Box<i32>`، می‌توانید به‌طور صریح باکس را با `i32::abs(*x)` واکنید. همچنین می‌توانید با استفاده از نحو فراخوانیِ متد مثل `x.abs()`، باکس را به‌طور ضمنی واکنید. نحو نقطه‌ای، شکر نحوی (syntactic sugar) برای نحو فراخوانی تابع است.
 
-2. This implicit conversion works for multiple layers of pointers. For example, calling `abs` on a reference to a box `r: &Box<i32>` will insert two dereferences.
+۲. این تبدیل ضمنی برای چندین لایه از اشاره‌گرها هم کار می‌کند. برای مثال، فراخوانیِ `abs` روی یک ارجاع به باکس، یعنی `r: &Box<i32>`، دو واکردن را اضافه می‌کند.
 
-3. This conversion also works the opposite direction. The function `str::len` expects a reference `&str`. If you call `len` on an owned `String`, then Rust will insert a single borrowing operator. (In fact, there is a further conversion from `String` to `str`!)
+۳. این تبدیل در جهت مخالف هم کار می‌کند. تابع `str::len` یک ارجاع، یعنی `&str`، انتظار دارد. اگر `len` را روی یک `String` مالکیت‌دار فراخوانی کنید، راست یک عملگرِ قرض‌گیری (borrowing) اضافه می‌کند. (در واقع، یک تبدیل دیگر هم از `String` به `str` وجود دارد!)
 
-We will say more about method calls and implicit conversions in later chapters. For now, the important takeaway is that these conversions are happening with method calls and some macros like `println`. We want to unravel all the "magic" of Rust so you can have a clear mental model of how Rust works.
+درباره‌ی فراخوانی متدها و تبدیل‌های ضمنی، در فصل‌های بعدی بیشتر صحبت خواهیم کرد. فعلاً نکته‌ی مهم این است که این تبدیل‌ها هنگام فراخوانی متدها و در برخی ماکروها مانند `println` رخ می‌دهند. می‌خواهیم تمام «جادوهای» راست را باز کنیم تا مدل ذهنی روشنی از نحوه‌ی کار راست داشته باشید.
 
 {{#quiz ../quizzes/ch04-02-references-sec1-basics.toml}}
 
-### Rust Avoids Simultaneous Aliasing and Mutation
+### راست از هم‌زمانیِ نام‌مستعارسازی و تغییر جلوگیری می‌کند
 
-Pointers are a powerful and dangerous feature because they enable **aliasing**. Aliasing is accessing the same data through different variables. On its own, aliasing is harmless. But combined with **mutation**, we have a recipe for disaster. One variable can "pull the rug out" from another variable in many ways, for example:
+اشاره‌گرها ویژگی‌ای قدرتمند و خطرناک هستند، چون **نام‌مستعارسازی (aliasing)** را ممکن می‌کنند. نام‌مستعارسازی یعنی دسترسی به یک داده‌ی واحد از طریق متغیرهای متفاوت. نام‌مستعارسازی به‌تنهایی بی‌ضرر است. اما وقتی با **تغییر (mutation)** ترکیب شود، دستورالعملی برای فاجعه داریم. یک متغیر می‌تواند از راه‌های مختلفی «فرش را زیر پای» متغیر دیگر بکشد، برای مثال:
 
-- By deallocating the aliased data, leaving the other variable to point to deallocated memory.
-- By mutating the aliased data, invalidating runtime properties expected by the other variable.
-- By _concurrently_ mutating the aliased data, causing a data race with nondeterministic behavior for the other variable.
+- با آزاد کردنِ داده‌ی نام‌مستعارشده، به‌طوری‌که متغیر دیگر به حافظه‌ی آزادشده اشاره کند.
+- با تغییر دادنِ داده‌ی نام‌مستعارشده، و نامعتبر کردنِ ویژگی‌های زمان‌اجرایی که متغیر دیگر انتظارشان را دارد.
+- با تغییر دادنِ *هم‌زمانِ* داده‌ی نام‌مستعارشده، و ایجاد یک رقابت داده‌ای (data race) با رفتاری غیرقطعی برای متغیر دیگر.
 
-As a running example, we are going to look at programs using the vector data structure, [`Vec`]. Unlike arrays which have a fixed length, vectors have a variable length by storing their elements in the heap. For example, [`Vec::push`] adds an element to the end of a vector, like this:
+به‌عنوان یک مثال جاری، به برنامه‌هایی نگاه خواهیم کرد که از ساختار داده‌ی وکتور [`Vec`] استفاده می‌کنند. برخلاف آرایه‌ها که طول ثابت دارند، وکتورها با ذخیره‌ی عناصرشان در هیپ، طول متغیر دارند. برای مثال، تابع [`Vec::push`] یک عنصر را به انتهای وکتور اضافه می‌کند، مثل این:
 
 ```aquascope,interpreter,horizontal
 #fn main() {
@@ -140,9 +140,9 @@ v.push(4);`[]`
 #}
 ```
 
-The macro `vec!` creates a vector with the elements between the brackets. The vector `v` has type `Vec<i32>`. The syntax `<i32>` means the elements of the vector have type `i32`.
+ماکروی `vec!` وکتوری با عناصرِ میان کروشه‌ها می‌سازد. وکتورِ `v` نوعِ `Vec<i32>` دارد. نحوِ `<i32>` به این معناست که عناصرِ وکتور از نوعِ `i32` هستند.
 
-One important implementation detail is that `v` allocates a heap array of a certain *capacity*. We can peek into `Vec`'s internals and see this detail for ourselves:
+یک جزئیاتِ پیاده‌سازیِ مهم این است که `v` یک آرایه‌ی هیپی با یک *ظرفیت (capacity)* مشخص تخصیص می‌دهد. می‌توانیم درونِ `Vec` را نگاه کنیم و خودمان این جزئیات را ببینیم:
 
 ```aquascope,interpreter,horizontal,concreteTypes
 #fn main() {
@@ -150,11 +150,11 @@ let mut v: Vec<i32> = vec![1, 2, 3];`[]`
 #}
 ```
 
-> *Note:* click the binocular icon in the top right of the diagram to toggle this detailed view in any runtime diagram.
+> *نکته:* برای تغییرِ نمایشِ جزئیِ این دیاگرام در هر نمودارِ زمان‌اجرا، روی نمادِ دوربینِ شکاری در گوشه‌ی بالا-راست دیاگرام کلیک کنید.
 
-Notice that the vector has a length (`len`) of 3 and a capacity (`cap`) of 3. The vector is at capacity. So when we do a `push`, the vector has to create a new allocation with larger capacity, copy all the elements over, and deallocate the original heap array. In the diagram above, the array `1 2 3 4` is in a (potentially) different memory location than the original array `1 2 3`.
+توجه کنید که وکتور طولی (`len`) برابر ۳ و ظرفیتی (`cap`) برابر ۳ دارد. وکتور در ظرفیتِ کامل است. پس وقتی `push` را انجام می‌دهیم، وکتور باید یک تخصیصِ جدید با ظرفیتِ بزرگ‌تر بسازد، همه‌ی عناصر را در آن کپی کند و آرایه‌ی هیپیِ اصلی را آزاد کند. در دیاگرامِ بالا، آرایه‌ی `1 2 3 4` در مکانی حافظه‌ای (بالقوه) متفاوت از آرایه‌ی اصلیِ `1 2 3` است.
 
-To tie this back to memory safety, let's bring references into the mix. Say we created a reference to a vector's heap data. Then that reference can be invalidated by a push, as simulated below:
+برای پیوند دادنِ این موضوع به امنیتِ حافظه، بیایید ارجاع‌ها را هم وارد بحث کنیم. فرض کنید ارجاعی به داده‌ی هیپیِ یک وکتور ساخته‌ایم. سپس آن ارجاع می‌تواند با یک `push` نامعتبر شود، همان‌طور که در ادامه شبیه‌سازی شده:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #fn main() {
@@ -165,30 +165,29 @@ println!("Third element is {}", *num);`[]`
 #}
 ```
 
-Initially, `v` points to an array with 3 elements on the heap. Then `num` is created as a reference to the third element, as seen at L1. However, the operation `v.push(4)` resizes `v`. The resize will deallocate the previous array and allocate a new, bigger array. In the process, `num` is left pointing to invalid memory. Therefore at L3, dereferencing `*num` reads invalid memory, causing undefined behavior.
+در ابتدا، `v` به آرایه‌ای با ۳ عنصر روی هیپ اشاره می‌کند. سپس `num` به‌عنوان ارجاعی به عنصر سوم ساخته می‌شود، همان‌طور که در L1 دیده می‌شود. اما عملیاتِ `v.push(4)` اندازه‌ی `v` را تغییر می‌دهد. این تغییرِ اندازه، آرایه‌ی قبلی را آزاد می‌کند و آرایه‌ای جدید و بزرگ‌تر تخصیص می‌دهد. در این فرآیند، `num` به حافظه‌ای نامعتبر اشاره می‌کند. بنابراین در L3، واکردنِ `*num` حافظه‌ی نامعتبر را می‌خواند و باعث رفتار نامشخص می‌شود.
 
-In more abstract terms, the issue is that the vector `v` is both aliased (by the reference `num`) and mutated (by the operation `v.push(4)`). So to avoid these kinds of issues, Rust follows a basic principle:
+به بیانی انتزاعی‌تر، مشکل این است که وکتورِ `v` هم نام‌مستعار شده (توسط ارجاعِ `num`) و هم تغییر یافته (توسط عملیاتِ `v.push(4)`) است. برای جلوگیری از این نوع مشکلات، راست از یک اصل پایه پیروی می‌کند:
 
-> **Pointer Safety Principle**: data should never be aliased and mutated at the same time.
+> **اصل امنیتِ اشاره‌گر (Pointer Safety Principle):** یک داده هرگز نباید هم‌زمان نام‌مستعار و تغییر داده شود.
 
-Data can be aliased. Data can be mutated. But data cannot be _both_ aliased _and_ mutated. For example, Rust enforces this principle for boxes (owned pointers) by disallowing aliasing. Assigning a box from one variable to another will move ownership, invalidating the previous variable. Owned data can only be accessed through the owner &mdash; no aliases.
+یک داده می‌تواند نام‌مستعار شود. یک داده می‌تواند تغییر کند. اما یک داده نمی‌تواند *هم* نام‌مستعار شود و *هم* تغییر کند. برای مثال، راست این اصل را برای باکس‌ها (اشاره‌گرهای مالکیت‌دار) با ممنوع کردنِ نام‌مستعارسازی اجرا می‌کند. انتساب یک باکس از یک متغیر به متغیر دیگر، مالکیت را جابه‌جا می‌کند و متغیر قبلی را نامعتبر می‌سازد. داده‌ی مالکیت‌دار فقط از طریق مالکش قابل دسترسی است — بدون هیچ نام‌مستعاری.
 
-However, because references are non-owning pointers, they need different rules than boxes to ensure the *Pointer Safety Principle*. By design, references are meant to temporarily create aliases. In the rest of this section, we will explain the basics of how Rust ensures the safety of references through the **borrow checker.**
+با این حال، چون ارجاع‌ها اشاره‌گرهای غیرمالک هستند، برای تضمینِ *اصل امنیتِ اشاره‌گر* به قواعدی متفاوت از باکس‌ها نیاز دارند. ارجاع‌ها ذاتاً برای ساختنِ نام‌مستعارهای موقت طراحی شده‌اند. در باقیِ این بخش، مبانیِ نحوه‌ی تضمینِ امنیتِ ارجاع‌ها توسط راست از طریق **بررسی‌کننده‌ی قرض (borrow checker)** را توضیح می‌دهیم.
 
-### References Change Permissions on Places
+### ارجاع‌ها اجازه‌های روی مکان‌ها را تغییر می‌دهند
 
-The core idea behind the borrow checker is that variables have three kinds of **permissions** on their data:
+ایده‌ی اصلیِ پشتِ بررسی‌کننده‌ی قرض این است که متغیرها سه نوع **اجازه (permission)** روی داده‌شان دارند:
 
-- **Read** (@Perm{read}): data can be copied to another location.
-- **Write** (@Perm{write}): data can be mutated.
-- **Own** (@Perm{own}): data can be moved or dropped.
+- **خواندن (@Perm{read})**: داده می‌تواند به مکانی دیگر کپی شود.
+- **نوشتن (@Perm{write})**: داده می‌تواند تغییر کند.
+- **مالکیت (@Perm{own})**: داده می‌تواند جابه‌جا یا آزاد شود.
 
-These permissions don't exist at runtime, only within the compiler. They describe how the compiler "thinks" about your program before the program is executed.
+این اجازه‌ها در زمانِ اجرا وجود ندارند، فقط درونِ کامپایلر وجود دارند. آن‌ها توصیف می‌کنند که کامپایلر پیش از اجرای برنامه، چگونه درباره‌ی برنامه‌ی شما «فکر می‌کند».
 
-By default, a variable has read/own permissions (@Perm{read}@Perm{own}) on its data. If a variable is annotated with `let mut`, then it also has the write permission (@Perm{write}). The key idea is
-that **references can temporarily remove these permissions.**
+به‌طور پیش‌فرض، یک متغیر اجازه‌های خواندن/مالکیت (@Perm{read}@Perm{own}) روی داده‌اش دارد. اگر متغیری با `let mut` مشخص شود، آن‌گاه اجازه‌ی نوشتن (@Perm{write}) را هم دارد. ایده‌ی کلیدی این است که **ارجاع‌ها می‌توانند به‌طور موقت این اجازه‌ها را حذف کنند.**
 
-To illustrate this idea, let's look at the permissions on a variation of the program above that is actually safe. The `push` has been moved after the `println!`. The permissions in this program are visualized with a new kind of diagram. The diagram shows the changes in permissions on each line.
+برای نشان دادنِ این ایده، بیایید اجازه‌ها را روی نسخه‌ای از برنامه‌ی بالا که واقعاً امن است، بررسی کنیم. `push` به بعد از `println!` منتقل شده است. اجازه‌های این برنامه با نوعی جدید از دیاگرام به تصویر کشیده شده‌اند. این دیاگرام تغییراتِ اجازه‌ها را در هر خط نشان می‌دهد.
 
 ```aquascope,permissions,stepper
 #fn main() {
@@ -199,19 +198,19 @@ v.push(4);
 #}
 ```
 
-Let's walk through each line:
+بیایید هر خط را مرور کنیم:
 
-1. After `let mut v = (...)`, the variable `v` has been initialized (indicated by <i class="fa fa-arrow-turn-up"></i>). It gains @Perm[gained]{read}@Perm[gained]{write}@Perm[gained]{own} permissions (the plus sign indicates gain).
-2. After `let num = &v[2]`, the data in `v` has been **borrowed** by `num` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
-   - The borrow removes @Perm[lost]{write}@Perm[lost]{own} permissions from `v` (the slash indicates loss). `v` cannot be written or owned, but it can still be read.
-   - The variable `num` has gained @Perm{read}@Perm{own} permissions. `num` is not writable (the missing @Perm{write} permission is shown as a dash <span class="perm write">‒</span>) because it was not marked `let mut`.
-   - The **place** `*num` has gained the @Perm{read} permission.
-3. After `println!(...)`, then `num` is no longer in use, so `v` is no longer borrowed. Therefore:
-   - `v` regains its @Perm{write}@Perm{own} permissions (indicated by <i class="fa fa-rotate-left"></i>).
-   - `num` and `*num` have lost all of their permissions (indicated by <i class="fa fa-arrow-turn-down"></i>).
-4. After `v.push(4)`, then `v` is no longer in use, and it loses all of its permissions.
+۱. بعد از `let mut v = (...)`، متغیرِ `v` مقداردهی‌اولیه شده است (که با <i class="fa fa-arrow-turn-up"></i> نشان داده می‌شود). این متغیر اجازه‌های @Perm[gained]{read}@Perm[gained]{write}@Perm[gained]{own} را به دست می‌آورد (علامتِ به‌علاوه نشان‌دهنده‌ی به‌دست‌آوردن است).
+۲. بعد از `let num = &v[2]`، داده‌ی درونِ `v` توسط `num` **قرض گرفته می‌شود** (که با <i class="fa fa-arrow-right"></i> نشان داده می‌شود). سه اتفاق می‌افتد:
+   - قرض گرفتن، اجازه‌های @Perm[lost]{write}@Perm[lost]{own} را از `v` حذف می‌کند (علامتِ خط‌مورب نشان‌دهنده‌ی از دست دادن است). `v` نمی‌تواند نوشته یا مالکیتش منتقل شود، اما همچنان می‌تواند خوانده شود.
+   - متغیرِ `num` اجازه‌های @Perm{read}@Perm{own} را به دست آورده است. `num` قابلِ نوشتن نیست (نبودِ اجازه‌ی @Perm{write} با یک خط‌تیره <span class="perm write">‒</span> نشان داده می‌شود) چون با `let mut` مشخص نشده بود.
+   - **مکانِ** `*num` اجازه‌ی @Perm{read} را به دست آورده است.
+۳. بعد از `println!(...)`، دیگر `num` استفاده نمی‌شود، پس `v` دیگر قرض داده نشده است. بنابراین:
+   - `v` اجازه‌های @Perm{write}@Perm{own} خود را دوباره به دست می‌آورد (که با <i class="fa fa-rotate-left"></i> نشان داده می‌شود).
+   - `num` و `*num` تمامِ اجازه‌هایشان را از دست داده‌اند (که با <i class="fa fa-arrow-turn-down"></i> نشان داده می‌شود).
+۴. بعد از `v.push(4)`، دیگر `v` استفاده نمی‌شود و همه‌ی اجازه‌هایش را از دست می‌دهد.
 
-Next, let's explore a few nuances of the diagram. First, why do you see both `num` and `*num`? Because accessing data through a reference is not the same as manipulating the reference itself. For example, say we declared a reference to a number with `let mut`:
+حالا بیایید چند نکته‌ی ظریف در این دیاگرام را بررسی کنیم. اول، چرا هم `num` و هم `*num` را می‌بینید؟ چون دسترسی به داده از طریقِ یک ارجاع، با دستکاریِ خودِ ارجاع یکسان نیست. برای مثال، فرض کنید ارجاعی به یک عدد را با `let mut` اعلام کنیم:
 
 ```aquascope,permissions,stepper
 #fn main() {
@@ -221,18 +220,18 @@ let mut x_ref = &x;
 #}
 ```
 
-Notice that `x_ref` has the @Perm{write} permission, while `*x_ref` does not. That means we can assign a different reference to the `x_ref` variable (e.g. `x_ref = &y`), but we cannot mutate the data it points to (e.g. `*x_ref += 1`).
+توجه کنید که `x_ref` اجازه‌ی @Perm{write} را دارد، درحالی‌که `*x_ref` ندارد. این یعنی می‌توانیم ارجاعی متفاوت به متغیرِ `x_ref` منتسب کنیم (مثلاً `x_ref = &y`)، اما نمی‌توانیم داده‌ای را که به آن اشاره می‌کند تغییر دهیم (مثلاً `*x_ref += 1`).
 
-More generally, permissions are defined on **places** and not just variables. A place is anything you can put on the left-hand side of an assignment. Places include:
+به‌طور کلی‌تر، اجازه‌ها روی **مکان‌ها (places)** تعریف می‌شوند، نه فقط متغیرها. مکان، هر چیزی است که می‌توانید در سمتِ چپِ یک انتساب قرار دهید. مکان‌ها شاملِ این موارد هستند:
 
-- Variables, like `a`.
-- Dereferences of places, like `*a`.
-- Array accesses of places, like `a[0]`.
-- Fields of places, like `a.0` for tuples or `a.field` for structs (discussed next chapter).
-- Any combination of the above, like `*((*a)[0].1)`.
+- متغیرها، مانند `a`.
+- واکردنِ مکان‌ها، مانند `*a`.
+- دسترسیِ آرایه‌ای به مکان‌ها، مانند `a[0]`.
+- فیلدهای مکان‌ها، مانند `a.0` برای تاپل‌ها یا `a.field` برای ساختارها (که در فصل بعدی بحث می‌شود).
+- هر ترکیبی از موارد بالا، مانند `*((*a)[0].1)`.
 
 
-Second, why do places lose permissions when they become unused? Because some permissions are mutually exclusive. If you write `num = &v[2]`, then `v` cannot be mutated or dropped while `num` is in use. But that doesn't mean it's invalid to use `num` again. For example, if we add another `println!` to the above program, then `num` simply loses its permissions one line later:
+دوم، چرا مکان‌ها وقتی استفاده‌نشده می‌شوند، اجازه‌هایشان را از دست می‌دهند؟ چون برخی اجازه‌ها متقابلاً منحصربه‌فرد هستند. اگر `num = &v[2]` را بنویسید، آن‌گاه `v` تا زمانی‌که `num` در حالِ استفاده است، نمی‌تواند تغییر یا آزاد شود. اما این به این معنا نیست که استفاده‌ی دوباره از `num` نامعتبر است. برای مثال، اگر یک `println!` دیگر به برنامه‌ی بالا اضافه کنیم، `num` به‌سادگی یک خط دیرتر اجازه‌هایش را از دست می‌دهد:
 
 ```aquascope,permissions,stepper
 #fn main() {
@@ -244,14 +243,14 @@ v.push(4);
 #}
 ```
 
-It's only a problem if you attempt to use `num` again *after* mutating `v`. Let's look at this in more detail.
+مشکل فقط زمانی پیش می‌آید که بخواهید *بعد از* تغییرِ `v`، دوباره از `num` استفاده کنید. بیایید این موضوع را با جزئیات بیشتری بررسی کنیم.
 
 
-### The Borrow Checker Finds Permission Violations
+### بررسی‌کننده‌ی قرض، نقض‌های اجازه را پیدا می‌کند
 
-Recall the *Pointer Safety Principle*: data should not be aliased and mutated. The goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer in use.
+اصلِ *امنیتِ اشاره‌گر* را به یاد بیاورید: داده نباید نام‌مستعار و تغییر داده شود. هدفِ این اجازه‌ها این است که تضمین کنند اگر داده‌ای نام‌مستعار شده باشد، نتواند تغییر کند. ساختنِ ارجاع به یک داده (یعنی «قرض گرفتنِ» آن) باعث می‌شود آن داده تا وقتی ارجاع در حالِ استفاده است، به‌طور موقت فقط‌خواندنی شود.
 
-Rust uses these permissions in its **borrow checker**. The borrow checker looks for potentially unsafe operations involving references. Let's return to the unsafe program we saw earlier, where `push` invalidates a reference. This time we'll add another aspect to the permissions diagram:
+راست از این اجازه‌ها در **بررسی‌کننده‌ی قرض (borrow checker)** خود استفاده می‌کند. بررسی‌کننده‌ی قرض دنبالِ عملیاتِ بالقوه‌ ناامنِ مرتبط با ارجاع‌ها می‌گردد. بیایید به برنامه‌ی ناامنی که پیش‌تر دیدیم و در آن `push` باعثِ نامعتبر شدنِ یک ارجاع می‌شد، برگردیم. این بار جنبه‌ی دیگری را به دیاگرامِ اجازه‌ها اضافه می‌کنیم:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #fn main() {
@@ -262,11 +261,11 @@ println!("Third element is {}", *num);
 #}
 ```
 
-Any time a place is used, Rust expects that place to have certain permissions depending on the operation. For example, the borrow `&v[2]` requires that `v` is readable. Therefore the @Perm{read} permission is shown between the operation `&` and the place `v`. The letter is filled-in because `v` has the read permission at that line.
+هر بار که یک مکان استفاده می‌شود، راست انتظار دارد آن مکان، بسته به نوعِ عملیات، اجازه‌های خاصی داشته باشد. برای مثال، قرضِ `&v[2]` نیاز دارد که `v` قابلِ خواندن باشد. بنابراین اجازه‌ی @Perm{read} بینِ عملگرِ `&` و مکانِ `v` نشان داده می‌شود. این حرف پرشده است چون `v` در آن خط اجازه‌ی خواندن را دارد.
 
-By contrast, the mutating operation `v.push(4)` requires that `v` is readable and writable. Both @Perm{read} and @Perm{write} are shown. However, `v` does not have write permissions (it is borrowed by `num`). So the letter @Perm[missing]{write} is hollow, indicating that the write permission is *expected* but `v` does not have it.
+در مقابل، عملیاتِ تغییردهنده‌ی `v.push(4)` نیاز دارد که `v` هم قابلِ خواندن باشد و هم قابلِ نوشتن. هر دوی @Perm{read} و @Perm{write} نشان داده می‌شوند. اما `v` اجازه‌ی نوشتن ندارد (چون توسطِ `num` قرض داده شده است). پس حرفِ @Perm[missing]{write} توخالی است، که نشان می‌دهد اجازه‌ی نوشتن *انتظار می‌رود* اما `v` آن را ندارد.
 
-If you try to compile this program, then the Rust compiler will return the following error:
+اگر بخواهید این برنامه را کامپایل کنید، کامپایلرِ راست این خطا را برمی‌گرداند:
 
 ```text
 error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
@@ -280,14 +279,14 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
   |                                 ---- immutable borrow later used here
 ```
 
-The error message explains that `v` cannot be mutated while the reference `num` is in use. That's the surface-level reason &mdash; the underlying issue is that `num` could be invalidated by `push`. Rust catches that potential violation of memory safety.
+پیامِ خطا توضیح می‌دهد که `v` تا زمانی‌که ارجاعِ `num` در حالِ استفاده است، نمی‌تواند تغییر کند. این دلیلِ سطحیِ ماجراست — مشکلِ زیربنایی این است که `num` می‌توانست توسطِ `push` نامعتبر شود. راست این نقضِ بالقوه‌ی امنیتِ حافظه را تشخیص می‌دهد.
 
 
-### Mutable References Provide Unique and Non-Owning Access to Data
+### ارجاع‌های تغییرپذیر، دسترسیِ منحصربه‌فرد و غیرمالک به داده می‌دهند
 
-The references we have seen so far are read-only **immutable references** (also called **shared references**). Immutable references permit aliasing but disallow mutation. However, it is also useful to temporarily provide mutable access to data without moving it.
+ارجاع‌هایی که تا اینجا دیدیم، **ارجاع‌های تغییرناپذیر (immutable references)** فقط‌خواندنی بودند (که **ارجاع‌های اشتراکی (shared references)** هم نامیده می‌شوند). ارجاع‌های تغییرناپذیر نام‌مستعارسازی را مجاز می‌دانند، اما تغییر را نه. با این حال، گاهی مفید است که به‌طور موقت دسترسیِ تغییرپذیر به داده‌ای بدهیم بدون اینکه آن را جابه‌جا کنیم.
 
-The mechanism for this is **mutable references** (also called **unique references**). Here's a simple example of a mutable reference with the accompanying permissions changes:
+سازوکارِ این کار، **ارجاع‌های تغییرپذیر (mutable references)** هستند (که **ارجاع‌های منحصربه‌فرد (unique references)** هم نامیده می‌شوند). در ادامه مثالی ساده از یک ارجاعِ تغییرپذیر همراه با تغییراتِ اجازه‌های مربوطه می‌آید:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -299,18 +298,18 @@ println!("Vector is now {:?}", v);
 #}
 ```
 
-<blockquote><div style="margin-block-start: 1em; margin-block-end: 1em"><i>Note:</i> when the expected permissions are not strictly relevant to an example, we will abbreviate them as dots like <div class="permission-stack stack-size-2"><div class="perm read"><div class="small">•</div><div class="big">R</div></div><div class="perm write"><div class="small">•</div><div class="big">W</div></div></div>. You can hover your mouse over the circles (or tap on a touchscreen) to see the corresponding permission letters.</div></blockquote>
+<blockquote><div style="margin-block-start: 1em; margin-block-end: 1em"><i>نکته:</i> وقتی اجازه‌های موردانتظار برای یک مثال چندان مرتبط نباشند، آن‌ها را با نقطه‌هایی مانندِ <div class="permission-stack stack-size-2"><div class="perm read"><div class="small">•</div><div class="big">R</div></div><div class="perm write"><div class="small">•</div><div class="big">W</div></div></div> خلاصه می‌کنیم. می‌توانید موس را روی دایره‌ها ببرید (یا روی صفحه‌ی لمسی ضربه بزنید) تا حروفِ اجازه‌ی متناظر را ببینید.</div></blockquote>
 
-A mutable reference is created with the `&mut` operator. The type of `num` is written as `&mut i32`. Compared to immutable references, you can see two important differences in the permissions:
+یک ارجاعِ تغییرپذیر با عملگرِ `&mut` ساخته می‌شود. نوعِ `num` به‌صورتِ `&mut i32` نوشته می‌شود. در مقایسه با ارجاع‌های تغییرناپذیر، دو تفاوتِ مهم را در اجازه‌ها می‌بینید:
 
-1. When `num` was an immutable reference, `v` still had the @Perm{read} permission. Now that `num` is a mutable reference, `v` has lost _all_ permissions while `num` is in use.
-2. When `num` was an immutable reference, the place `*num` only had the @Perm{read} permission. Now that `num` is a mutable reference, `*num` has also gained the @Perm{write} permission.
+۱. وقتی `num` یک ارجاعِ تغییرناپذیر بود، `v` هنوز اجازه‌ی @Perm{read} را داشت. حالا که `num` یک ارجاعِ تغییرپذیر است، `v` تا زمانی‌که `num` در حالِ استفاده است، *همه‌ی* اجازه‌هایش را از دست می‌دهد.
+۲. وقتی `num` یک ارجاعِ تغییرناپذیر بود، مکانِ `*num` فقط اجازه‌ی @Perm{read} را داشت. حالا که `num` یک ارجاعِ تغییرپذیر است، `*num` اجازه‌ی @Perm{write} را هم به دست آورده است.
 
-The first observation is what makes mutable references *safe*. Mutable references allow mutation but prevent aliasing. The borrowed place `v` becomes temporarily unusable, so effectively not an alias.
+مشاهده‌ی اول همان چیزی است که ارجاع‌های تغییرپذیر را *امن* می‌کند. ارجاع‌های تغییرپذیر تغییر را مجاز می‌دانند اما جلوی نام‌مستعارسازی را می‌گیرند. مکانِ قرض‌داده‌شده‌یِ `v` به‌طور موقت غیرقابل‌استفاده می‌شود، پس عملاً دیگر یک نام‌مستعار نیست.
 
-The second observation is what makes mutable references *useful*. `v[2]` can be mutated through `*num`. For example, `*num += 1` mutates `v[2]`. Note that `*num` has the @Perm{write} permission, but `num` does not. `num` refers to the mutable reference itself, e.g. `num` cannot be reassigned to a *different* mutable reference.
+مشاهده‌ی دوم همان چیزی است که ارجاع‌های تغییرپذیر را *مفید* می‌کند. `v[2]` می‌تواند از طریقِ `*num` تغییر کند. برای مثال، `*num += 1` باعثِ تغییرِ `v[2]` می‌شود. توجه کنید که `*num` اجازه‌ی @Perm{write} دارد، اما `num` ندارد. `num` به خودِ ارجاعِ تغییرپذیر اشاره می‌کند؛ برای مثال، `num` نمی‌تواند دوباره به یک ارجاعِ تغییرپذیرِ *دیگر* منتسب شود.
 
-Mutable references can also be temporarily "downgraded" to read-only references. For example:
+ارجاع‌های تغییرپذیر همچنین می‌توانند به‌طور موقت به ارجاع‌های فقط‌خواندنی «تنزل داده شوند». برای مثال:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -321,16 +320,16 @@ println!("{} {}", *num, *num2);
 #}
 ```
 
-> *Note:* when permission changes are not relevant to an example, we will hide them. You can view hidden steps by clicking "»", and you can view hidden permissions within a step by clicking "● ● ●".
+> *نکته:* وقتی تغییراتِ اجازه‌ها به مثالی مربوط نباشند، آن‌ها را پنهان می‌کنیم. می‌توانید با کلیک روی "»" مراحلِ پنهان را ببینید، و با کلیک روی "● ● ●" اجازه‌های پنهان درونِ یک مرحله را ببینید.
 
-In this program, the borrow `&*num` removes the @Perm{write} permission from `*num` but _not_ the @Perm{read} permission, so `println!(..)` can read both `*num` and `*num2`.
+در این برنامه، قرضِ `&*num` اجازه‌ی @Perm{write} را از `*num` حذف می‌کند اما اجازه‌ی @Perm{read} را حذف نمی‌کند، پس `println!(..)` می‌تواند هم `*num` و هم `*num2` را بخواند.
 
 
-### Permissions Are Returned At The End of a Reference's Lifetime
+### اجازه‌ها در پایانِ طولِ‌عمرِ یک ارجاع بازگردانده می‌شوند
 
-We said above that a reference changes permissions while it is "in use". The phrase "in use" is describing a reference's **lifetime**, or the range of code spanning from its birth (where the reference is created) to its death (the last time(s) the reference is used).
+پیش‌تر گفتیم یک ارجاع، تا زمانی‌که «در حالِ استفاده» است، اجازه‌ها را تغییر می‌دهد. عبارتِ «در حالِ استفاده» توصیف‌کننده‌ی **طولِ‌عمر (lifetime)** یک ارجاع است، یعنی بازه‌ای از کد که از تولدِ آن (جایی که ارجاع ساخته می‌شود) تا مرگش (آخرین باری/بارهایی که ارجاع استفاده می‌شود) امتداد دارد.
 
-For example, in this program, the lifetime of `y` starts with `let y = &x`, and ends with `let z = *y`:
+برای مثال، در این برنامه، طولِ‌عمرِ `y` با `let y = &x` شروع و با `let z = *y` تمام می‌شود:
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -341,9 +340,9 @@ x += z;
 #}
 ```
 
-The @Perm{write} permission on `x` is returned to `x` after the lifetime of `y` has ended, like we have seen before.
+اجازه‌ی @Perm{write} روی `x`، بعد از پایانِ طولِ‌عمرِ `y`، همان‌طور که پیش‌تر دیدیم، به `x` بازگردانده می‌شود.
 
-In the previous examples, a lifetime has been a contiguous region of code. However, once we introduce control flow, this is not necessarily the case. For example, here is a function that capitalizes the first character in a vector of ASCII characters:
+در مثال‌های قبلی، یک طولِ‌عمر ناحیه‌ای پیوسته از کد بوده است. اما وقتی جریانِ کنترل را وارد کنیم، این لزوماً درست نیست. برای مثال، در ادامه تابعی می‌آید که اولین کاراکتر در یک وکتور از کاراکترهای اَسکی را با حروفِ بزرگ می‌نویسد:
 
 ```aquascope,permissions,stepper,boundaries
 fn ascii_capitalize(v: &mut Vec<char>) {
@@ -357,16 +356,16 @@ fn ascii_capitalize(v: &mut Vec<char>) {
 }
 ```
 
-The variable `c` has a different lifetime in each branch of the if-statement. In the then-block, `c` is used in the expression `c.to_ascii_uppercase()`. Therefore `*v` does not regain the @Perm{write} permission until after that line.
+متغیرِ `c` در هر شاخه‌ی دستورِ if، طولِ‌عمرِ متفاوتی دارد. در بلوکِ then، `c` در عبارتِ `c.to_ascii_uppercase()` استفاده می‌شود. بنابراین `*v` تا بعد از آن خط، اجازه‌ی @Perm{write} را دوباره به دست نمی‌آورد.
 
-However, in the else-block, `c` is not used. `*v` immediately regains the @Perm{write} permission on entry to the else-block.
+اما در بلوکِ else، `c` استفاده نمی‌شود. `*v` بلافاصله در ورود به بلوکِ else، اجازه‌ی @Perm{write} را دوباره به دست می‌آورد.
 
 {{#quiz ../quizzes/ch04-02-references-sec2-perms.toml}}
 
 
-### Data Must Outlive All Of Its References
+### داده باید بیش از تمامِ ارجاع‌هایش زنده بماند
 
-As a part of the *Pointer Safety Principle*, the borrow checker enforces that **data must outlive any references to it.** Rust enforces this property in two ways. The first way deals with references that are created and dropped within the scope of a single function. For example, say we tried to drop a string while holding a reference to it:
+به‌عنوان بخشی از *اصلِ امنیتِ اشاره‌گر*، بررسی‌کننده‌ی قرض این را اجرا می‌کند که **داده باید بیش از هر ارجاعی به آن، زنده بماند.** راست این ویژگی را به دو روش اجرا می‌کند. روشِ اول با ارجاع‌هایی سروکار دارد که درونِ قلمروِ یک تابعِ واحد ساخته و آزاد می‌شوند. برای مثال، فرض کنید سعی می‌کردیم یک رشته را درحالی‌که ارجاعی به آن داریم، آزاد کنیم:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -377,9 +376,9 @@ println!("{}", s_ref);
 #}
 ```
 
-To catch these kinds of errors, Rust uses the permissions we've already discussed. The borrow `&s` removes the @Perm{own} permission from `s`. However, `drop` expects the @Perm{own} permission, leading to a permission mismatch.
+برای گرفتنِ این نوع خطاها، راست از اجازه‌هایی که پیش‌تر دیدیم استفاده می‌کند. قرضِ `&s` اجازه‌ی @Perm{own} را از `s` حذف می‌کند. اما `drop` انتظارِ اجازه‌ی @Perm{own} را دارد، که منجر به ناهماهنگیِ اجازه‌ها می‌شود.
 
-The key idea is that in this example, Rust knows how long `s_ref` lives. But Rust needs a different enforcement mechanism when it doesn't know how long a reference lives. Specifically, when references are either input to a function, or output from a function. For example, here is a safe function that returns a reference to the first element in a vector:
+ایده‌ی کلیدی این است که در این مثال، راست می‌داند `s_ref` چه مدت زنده می‌ماند. اما وقتی راست نداند یک ارجاع چه مدت زنده می‌ماند، به سازوکارِ اجراییِ متفاوتی نیاز دارد. به‌طور خاص، وقتی ارجاع‌ها یا ورودیِ یک تابع باشند، یا خروجیِ آن. برای مثال، در ادامه تابعی امن می‌آید که ارجاعی به اولین عنصرِ یک وکتور برمی‌گرداند:
 
 ```aquascope,permissions,boundaries,showFlows
 fn first(strings: &Vec<String>) -> &String {
@@ -388,9 +387,9 @@ fn first(strings: &Vec<String>) -> &String {
 }
 ```
 
-This snippet introduces a new kind of permission, the flow permission @Perm{flow}. The @Perm{flow} permission is expected whenever an expression uses an input reference (like `&strings[0]`), or returns an output reference (like `return s_ref`).
+این قطعه‌کد نوعِ جدیدی از اجازه را معرفی می‌کند، اجازه‌ی جریان یا @Perm{flow}. اجازه‌ی @Perm{flow} هر وقت یک عبارت از یک ارجاعِ ورودی استفاده کند (مانندِ `&strings[0]`)، یا یک ارجاعِ خروجی برگرداند (مانندِ `return s_ref`)، انتظار می‌رود.
 
-Unlike the @Perm{read}@Perm{write}@Perm{own} permissions, @Perm{flow} does not change throughout the body of a function. A reference has the @Perm{flow} permission if it's allowed to be used (that is, to *flow*) in a particular expression. For example, let's say we change `first` to a new function `first_or` that includes a `default` parameter:
+برخلافِ اجازه‌های @Perm{read}@Perm{write}@Perm{own}، اجازه‌ی @Perm{flow} در طولِ بدنه‌ی یک تابع تغییر نمی‌کند. یک ارجاع اگر مجاز باشد در یک عبارتِ خاص استفاده شود (یعنی *جریان* پیدا کند)، اجازه‌ی @Perm{flow} را دارد. برای مثال، فرض کنید `first` را به تابعِ جدیدی به نامِ `first_or` تغییر دهیم که پارامترِ `default` را هم دارد:
 
 ```aquascope,permissions,boundaries,showFlows,shouldFail
 fn first_or<'a, 'b, 'c>(strings: &'a Vec<String>, default: &'b String) -> &'c String {
@@ -402,7 +401,7 @@ fn first_or<'a, 'b, 'c>(strings: &'a Vec<String>, default: &'b String) -> &'c St
 }
 ```
 
-This function no longer compiles, because the expressions `&strings[0]` and `default` lack the necessary @Perm{flow} permission to be returned. But why? Rust gives the following error:
+این تابع دیگر کامپایل نمی‌شود، چون عبارت‌های `&strings[0]` و `default` اجازه‌ی @Perm{flow} لازم برای بازگرداندن را ندارند. اما چرا؟ راست این خطا را می‌دهد:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -414,7 +413,7 @@ error[E0106]: missing lifetime specifier
   = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `strings` or `default`
 ```
 
-The message "missing lifetime specifier" is a bit mysterious, but the help message provides some useful context. If Rust *just* looks at the function signature, it doesn't know whether the output `&String` is a reference to either `strings` or `default`. To understand why that matters, let's say we used `first_or` like this:
+پیامِ "missing lifetime specifier" کمی مرموز است، اما پیامِ راهنما زمینه‌ی مفیدی می‌دهد. اگر راست *فقط* به امضایِ تابع نگاه کند، نمی‌داند خروجیِ `&String` ارجاعی به `strings` است یا به `default`. برای فهمیدنِ اینکه چرا این موضوع اهمیت دارد، فرض کنید `first_or` را این‌طور استفاده می‌کردیم:
 
 ```rust,ignore
 fn main() {
@@ -426,11 +425,11 @@ fn main() {
 }
 ```
 
-This program is unsafe if `first_or` allows `default` to *flow* into the return value. Like the previous example, `drop` could invalidate `s`. Rust would only allow this program to compile if it was *certain* that `default` cannot flow into the return value.
+این برنامه ناامن است اگر `first_or` اجازه دهد `default` به مقدارِ بازگشتی *جریان* پیدا کند. مانندِ مثالِ قبلی، `drop` می‌توانست `s` را نامعتبر کند. راست این برنامه را تنها زمانی اجازه‌ی کامپایل شدن می‌داد که *مطمئن* بود `default` نمی‌تواند به مقدارِ بازگشتی جریان پیدا کند.
 
-To specify whether `default` can be returned, Rust provides a mechanism called *lifetime parameters*. We will explain that feature later in Chapter 10.3, ["Validating References with Lifetimes"](ch10-03-lifetime-syntax.html). For now, it's enough to know that: (1) input/output references are treated differently than references within a function body, and (2) Rust uses a different mechanism, the @Perm{flow} permission, to check the safety of those references.
+برای مشخص کردنِ اینکه آیا `default` قابلِ بازگرداندن است یا نه، راست سازوکاری به نامِ *پارامترهای طولِ‌عمر (lifetime parameters)* ارائه می‌دهد. این ویژگی را بعداً در فصلِ ۱۰.۳، [«اعتبارسنجیِ ارجاع‌ها با طولِ‌عمرها»](ch10-03-lifetime-syntax.html) توضیح خواهیم داد. فعلاً همین‌قدر کافی است بدانید که: (۱) ارجاع‌های ورودی/خروجی متفاوت از ارجاع‌های درونِ بدنه‌ی یک تابع رفتار می‌شوند، و (۲) راست از سازوکاری متفاوت، یعنی اجازه‌ی @Perm{flow}، برای بررسیِ امنیتِ آن ارجاع‌ها استفاده می‌کند.
 
-To see the @Perm{flow} permission in another context, say you tried to return a reference to a variable on the stack like this:
+برای دیدنِ اجازه‌ی @Perm{flow} در زمینه‌ای دیگر، فرض کنید سعی می‌کردید ارجاعی به یک متغیرِ روی پشته را این‌طور برگردانید:
 
 ```aquascope,permissions,boundaries,showFlows,shouldFail
 fn return_a_string() -> &String {
@@ -440,24 +439,24 @@ fn return_a_string() -> &String {
 }
 ```
 
-This program is unsafe because the reference `&s` will be invalidated when `return_a_string` returns. And Rust will reject this program with a similar `missing lifetime specifier` error. Now you can understand that error means that `s_ref` is missing the appropriate flow permissions.
+این برنامه ناامن است چون ارجاعِ `&s` وقتی `return_a_string` بازمی‌گردد، نامعتبر می‌شود. و راست این برنامه را با خطایی مشابهِ `missing lifetime specifier` رد می‌کند. حالا می‌توانید بفهمید که آن خطا یعنی `s_ref` اجازه‌های جریانِ لازم را ندارد.
 
 
 {{#quiz ../quizzes/ch04-02-references-sec3-safety.toml}}
 
 
-### Summary
+### خلاصه
 
-References provide the ability to read and write data without consuming ownership of it. References are created with borrows (`&` and `&mut`) and used with dereferences (`*`), often implicitly.
+ارجاع‌ها این امکان را می‌دهند که داده را بدون مصرف کردنِ مالکیتش، بخوانید و بنویسید. ارجاع‌ها با قرض‌گرفتن (`&` و `&mut`) ساخته می‌شوند و با واکردن (`*`)، اغلب به‌طور ضمنی، استفاده می‌شوند.
 
-However, references can be easily misused. Rust's borrow checker enforces a system of permissions that ensures references are used safely:
+با این حال، ارجاع‌ها به‌راحتی می‌توانند نادرست استفاده شوند. بررسی‌کننده‌ی قرضِ راست، سیستمی از اجازه‌ها را اجرا می‌کند که تضمین می‌کند ارجاع‌ها به‌طور امن استفاده می‌شوند:
 
-- All variables can read, own, and (optionally) write their data.
-- Creating a reference will transfer permissions from the borrowed place to the reference.
-- Permissions are returned once the reference's lifetime has ended.
-- Data must outlive all references that point to it.
+- همه‌ی متغیرها می‌توانند داده‌شان را بخوانند، مالکش باشند و (به‌صورتِ اختیاری) بنویسند.
+- ساختنِ یک ارجاع، اجازه‌ها را از مکانِ قرض‌داده‌شده به خودِ ارجاع منتقل می‌کند.
+- به‌محضِ پایانِ طولِ‌عمرِ ارجاع، اجازه‌ها بازگردانده می‌شوند.
+- داده باید بیش از تمامِ ارجاع‌هایی که به آن اشاره می‌کنند، زنده بماند.
 
-In this section, it probably feels like we've described more of what Rust _cannot_ do than what Rust _can_ do. That is intentional! One of Rust's core features is allowing you to use pointers without garbage collection, while also avoiding undefined behavior. Understanding these safety rules now will help you avoid frustration with the compiler later.
+در این بخش، احتمالاً حس می‌کنید بیشتر درباره‌ی آنچه راست *نمی‌تواند* انجام دهد صحبت کرده‌ایم تا آنچه *می‌تواند* انجام دهد. این عمدی بوده است! یکی از ویژگی‌های اصلیِ راست این است که به شما اجازه می‌دهد بدون Garbage Collector از اشاره‌گرها استفاده کنید، و درعین‌حال از رفتار نامشخص هم جلوگیری کنید. فهمیدنِ این قواعدِ امنیتی در همین حالا، بعداً به شما کمک می‌کند از سرخوردگی با کامپایلر جلوگیری کنید.
 
 [`String::push_str`]: https://doc.rust-lang.org/std/string/struct.String.html#method.push_str
 [`Vec`]: https://doc.rust-lang.org/std/vec/struct.Vec.html

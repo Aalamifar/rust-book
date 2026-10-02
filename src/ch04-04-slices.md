@@ -1,77 +1,48 @@
-## The Slice Type
+## نوعِ اسلایس
 
-*Slices* let you reference a contiguous sequence of elements in a [collection](ch08-00-common-collections.md) 
-rather than the whole collection. A slice is a kind of reference, so it is a non-owning pointer.
+*اسلایس‌ها* به شما اجازه می‌دهند به یک دنباله‌ی پیوسته از عناصرِ درونِ یک [مجموعه](ch08-00-common-collections.md) ارجاع دهید، به‌جایِ کلِ مجموعه. اسلایس نوعی ارجاع است، پس یک اشاره‌گرِ غیرمالک است.
 
-To motivate why slices are useful, let's work through a small programming problem: 
-write a function that takes a string of
-words separated by spaces and returns the first word it finds in that string.
-If the function doesn’t find a space in the string, the whole string must be
-one word, so the entire string should be returned. Without slices, we might
-write the signature of the function like this:
+برای اینکه انگیزه‌ی مفید بودنِ اسلایس‌ها را نشان دهیم، بیایید مسئله‌ی برنامه‌نویسیِ کوچکی را حل کنیم: تابعی بنویسید که رشته‌ای از کلماتِ جداشده با فاصله را می‌گیرد و اولین کلمه‌ای را که در آن رشته پیدا می‌کند برمی‌گرداند. اگر تابع فاصله‌ای در رشته پیدا نکند، کلِ رشته باید یک کلمه باشد، پس باید کلِ رشته برگردانده شود. بدونِ اسلایس‌ها، شاید امضایِ این تابع را این‌طور بنویسیم:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-The `first_word` function has a `&String` as a parameter. We don’t want
-ownership of the string, so this is fine. But what should we return? We don’t really have a
-way to talk about *part* of a string. However, we could return the index of the
-end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
+تابعِ `first_word` یک `&String` به‌عنوانِ پارامتر دارد. مالکیتِ رشته را نمی‌خواهیم، پس این خوب است. اما چه چیزی باید برگردانیم؟ ما در واقع راهی برای صحبت درباره‌ی *بخشی* از یک رشته نداریم. با این حال، می‌توانیم اندیسِ پایانِ کلمه، که با یک فاصله مشخص می‌شود، را برگردانیم. بیایید این کار را امتحان کنیم، همان‌طور که در فهرستِ ۴-۷ نشان داده شده است.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">نامِ فایل: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-7: The `first_word` function that returns a
-byte index value into the `String` parameter</span>
+<span class="caption">فهرستِ ۴-۷: تابعِ `first_word` که یک مقدارِ اندیسِ بایتی درونِ پارامترِ `String` برمی‌گرداند</span>
 
-Because we need to go through the `String` element by element and check whether
-a value is a space, we’ll convert our `String` to an array of bytes using the
-`as_bytes` method:
+چون باید عنصر به عنصرِ `String` را پیمایش کنیم و بررسی کنیم که آیا مقداری فاصله است یا نه، `String` خود را با استفاده از متدِ `as_bytes` به آرایه‌ای از بایت‌ها تبدیل می‌کنیم:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method:
+سپس، با استفاده از متدِ `iter` یک تکرارگر (iterator) روی آرایه‌ی بایت‌ها می‌سازیم:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
-We’ll discuss iterators in more detail in [Chapter 13][ch13]<!-- ignore -->.
-For now, know that `iter` is a method that returns each element in a collection
-and that `enumerate` wraps the result of `iter` and returns each element as
-part of a tuple instead. The first element of the tuple returned from
-`enumerate` is the index, and the second element is a reference to the element.
-This is a bit more convenient than calculating the index ourselves.
+درباره‌ی تکرارگرها با جزئیاتِ بیشتری در [فصلِ ۱۳][ch13]<!-- ignore --> بحث خواهیم کرد. فعلاً همین‌قدر بدانید که `iter` متدی است که هر عنصر را در یک مجموعه برمی‌گرداند، و `enumerate` نتیجه‌ی `iter` را می‌پیچد و هر عنصر را به‌جای آن، به‌صورتِ بخشی از یک تاپل برمی‌گرداند. اولین عنصرِ تاپلی که از `enumerate` برمی‌گردد، اندیس است، و دومین عنصر، ارجاعی به آن عنصر است. این کمی راحت‌تر از این است که خودمان اندیس را محاسبه کنیم.
 
-Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple. We’ll be discussing patterns more in [Chapter
-6][ch6]<!-- ignore -->. In the `for` loop, we specify a pattern that has `i`
-for the index in the tuple and `&item` for the single byte in the tuple.
-Because we get a reference to the element from `.iter().enumerate()`, we use
-`&` in the pattern.
+چون متدِ `enumerate` یک تاپل برمی‌گرداند، می‌توانیم از الگوها برایِ تجزیه‌ی آن تاپل استفاده کنیم. درباره‌ی الگوها بیشتر در [فصلِ ۶][ch6]<!-- ignore --> بحث خواهیم کرد. در حلقه‌ی `for`، الگویی مشخص می‌کنیم که در آن `i` نشان‌دهنده‌ی اندیس در تاپل است و `&item` نشان‌دهنده‌ی تکِ بایتِ درونِ تاپل است. چون از `.iter().enumerate()` ارجاعی به عنصر می‌گیریم، در الگو از `&` استفاده می‌کنیم.
 
-Inside the `for` loop, we search for the byte that represents the space by
-using the byte literal syntax. If we find a space, we return the position.
-Otherwise, we return the length of the string by using `s.len()`:
+درونِ حلقه‌ی `for`، با استفاده از نحوِ لفظیِ بایت، دنبالِ بایتی می‌گردیم که نشان‌دهنده‌ی فاصله باشد. اگر فاصله‌ای پیدا کنیم، آن موقعیت را برمی‌گردانیم. در غیرِ این صورت، با استفاده از `s.len()` طولِ رشته را برمی‌گردانیم:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
 
-We now have a way to find out the index of the end of the first word in the
-string, but there’s a problem. We’re returning a `usize` on its own, but it’s
-only a meaningful number in the context of the `&String`. In other words,
-because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-8 that
-uses the `first_word` function from Listing 4-7.
+حالا روشی برای پیدا کردنِ اندیسِ پایانِ اولین کلمه در رشته داریم، اما مشکلی وجود دارد. ما یک `usize` را به‌تنهایی برمی‌گردانیم، اما این عدد فقط در زمینه‌ی `&String` معنادار است. به بیانِ دیگر، چون مقداری جدا از `String` است، هیچ تضمینی نیست که در آینده همچنان معتبر بماند. برنامه‌ی فهرستِ ۴-۸ را در نظر بگیرید که از تابعِ `first_word` در فهرستِ ۴-۷ استفاده می‌کند.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">نامِ فایل: src/main.rs</span>
 
 ```aquascope,interpreter+permissions,boundaries,stepper,horizontal
 fn first_word(s: &String) -> usize {
@@ -93,33 +64,23 @@ fn main() {
 }
 ``` 
 
-<span class="caption">Listing 4-8: Storing the result from calling the
-`first_word` function and then changing the `String` contents</span>
+<span class="caption">فهرستِ ۴-۸: ذخیره‌ی نتیجه‌ی فراخوانیِ تابعِ `first_word` و سپس تغییرِ محتوایِ `String`</span>
 
-This program compiles without any errors, as `s` retains write permissions
-after calling `first_word`. Because `word` isn’t connected to the state of `s`
-at all, `word` still contains the value `5`. We could use that value `5` with
-the variable `s` to try to extract the first word out, but this would be a bug
-because the contents of `s` have changed since we saved `5` in `word`.
+این برنامه بدونِ هیچ خطایی کامپایل می‌شود، چون `s` بعد از فراخوانیِ `first_word` اجازه‌ی نوشتنش را حفظ می‌کند. چون `word` اصلاً به وضعیتِ `s` متصل نیست، `word` همچنان مقدارِ `5` را نگه می‌دارد. می‌توانستیم از آن مقدارِ `5` همراه با متغیرِ `s` استفاده کنیم تا اولین کلمه را استخراج کنیم، اما این کار باگی خواهد بود، چون محتوایِ `s` از زمانی که `5` را در `word` ذخیره کردیم، تغییر کرده است.
 
-Having to worry about the index in `word` getting out of sync with the data in
-`s` is tedious and error prone! Managing these indices is even more brittle if
-we write a `second_word` function. Its signature would have to look like this:
+نگرانیِ لازم درباره‌ی اینکه اندیسِ درونِ `word` از داده‌ی درونِ `s` عقب بیفتد، خسته‌کننده و مستعدِ خطاست! اگر تابعِ `second_word` را هم بنویسیم، مدیریتِ این اندیس‌ها حتی شکننده‌تر هم می‌شود. امضایِ آن باید این‌طور باشد:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a starting *and* an ending index, and we have even more
-values that were calculated from data in a particular state but aren’t tied to
-that state at all. We have three unrelated variables floating around that
-need to be kept in sync.
+حالا هم یک اندیسِ شروع و هم یک اندیسِ پایان را ردیابی می‌کنیم، و حتی مقادیرِ بیشتری داریم که از داده‌ای در یک وضعیتِ خاص محاسبه شده‌اند اما اصلاً به آن وضعیت مقید نیستند. سه متغیرِ نامرتبط داریم که در اطراف شناورند و باید هماهنگ نگه داشته شوند.
 
-Luckily, Rust has a solution to this problem: string slices.
+خوشبختانه، راست راه‌حلی برایِ این مشکل دارد: اسلایس‌های رشته‌ای.
 
-### String Slices
+### اسلایس‌های رشته‌ای
 
-A *string slice* is a reference to part of a `String`, and it looks like this:
+یک *اسلایسِ رشته‌ای (string slice)* ارجاعی به بخشی از یک `String` است، و این‌طور به نظر می‌رسد:
 
 ```aquascope,interpreter
 #fn main() {
@@ -131,15 +92,9 @@ let s2: &String = &s; `[]`
 #}
 ```
 
-Rather than a reference to the entire `String` (like `s2`), `hello` is a reference to a
-portion of the `String`, specified in the extra `[0..5]` bit. We create slices
-using a range within brackets by specifying `[starting_index..ending_index]`,
-where `starting_index` is the first position in the slice and `ending_index` is
-one more than the last position in the slice.
+به‌جایِ ارجاع به کلِ `String` (مانندِ `s2`)، `hello` ارجاعی به بخشی از `String` است، که با تکه‌ی اضافیِ `[0..5]` مشخص شده. اسلایس‌ها را با استفاده از یک بازه درونِ کروشه‌ها می‌سازیم، با مشخص کردنِ `[starting_index..ending_index]`، که در آن `starting_index` اولین موقعیت در اسلایس است و `ending_index` یکی بیشتر از آخرین موقعیت در اسلایس است.
 
-Slices are special kinds of references because they are "fat" pointers, or pointers
-with metadata. Here, the metadata is the length of the slice. We can see this metadata
-by changing our visualization to peek into the internals of Rust's data structures:
+اسلایس‌ها نوعِ خاصی از ارجاع‌ها هستند چون اشاره‌گرهایی «چاق (fat)»اند، یا اشاره‌گرهایی با فرا‌داده (metadata). در اینجا، فرا‌داده، طولِ اسلایس است. می‌توانیم این فرا‌داده را با تغییرِ تجسمِ خود برای نگاه کردن به درونِ ساختارهای داده‌ی راست ببینیم:
 
 ```aquascope,interpreter,concreteTypes,hideCode
 fn main() {
@@ -152,12 +107,9 @@ fn main() {
 }
 ```
 
-Observe that the variables `hello` and `world` have both a `ptr` and a `len` field, which together define the underlined regions
-of the string on the heap. You can also see here what a `String` actually looks like: a string is a vector of bytes (`Vec<u8>`),
-which contains a length `len` and a buffer `buf` that has a pointer `ptr` and a capacity `cap`.
+توجه کنید که متغیرهایِ `hello` و `world` هر دو یک فیلدِ `ptr` و یک فیلدِ `len` دارند، که با هم نواحیِ زیرخط‌داری از رشته روی هیپ را مشخص می‌کنند. اینجا همچنین می‌توانید ببینید که یک `String` واقعاً چه شکلی دارد: یک رشته، وکتوری از بایت‌هاست (`Vec<u8>`)، که حاویِ یک طولِ `len` و یک بافرِ `buf` است که یک اشاره‌گرِ `ptr` و یک ظرفیتِ `cap` دارد.
 
-Because slices are references, they also change the permissions on referenced data. For example, observe below that when
-`hello` is created as a slice of `s`, then `s` loses write and own permissions:
+چون اسلایس‌ها ارجاع هستند، اجازه‌های روی داده‌ی ارجاع‌شده را هم تغییر می‌دهند. برای مثال، در ادامه ببینید که وقتی `hello` به‌عنوانِ اسلایسی از `s` ساخته می‌شود، `s` اجازه‌های نوشتن و مالکیتش را از دست می‌دهد:
 
 ```aquascope,permissions,stepper,boundaries
 fn main() {
@@ -168,10 +120,9 @@ fn main() {
 }
 ```
 
-#### Range syntax
+#### نحوِ بازه
 
-With Rust’s `..` range syntax, if you want to start at index zero, you can drop
-the value before the two periods. In other words, these are equal:
+با نحوِ بازه‌ایِ `..` در راست، اگر بخواهید از اندیسِ صفر شروع کنید، می‌توانید مقدارِ قبل از دو نقطه را حذف کنید. به بیانِ دیگر، این دو یکسان‌اند:
 
 ```rust
 let s = String::from("hello");
@@ -180,8 +131,7 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you
-can drop the trailing number. That means these are equal:
+به همان ترتیب، اگر اسلایسِ شما شاملِ آخرین بایتِ `String` باشد، می‌توانید عددِ پایانی را حذف کنید. یعنی این دو یکسان‌اند:
 
 ```rust
 let s = String::from("hello");
@@ -192,8 +142,7 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So these
-are equal:
+همچنین می‌توانید هر دو مقدار را حذف کنید تا اسلایسی از کلِ رشته بگیرید. پس این دو یکسان‌اند:
 
 ```rust
 let s = String::from("hello");
@@ -204,49 +153,31 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-> Note: String slice range indices must occur at valid UTF-8 character
-> boundaries. If you attempt to create a string slice in the middle of a
-> multibyte character, your program will exit with an error. For the purposes
-> of introducing string slices, we are assuming ASCII only in this section; a
-> more thorough discussion of UTF-8 handling is in the [“Storing UTF-8 Encoded
-> Text with Strings”][strings]<!-- ignore --> section of Chapter 8.
+> نکته: اندیس‌های بازه‌ی اسلایسِ رشته باید در مرزهای معتبرِ کاراکترهایِ UTF-8 رخ دهند. اگر بخواهید در میانه‌ی یک کاراکترِ چندبایتی، اسلایسِ رشته‌ای بسازید، برنامه‌ی شما با یک خطا خارج می‌شود. برای هدفِ معرفیِ اسلایس‌های رشته‌ای، در این بخش فرض می‌کنیم فقط با اَسکی سروکار داریم؛ بحثِ کامل‌تری درباره‌ی مدیریتِ UTF-8 در بخشِ [«ذخیره‌ی متنِ کدگذاری‌شده با UTF-8 در رشته‌ها»][strings]<!-- ignore --> در فصلِ ۸ آمده است.
 
-#### Rewriting `first_word` with string slices
+#### بازنویسیِ `first_word` با اسلایس‌های رشته‌ای
 
-With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+با در نظر گرفتنِ همه‌ی این اطلاعات، بیایید `first_word` را بازنویسی کنیم تا یک اسلایس برگرداند. نوعی که «اسلایسِ رشته‌ای» را نشان می‌دهد، به‌صورتِ `&str` نوشته می‌شود:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">نامِ فایل: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-18-first-word-slice/src/main.rs:here}}
 ```
 
-We get the index for the end of the word in the same way as we did in Listing
-4-7, by looking for the first occurrence of a space. When we find a space, we
-return a string slice using the start of the string and the index of the space
-as the starting and ending indices.
+اندیسِ پایانِ کلمه را به همان روشی که در فهرستِ ۴-۷ انجام دادیم به دست می‌آوریم، با گشتن دنبالِ اولین وقوعِ یک فاصله. وقتی فاصله‌ای پیدا می‌کنیم، اسلایسی از رشته را با استفاده از ابتدایِ رشته و اندیسِ فاصله به‌عنوانِ اندیس‌های شروع و پایان، برمی‌گردانیم.
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
+حالا وقتی `first_word` را فراخوانی می‌کنیم، یک مقدارِ واحد می‌گیریم که به داده‌ی زیربنایی مقید است. این مقدار از ارجاعی به نقطه‌ی شروعِ اسلایس و تعدادِ عناصرِ درونِ اسلایس تشکیل شده است.
 
-Returning a slice would also work for a `second_word` function:
+بازگرداندنِ یک اسلایس برای تابعِ `second_word` هم کار می‌کند:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up, because the
-compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-8, when we got the index to the end of the
-first word but then cleared the string so our index was invalid? That code was
-logically incorrect but didn’t show any immediate errors. The problems would
-show up later if we kept trying to use the first word index with an emptied
-string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. For example:
+حالا رابطِ برنامه‌نویسیِ ساده‌ای داریم که به‌مراتب سخت‌تر می‌شود آن را خراب کرد، چون کامپایلر تضمین می‌کند ارجاع‌های درونِ `String` معتبر می‌مانند. آن باگ در برنامه‌ی فهرستِ ۴-۸ را به یاد بیاورید، وقتی اندیسِ پایانِ اولین کلمه را گرفتیم اما بعد رشته را پاک کردیم و در نتیجه اندیسمان نامعتبر شد؟ آن کد از نظرِ منطقی نادرست بود، اما هیچ خطایِ فوری‌ای نشان نمی‌داد. مشکلات بعدها ظاهر می‌شدند، اگر همچنان سعی می‌کردیم اندیسِ اولین کلمه را با یک رشته‌ی خالی‌شده استفاده کنیم. اسلایس‌ها این باگ را غیرممکن می‌کنند و باعث می‌شوند خیلی زودتر متوجه شویم که کدمان مشکل دارد. برای مثال:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">نامِ فایل: src/main.rs</span>
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #fn first_word(s: &String) -> &str {
@@ -268,81 +199,59 @@ fn main() {
 }
 ```
 
-You can see that calling `first_word` now removes the write permission from `s`,
-which prevents us from calling `s.clear()`. Here’s the compiler error:
+می‌بینید که حالا فراخوانیِ `first_word`، اجازه‌ی نوشتن را از `s` حذف می‌کند، که جلوی فراخوانیِ `s.clear()` را می‌گیرد. در ادامه خطایِ کامپایلر می‌آید:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it needs to get a mutable reference. The `println!`
-after the call to `clear` uses the reference in `word`, so the immutable
-reference must still be active at that point. Rust disallows the mutable
-reference in `clear` and the immutable reference in `word` from existing at the
-same time, and compilation fails. Not only has Rust made our API easier to use,
-but it has also eliminated an entire class of errors at compile time!
+از قواعدِ قرض‌گرفتن به یاد بیاورید که اگر ارجاعِ تغییرناپذیری به چیزی داشته باشیم، نمی‌توانیم هم‌زمان ارجاعِ تغییرپذیری هم بگیریم. چون `clear` باید `String` را کوتاه کند، نیاز دارد یک ارجاعِ تغییرپذیر بگیرد. `println!` بعد از فراخوانیِ `clear` از ارجاعِ درونِ `word` استفاده می‌کند، پس ارجاعِ تغییرناپذیر باید در آن لحظه هنوز فعال باشد. راست اجازه نمی‌دهد ارجاعِ تغییرپذیر در `clear` و ارجاعِ تغییرناپذیر در `word` هم‌زمان وجود داشته باشند، و کامپایل شکست می‌خورد. راست نه‌تنها رابطِ برنامه‌نویسیِ ما را ساده‌تر کرده، بلکه یک دسته‌ی کاملِ خطاها را هم در زمانِ کامپایل حذف کرده است!
 
-#### String Literals Are Slices
+#### رشته‌های لفظی، اسلایس هستند
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+به یاد بیاورید که درباره‌ی ذخیره شدنِ رشته‌های لفظی درونِ باینری صحبت کردیم. حالا که با اسلایس‌ها آشنا شدیم، می‌توانیم رشته‌های لفظی را به‌درستی بفهمیم:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+نوعِ `s` در اینجا `&str` است: یعنی اسلایسی است که به آن نقطه‌ی خاص از باینری اشاره می‌کند. به همین دلیل هم رشته‌های لفظی تغییرناپذیرند؛ `&str` یک ارجاعِ تغییرناپذیر است.
 
-#### String Slices as Parameters
+#### اسلایس‌های رشته‌ای به‌عنوانِ پارامتر
 
-Knowing that you can take slices of literals and `String` values leads us to
-one more improvement on `first_word`, and that’s its signature:
+دانستنِ اینکه می‌توانید از لفظی‌ها و مقادیرِ `String` اسلایس بگیرید، ما را به یک بهبودِ دیگر برایِ `first_word` می‌رساند، و آن هم امضایِ آن است:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the signature shown in Listing 4-9
-instead because it allows us to use the same function on both `&String` values
-and `&str` values.
+یک راستیشِینِ باتجربه‌تر، به‌جایِ این، امضایِ نشان‌داده‌شده در فهرستِ ۴-۹ را می‌نویسد، چون این امضا به ما اجازه می‌دهد از همان تابع، هم برایِ مقادیرِ `&String` و هم برایِ مقادیرِ `&str` استفاده کنیم.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-9: Improving the `first_word` function by using
-a string slice for the type of the `s` parameter</span>
+<span class="caption">فهرستِ ۴-۹: بهبودِ تابعِ `first_word` با استفاده از یک اسلایسِ رشته‌ای برایِ نوعِ پارامترِ `s`</span>
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the `String` or a reference to the `String`. This
-flexibility takes advantage of *deref coercions*, a feature we will cover in the
-[“Implicit Deref Coercions with Functions and
-Methods”][deref-coercions]<!--ignore--> section of Chapter 15.
+اگر اسلایسِ رشته‌ای داشته باشیم، می‌توانیم مستقیماً آن را پاس دهیم. اگر یک `String` داشته باشیم، می‌توانیم اسلایسی از `String` یا ارجاعی به `String` را پاس دهیم. این انعطاف‌پذیری از *تبدیل‌های ضمنیِ واکردن (deref coercions)* بهره می‌برد، ویژگی‌ای که در بخشِ [«تبدیل‌های ضمنیِ واکردن با توابع و متدها»][deref-coercions]<!--ignore--> در فصلِ ۱۵ پوشش خواهیم داد.
 
-Defining a function to take a string slice instead of a reference to a `String`
-makes our API more general and useful without losing any functionality:
+تعریفِ تابعی که به‌جایِ ارجاعی به `String`، یک اسلایسِ رشته‌ای می‌گیرد، رابطِ برنامه‌نویسیِ ما را بدونِ از دست دادنِ هیچ قابلیتی، عمومی‌تر و مفیدتر می‌کند:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">نامِ فایل: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:usage}}
 ```
 
-### Other Slices
+### اسلایس‌های دیگر
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type, too. Consider this array:
+همان‌طور که احتمالاً حدس می‌زنید، اسلایس‌های رشته‌ای مختصِ رشته‌ها هستند. اما نوعِ عمومی‌تری از اسلایس هم وجود دارد. این آرایه را در نظر بگیرید:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just as we might want to refer to a part of a string, we might want to refer
-to part of an array. We’d do so like this:
+همان‌طور که ممکن است بخواهیم به بخشی از یک رشته اشاره کنیم، ممکن است بخواهیم به بخشی از یک آرایه هم اشاره کنیم. این کار را این‌طور انجام می‌دهیم:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -352,19 +261,13 @@ let slice = &a[1..3];
 assert_eq!(slice, &[2, 3]);
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+این اسلایس نوعِ `&[i32]` دارد. این اسلایس دقیقاً مثلِ اسلایس‌های رشته‌ای کار می‌کند، با ذخیره‌ی ارجاعی به اولین عنصر و یک طول. از این نوع اسلایس برای انواعِ دیگرِ مجموعه‌ها هم استفاده خواهید کرد. وقتی درباره‌ی وکتورها در فصلِ ۸ صحبت می‌کنیم، این مجموعه‌ها را با جزئیات بیشتری بحث می‌کنیم.
 
 {{#quiz ../quizzes/ch04-04-slices.toml}}
 
-## Summary
+## خلاصه
 
-Slices are a special kind of reference that refer to sub-ranges of a sequence, like a 
-string or a vector. At runtime, a slice is represented as a "fat pointer" which contains
-a pointer to the beginning of the range and a length of the range. One advantage of slices
-over index-based ranges is that the slice cannot be invalidated while it's being used.
+اسلایس‌ها نوعِ خاصی از ارجاع هستند که به زیربازه‌هایِ یک دنباله، مانندِ یک رشته یا یک وکتور، اشاره می‌کنند. در زمانِ اجرا، یک اسلایس به‌صورتِ یک «اشاره‌گرِ چاق (fat pointer)» نمایش داده می‌شود که حاویِ اشاره‌گری به ابتدایِ بازه و طولِ آن بازه است. یکی از مزایایِ اسلایس‌ها نسبت به بازه‌هایِ مبتنی‌بر اندیس این است که اسلایس نمی‌تواند در حینِ استفاده شدنش نامعتبر شود.
 
 [ch13]: ch13-02-iterators.html
 [ch6]: ch06-02-match.html#patterns-that-bind-to-values
