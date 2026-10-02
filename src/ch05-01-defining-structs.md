@@ -1,17 +1,8 @@
-## Defining and Instantiating Structs
+## تعریف و نمونه‌سازیِ ساختارها
 
-Structs are similar to tuples, discussed in [“The Tuple Type”][tuples]<!--
-ignore --> section, in that both hold multiple related values. Like tuples, the
-pieces of a struct can be different types. Unlike with tuples, in a struct
-you’ll name each piece of data so it’s clear what the values mean. Adding these
-names means that structs are more flexible than tuples: You don’t have to rely
-on the order of the data to specify or access the values of an instance.
+ساختارها شبیهِ تاپل‌ها هستند، که در بخشِ [«نوعِ تاپل»][tuples]<!-- ignore --> درباره‌شان بحث کردیم، از این جهت که هر دو چندین مقدارِ مرتبط را نگه می‌دارند. مانندِ تاپل‌ها، بخش‌های یک ساختار می‌توانند نوع‌هایِ متفاوتی داشته باشند. برخلافِ تاپل‌ها، در یک ساختار هر بخشِ داده را نام‌گذاری می‌کنید، پس روشن است که مقادیر چه معنایی دارند. اضافه کردنِ این نام‌ها یعنی ساختارها انعطاف‌پذیرتر از تاپل‌ها هستند: لازم نیست برایِ مشخص کردن یا دسترسی به مقادیرِ یک نمونه، به ترتیبِ داده‌ها تکیه کنید.
 
-To define a struct, we enter the keyword `struct` and name the entire struct. A
-struct’s name should describe the significance of the pieces of data being
-grouped together. Then, inside curly brackets, we define the names and types of
-the pieces of data, which we call _fields_. For example, Listing 5-1 shows a
-struct that stores information about a user account.
+برای تعریفِ یک ساختار، کلیدواژه‌ی `struct` را می‌نویسیم و به کلِ ساختار نام می‌دهیم. نامِ یک ساختار باید اهمیتِ بخش‌هایِ داده‌ای که در کنارِ هم گروه‌بندی شده‌اند را توصیف کند. سپس، درونِ آکولاد، نام‌ها و نوع‌هایِ بخش‌هایِ داده، که آن‌ها را _فیلد (field)_ می‌نامیم، تعریف می‌کنیم. برای مثال، فهرستِ ۵-۱ ساختاری را نشان می‌دهد که اطلاعاتِ مربوط به یک حسابِ کاربری را ذخیره می‌کند.
 
 <Listing number="5-1" file-name="src/main.rs" caption="A `User` struct definition">
 
@@ -21,15 +12,7 @@ struct that stores information about a user account.
 
 </Listing>
 
-To use a struct after we’ve defined it, we create an _instance_ of that struct
-by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct and then add curly brackets containing _`key:
-value`_ pairs, where the keys are the names of the fields and the values are the
-data we want to store in those fields. We don’t have to specify the fields in
-the same order in which we declared them in the struct. In other words, the
-struct definition is like a general template for the type, and instances fill
-in that template with particular data to create values of the type. For
-example, we can declare a particular user as shown in Listing 5-2.
+برایِ استفاده از یک ساختار بعد از تعریفش، یک _نمونه (instance)_ از آن ساختار می‌سازیم، با مشخص کردنِ مقادیرِ عینی برایِ هر یک از فیلدها. یک نمونه را با نوشتنِ نامِ ساختار و سپس افزودنِ آکولادی حاویِ جفت‌های _`key: value`_ می‌سازیم، که در آن کلیدها نامِ فیلدها هستند و مقادیر، داده‌هایی هستند که می‌خواهیم در آن فیلدها ذخیره کنیم. لازم نیست فیلدها را به همان ترتیبی که در ساختار اعلام کرده‌ایم، مشخص کنیم. به بیانِ دیگر، تعریفِ ساختار مانندِ یک الگویِ کلی برایِ آن نوع است، و نمونه‌ها آن الگو را با داده‌ای خاص پر می‌کنند تا مقادیری از آن نوع بسازند. برای مثال، می‌توانیم یک کاربرِ خاص را همان‌طور که در فهرستِ ۵-۲ نشان داده شده، اعلام کنیم.
 
 ```aquascope,interpreter
 #struct User {
@@ -48,11 +31,7 @@ fn main() {
 }
 ```
 
-To get a specific value from a struct, we use dot notation. For example, to
-access this user’s email address, we use `user1.email`. If the instance is
-mutable, we can change a value by using the dot notation and assigning into a
-particular field. Listing 5-3 shows how to change the value in the `email`
-field of a mutable `User` instance.
+برایِ گرفتنِ مقداری خاص از یک ساختار، از نحوِ نقطه استفاده می‌کنیم. برای مثال، برایِ دسترسی به ایمیلِ این کاربر، از `user1.email` استفاده می‌کنیم. اگر نمونه تغییرپذیر باشد، می‌توانیم با استفاده از نحوِ نقطه و انتساب به یک فیلدِ خاص، مقداری را تغییر دهیم. فهرستِ ۵-۳ نشان می‌دهد چگونه مقدارِ فیلدِ `email` را در یک نمونه‌ی تغییرپذیرِ `User` تغییر دهیم.
 
 ```aquascope,interpreter
 #struct User {
@@ -73,14 +52,9 @@ fn main() {
 }
 ```
 
-Note that the entire instance must be mutable; Rust doesn’t allow us to mark
-only certain fields as mutable. As with any expression, we can construct a new
-instance of the struct as the last expression in the function body to
-implicitly return that new instance.
+توجه کنید که کلِ نمونه باید تغییرپذیر باشد؛ راست به ما اجازه نمی‌دهد فقط برخی فیلدها را به‌عنوانِ تغییرپذیر مشخص کنیم. مانندِ هر عبارتِ دیگری، می‌توانیم یک نمونه‌ی جدیدِ ساختار را به‌عنوانِ آخرین عبارتِ بدنه‌ی تابع بسازیم تا آن نمونه‌ی جدید را به‌طورِ ضمنی برگردانیم.
 
-Listing 5-4 shows a `build_user` function that returns a `User` instance with
-the given email and username. The `active` field gets the value `true`, and the
-`sign_in_count` gets a value of `1`.
+فهرستِ ۵-۴ تابعی به نامِ `build_user` را نشان می‌دهد که نمونه‌ای از `User` را با ایمیل و نامِ کاربریِ داده‌شده برمی‌گرداند. فیلدِ `active` مقدارِ `true` می‌گیرد، و `sign_in_count` مقدارِ `1` می‌گیرد.
 
 <Listing number="5-4" file-name="src/main.rs" caption="A `build_user` function that takes an email and username and returns a `User` instance">
 
@@ -90,21 +64,15 @@ the given email and username. The `active` field gets the value `true`, and the
 
 </Listing>
 
-It makes sense to name the function parameters with the same name as the struct
-fields, but having to repeat the `email` and `username` field names and
-variables is a bit tedious. If the struct had more fields, repeating each name
-would get even more annoying. Luckily, there’s a convenient shorthand!
+منطقی است که پارامترهایِ تابع را با همان نامِ فیلدهایِ ساختار نام‌گذاری کنیم، اما تکرار کردنِ نام‌های فیلدهایِ `email` و `username` و متغیرها کمی خسته‌کننده است. اگر ساختار فیلدهایِ بیشتری داشت، تکرارِ هر نام حتی آزاردهنده‌تر هم می‌شد. خوشبختانه، یک میان‌بُرِ راحت وجود دارد!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
 
-### Using the Field Init Shorthand
+### استفاده از میان‌بُرِ مقداردهی‌اولیه‌ی فیلد
 
-Because the parameter names and the struct field names are exactly the same in
-Listing 5-4, we can use the _field init shorthand_ syntax to rewrite
-`build_user` so that it behaves exactly the same but doesn’t have the
-repetition of `username` and `email`, as shown in Listing 5-5.
+چون نامِ پارامترها و نامِ فیلدهایِ ساختار در فهرستِ ۵-۴ دقیقاً یکسان‌اند، می‌توانیم از نحوِ _میان‌بُرِ مقداردهی‌اولیه‌ی فیلد (field init shorthand)_ استفاده کنیم تا `build_user` را بازنویسی کنیم، به‌طوری‌که دقیقاً همان رفتار را داشته باشد اما تکرارِ `username` و `email` را نداشته باشد، همان‌طور که در فهرستِ ۵-۵ نشان داده شده است.
 
 <Listing number="5-5" file-name="src/main.rs" caption="A `build_user` function that uses field init shorthand because the `username` and `email` parameters have the same name as struct fields">
 
@@ -114,25 +82,17 @@ repetition of `username` and `email`, as shown in Listing 5-5.
 
 </Listing>
 
-Here, we’re creating a new instance of the `User` struct, which has a field
-named `email`. We want to set the `email` field’s value to the value in the
-`email` parameter of the `build_user` function. Because the `email` field and
-the `email` parameter have the same name, we only need to write `email` rather
-than `email: email`.
+در اینجا، نمونه‌ای جدید از ساختارِ `User` می‌سازیم، که فیلدی به نامِ `email` دارد. می‌خواهیم مقدارِ فیلدِ `email` را برابرِ مقدارِ درونِ پارامترِ `email` تابعِ `build_user` قرار دهیم. چون فیلدِ `email` و پارامترِ `email` هم‌نام هستند، فقط لازم است `email` بنویسیم، به‌جایِ `email: email`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="creating-instances-from-other-instances-with-struct-update-syntax"></a>
 
-### Creating Instances with Struct Update Syntax
+### ساختنِ نمونه‌ها با نحوِ به‌روزرسانیِ ساختار
 
-It’s often useful to create a new instance of a struct that includes most of
-the values from another instance of the same type, but changes some of them.
-You can do this using struct update syntax.
+اغلب مفید است نمونه‌ای جدید از یک ساختار بسازیم که بیشترِ مقادیرِ خود را از نمونه‌ی دیگری از همان نوع می‌گیرد، اما بعضی از آن‌ها را تغییر می‌دهد. می‌توانید این کار را با استفاده از نحوِ به‌روزرسانیِ ساختار (struct update syntax) انجام دهید.
 
-First, in Listing 5-6 we show how to create a new `User` instance in `user2` in
-the regular way, without the update syntax. We set a new value for `email` but
-otherwise use the same values from `user1` that we created in Listing 5-2.
+اول، در فهرستِ ۵-۶ نشان می‌دهیم چگونه یک نمونه‌ی جدیدِ `User` را در `user2` به روشِ معمول، بدونِ نحوِ به‌روزرسانی، بسازیم. مقداری جدید برایِ `email` تنظیم می‌کنیم اما در باقیِ موارد از همان مقادیرِ `user1` که در فهرستِ ۵-۲ ساختیم، استفاده می‌کنیم.
 
 ```aquascope,interpreter
 #struct User {
@@ -159,12 +119,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 5-6: Creating a new `User` instance using all but one of
-the values from `user1`</span>
+<span class="caption">فهرستِ ۵-۶: ساختنِ نمونه‌ای جدیدِ `User` با استفاده از همه‌ی مقادیرِ `user1` به‌جز یکی</span>
 
-Using struct update syntax, we can achieve the same effect with less code, as
-shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
-explicitly set should have the same value as the fields in the given instance.
+با استفاده از نحوِ به‌روزرسانیِ ساختار، می‌توانیم همان اثر را با کدِ کمتری به دست بیاوریم، همان‌طور که در فهرستِ ۵-۷ نشان داده شده است. نحوِ `..` مشخص می‌کند که فیلدهایِ باقی‌مانده‌ای که به‌طورِ صریح تنظیم نشده‌اند، باید همان مقدارِ فیلدهایِ نمونه‌ی داده‌شده را داشته باشند.
 
 <Listing number="5-7" file-name="src/main.rs" caption="Using struct update syntax to set a new `email` value for a `User` instance but to use the rest of the values from `user1`">
 
@@ -174,39 +131,19 @@ explicitly set should have the same value as the fields in the given instance.
 
 </Listing>
 
-The code in Listing 5-7 also creates an instance in `user2` that has a
-different value for `email` but has the same values for the `username`,
-`active`, and `sign_in_count` fields from `user1`. The `..user1` must come last
-to specify that any remaining fields should get their values from the
-corresponding fields in `user1`, but we can choose to specify values for as
-many fields as we want in any order, regardless of the order of the fields in
-the struct’s definition.
+کدِ فهرستِ ۵-۷ هم نمونه‌ای در `user2` می‌سازد که مقداری متفاوت برایِ `email` دارد اما مقادیرِ فیلدهایِ `username`، `active` و `sign_in_count` را همان مقادیرِ `user1` نگه می‌دارد. `..user1` باید در آخر بیاید تا مشخص کند هر فیلدِ باقی‌مانده باید مقدارش را از فیلدِ متناظرش در `user1` بگیرد، اما می‌توانیم برایِ هر تعداد فیلد که بخواهیم، به هر ترتیبی، مقدار مشخص کنیم، فارغ از ترتیبِ فیلدها در تعریفِ ساختار.
 
-Note that the struct update syntax uses `=` like an assignment; this is
-because it moves the data, just as we saw in the ["What Is Ownership?"][move]<!-- ignore --> section. In this example, after creating `user2`, `user1` is partially invalidated because the `String` in the
-`username` field of `user1` was moved into `user2`. If we had given `user2` new
-`String` values for both `email` and `username`, and thus only used the
-`active` and `sign_in_count` values from `user1`, then `user1` would still be
-fully valid after creating `user2`. The types of `active` and `sign_in_count` are
-types that implement the `Copy` trait, so the behavior we discussed in the
-[“Copying vs. Moving Out of a Collection”][copy]<!-- ignore --> section would apply.
+توجه کنید که نحوِ به‌روزرسانیِ ساختار از `=` مانندِ یک انتساب استفاده می‌کند؛ به این دلیل که داده را جابه‌جا می‌کند، دقیقاً همان‌طور که در بخشِ [«مالکیت چیست؟»][move]<!-- ignore --> دیدیم. در این مثال، بعد از ساختِ `user2`، `user1` تا حدی نامعتبر می‌شود چون `String` درونِ فیلدِ `username` در `user1` به `user2` منتقل شده است. اگر برایِ هر دویِ `email` و `username` در `user2`، مقادیرِ `String` جدیدی داده بودیم، و در نتیجه فقط از مقادیرِ `active` و `sign_in_count` در `user1` استفاده می‌کردیم، آن‌گاه `user1` بعد از ساختِ `user2` همچنان کاملاً معتبر می‌ماند. نوع‌هایِ `active` و `sign_in_count` نوع‌هایی هستند که traitِ `Copy` را پیاده‌سازی می‌کنند، پس رفتاری که در بخشِ [«کپی کردن در برابرِ خارج کردن از یک مجموعه»][copy]<!-- ignore --> بحث کردیم، در اینجا هم صدق می‌کند.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-tuple-structs-without-named-fields-to-create-different-types"></a>
 
-### Creating Different Types with Tuple Structs
+### ساختنِ نوع‌هایِ متفاوت با استراکت‌های تاپلی
 
-Rust also supports structs that look similar to tuples, called _tuple structs_.
-Tuple structs have the added meaning the struct name provides but don’t have
-names associated with their fields; rather, they just have the types of the
-fields. Tuple structs are useful when you want to give the whole tuple a name
-and make the tuple a different type from other tuples, and when naming each
-field as in a regular struct would be verbose or redundant.
+راست همچنین از ساختارهایی پشتیبانی می‌کند که شبیهِ تاپل‌ها هستند، به نامِ _استراکت‌های تاپلی (tuple structs)_. استراکت‌های تاپلی معنایِ اضافه‌ای دارند که نامِ ساختار فراهم می‌کند، اما نامی مرتبط با فیلدهایشان ندارند؛ در عوض، فقط نوعِ فیلدها را دارند. استراکت‌های تاپلی وقتی مفیدند که بخواهید به کلِ تاپل نامی بدهید و آن تاپل را از تاپل‌های دیگر به نوعی متفاوت تبدیل کنید، و وقتی نام‌گذاریِ هر فیلد مانندِ یک استراکتِ معمولی، پرحرف یا زائد باشد.
 
-To define a tuple struct, start with the `struct` keyword and the struct name
-followed by the types in the tuple. For example, here we define and use two
-tuple structs named `Color` and `Point`:
+برای تعریفِ یک استراکتِ تاپلی، با کلیدواژه‌ی `struct` و نامِ ساختار شروع می‌کنیم و بعد نوع‌هایِ درونِ تاپل می‌آیند. برای مثال، در اینجا دو استراکتِ تاپلی به نام‌هایِ `Color` و `Point` تعریف و استفاده می‌کنیم:
 
 <Listing file-name="src/main.rs">
 
@@ -222,31 +159,15 @@ fn main() {
 
 </Listing>
 
-Note that the `black` and `origin` values are different types because they’re
-instances of different tuple structs. Each struct you define is its own type,
-even though the fields within the struct might have the same types. For
-example, a function that takes a parameter of type `Color` cannot take a
-`Point` as an argument, even though both types are made up of three `i32`
-values. Otherwise, tuple struct instances are similar to tuples in that you can
-destructure them into their individual pieces, and you can use a `.` followed
-by the index to access an individual value. Unlike tuples, tuple structs
-require you to name the type of the struct when you destructure them. For
-example, we would write `let Point(x, y, z) = origin;` to destructure the
-values in the `origin` point into variables named `x`, `y`, and `z`.
+توجه کنید که مقادیرِ `black` و `origin` نوع‌های متفاوتی هستند چون نمونه‌هایِ استراکت‌های تاپلیِ متفاوتی‌اند. هر ساختاری که تعریف می‌کنید، نوعِ خودش را دارد، حتی اگر فیلدهایِ درونِ آن ساختار نوع‌هایِ یکسانی داشته باشند. برای مثال، تابعی که پارامتری از نوعِ `Color` می‌گیرد، نمی‌تواند یک `Point` را به‌عنوانِ آرگومان بگیرد، حتی اگر هر دو نوع از سه مقدارِ `i32` تشکیل شده باشند. در غیرِ این صورت، نمونه‌های استراکتِ تاپلی شبیهِ تاپل‌ها هستند، از این جهت که می‌توانید آن‌ها را به بخش‌های منفردشان تجزیه کنید، و می‌توانید از یک `.` به‌همراهِ اندیس برایِ دسترسی به یک مقدارِ منفرد استفاده کنید. برخلافِ تاپل‌ها، استراکت‌های تاپلی نیاز دارند وقتی آن‌ها را تجزیه می‌کنید، نوعِ ساختار را نام ببرید. برای مثال، برایِ تجزیه‌ی مقادیرِ درونِ نقطه‌ی `origin` به متغیرهایی به نامِ `x`، `y` و `z`، می‌نویسیم `let Point(x, y, z) = origin;`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="unit-like-structs-without-any-fields"></a>
 
-### Defining Unit-Like Structs
+### تعریفِ استراکت‌هایِ شبه‌واحد
 
-You can also define structs that don’t have any fields! These are called
-_unit-like structs_ because they behave similarly to `()`, the unit type that
-we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like
-structs can be useful when you need to implement a trait on some type but don’t
-have any data that you want to store in the type itself. We’ll discuss traits
-in Chapter 10. Here’s an example of declaring and instantiating a unit struct
-named `AlwaysEqual`:
+همچنین می‌توانید ساختارهایی تعریف کنید که هیچ فیلدی ندارند! این‌ها را _استراکت‌های شبه‌واحد (unit-like structs)_ می‌نامند چون رفتاری شبیهِ `()`، نوعِ واحدی که در بخشِ [«نوعِ تاپل»][tuples]<!-- ignore --> به آن اشاره کردیم، دارند. استراکت‌های شبه‌واحد وقتی مفیدند که بخواهید یک trait را روی نوعی پیاده‌سازی کنید اما هیچ داده‌ای نداشته باشید که بخواهید در خودِ آن نوع ذخیره کنید. درباره‌ی traitها در فصلِ ۱۰ بحث خواهیم کرد. در ادامه مثالی از اعلام و نمونه‌سازیِ یک استراکتِ واحد به نامِ `AlwaysEqual` می‌آید:
 
 ```aquascope,interpreter
 struct AlwaysEqual;
@@ -256,29 +177,13 @@ fn main() {
 }
 ```
 
-To define `AlwaysEqual`, we use the `struct` keyword, the name we want, and
-then a semicolon. No need for curly brackets or parentheses! Then, we can get
-an instance of `AlwaysEqual` in the `subject` variable in a similar way: using
-the name we defined, without any curly brackets or parentheses. Imagine that
-later we’ll implement behavior for this type such that every instance of
-`AlwaysEqual` is always equal to every instance of any other type, perhaps to
-have a known result for testing purposes. We wouldn’t need any data to
-implement that behavior! You’ll see in Chapter 10 how to define traits and
-implement them on any type, including unit-like structs.
+برایِ تعریفِ `AlwaysEqual`، از کلیدواژه‌ی `struct`، نامی که می‌خواهیم و سپس یک نقطه‌ویرگول استفاده می‌کنیم. نیازی به آکولاد یا پرانتز نیست! سپس، می‌توانیم نمونه‌ای از `AlwaysEqual` را در متغیرِ `subject` به روشی مشابه بگیریم: با استفاده از نامی که تعریف کردیم، بدونِ هیچ آکولاد یا پرانتزی. تصور کنید بعدها رفتاری برایِ این نوع پیاده‌سازی می‌کنیم که هر نمونه‌ای از `AlwaysEqual` همیشه با هر نمونه‌ای از هر نوعِ دیگری برابر باشد، شاید برایِ داشتنِ نتیجه‌ای شناخته‌شده برایِ هدفِ آزمون. برایِ پیاده‌سازیِ آن رفتار، نیازی به هیچ داده‌ای نداشتیم! در فصلِ ۱۰ خواهید دید چگونه traitها را تعریف و روی هر نوعی، شاملِ استراکت‌های شبه‌واحد، پیاده‌سازی کنید.
 
-> ### Ownership of Struct Data
+> ### مالکیتِ داده‌های ساختار
 >
-> In the `User` struct definition in Listing 5-1, we used the owned `String`
-> type rather than the `&str` string slice type. This is a deliberate choice
-> because we want each instance of this struct to own all of its data and for
-> that data to be valid for as long as the entire struct is valid.
+> در تعریفِ ساختارِ `User` در فهرستِ ۵-۱، به‌جایِ نوعِ اسلایسِ رشته‌ایِ `&str`، از نوعِ مالکیت‌دارِ `String` استفاده کردیم. این انتخابی عمدی است چون می‌خواهیم هر نمونه از این ساختار مالکِ همه‌ی داده‌اش باشد و آن داده تا زمانی‌که کلِ ساختار معتبر است، معتبر باشد.
 >
-> It’s also possible for structs to store references to data owned by something
-> else, but to do so requires the use of _lifetimes_, a Rust feature that we’ll
-> discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
-> is valid for as long as the struct is. Let’s say you try to store a reference
-> in a struct without specifying lifetimes, like the following in
-> *src/main.rs*; this won’t work:
+> همچنین ممکن است ساختارها ارجاع‌هایی به داده‌ای که چیزِ دیگری مالکِ آن است را ذخیره کنند، اما این کار به استفاده از _طولِ‌عمرها (lifetimes)_، ویژگی‌ای در راست که در فصلِ ۱۰ بحث خواهیم کرد، نیاز دارد. طولِ‌عمرها تضمین می‌کنند داده‌ای که یک ساختار به آن ارجاع می‌دهد، تا زمانی‌که خودِ ساختار معتبر است، معتبر بماند. فرض کنید سعی می‌کنید ارجاعی را در یک ساختار بدونِ مشخص کردنِ طولِ‌عمرها ذخیره کنید، مانندِ این در *src/main.rs*؛ این کار نتیجه نمی‌دهد:
 >
 > <Listing file-name="src/main.rs">
 >
@@ -304,7 +209,7 @@ implement them on any type, including unit-like structs.
 >
 > </Listing>
 >
-> The compiler will complain that it needs lifetime specifiers:
+> کامپایلر شکایت می‌کند که به مشخص‌کننده‌های طولِ‌عمر نیاز دارد:
 >
 > ```console
 > $ cargo run
@@ -340,14 +245,11 @@ implement them on any type, including unit-like structs.
 > error: could not compile `structs` (bin "structs") due to 2 previous errors
 > ```
 >
-> In Chapter 10, we’ll discuss how to fix these errors so that you can store
-> references in structs, but for now, we’ll fix errors like these using owned
-> types like `String` instead of references like `&str`.
+> در فصلِ ۱۰ بحث خواهیم کرد چگونه این خطاها را رفع کنیم تا بتوانید ارجاع‌ها را در ساختارها ذخیره کنید، اما فعلاً، خطاهایی مانندِ این را با استفاده از نوع‌هایِ مالکیت‌دار مانندِ `String` به‌جایِ ارجاع‌هایی مانندِ `&str` رفع می‌کنیم.
 
-### Borrowing Fields of a Struct
+### قرض گرفتنِ فیلدهایِ یک ساختار
 
-Similar to our discussion in ["Different Tuple Fields"][differentfields], Rust's borrow checker will track ownership permissions
-at both the struct-level and field-level. For example, if we borrow a field `x` of a `Point` structure, then both `p` and `p.x` temporarily lose their permissions (but not `p.y`):
+مشابهِ بحثی که در [«فیلدهایِ مختلفِ تاپل»][differentfields] داشتیم، بررسی‌کننده‌ی قرضِ راست، اجازه‌های مالکیت را هم در سطحِ ساختار و هم در سطحِ فیلد ردیابی می‌کند. برای مثال، اگر فیلدِ `x` از یک ساختارِ `Point` را قرض بگیریم، آن‌گاه هم `p` و هم `p.x` به‌طورِ موقت اجازه‌هایشان را از دست می‌دهند (اما `p.y` این‌طور نیست):
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
@@ -360,7 +262,7 @@ println!("{}, {}", p.x, p.y);
 #}
 ```
 
-As a result, if we try and use `p` while `p.x` is mutably borrowed like this:
+در نتیجه، اگر سعی کنیم درحالی‌که `p.x` به‌طورِ تغییرپذیر قرض داده شده، از `p` استفاده کنیم، مثلِ این:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 struct Point { x: i32, y: i32 }
@@ -377,7 +279,7 @@ fn main() {
 }
 ```
 
-Then the compiler will reject our program with the following error:
+آن‌گاه کامپایلر برنامه‌ی ما را با این خطا رد می‌کند:
 
 ```text
 error[E0502]: cannot borrow `p` as immutable because it is also borrowed as mutable
@@ -391,9 +293,7 @@ error[E0502]: cannot borrow `p` as immutable because it is also borrowed as muta
    |     ------- mutable borrow later used here
 ```
 
-More generally, if you encounter an ownership error that involves a struct, you should consider which fields of your structure
-are supposed to be borrowed with which permissions. But be aware of the borrow checker's limitations, since Rust may sometimes
-assume more fields are borrowed than they actually are.
+به‌طورِ کلی‌تر، اگر با خطای مالکیتی روبه‌رو شدید که یک ساختار در آن دخیل است، باید در نظر بگیرید کدام فیلدهایِ ساختارتان قرار است با چه اجازه‌هایی قرض داده شوند. اما مراقبِ محدودیت‌هایِ بررسی‌کننده‌ی قرض باشید، چون راست گاهی ممکن است فرض کند بیش از آنچه واقعاً قرض داده شده، فیلد قرض داده شده است.
 
 {{#quiz ../quizzes/ch05-01-structs.toml}}
 

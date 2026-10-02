@@ -1,14 +1,5 @@
-# Using Structs to Structure Related Data
+# استفاده از ساختارها برایِ سازمان‌دهیِ داده‌های مرتبط
 
-A _struct_, or _structure_, is a custom data type that lets you package
-together and name multiple related values that make up a meaningful group. If
-you’re familiar with an object-oriented language, a struct is like an object’s
-data attributes. In this chapter, we’ll compare and contrast tuples with
-structs to build on what you already know and demonstrate when structs are a
-better way to group data.
+یک _ساختار (struct)_، یا _استراکت_، نوعِ داده‌ای سفارشی است که به شما اجازه می‌دهد چندین مقدارِ مرتبط را که یک گروهِ معنادار را تشکیل می‌دهند، در کنارِ هم بسته‌بندی و نام‌گذاری کنید. اگر با یک زبانِ شیءگرا آشنا باشید، یک ساختار شبیهِ ویژگی‌هایِ داده‌ایِ یک شیء است. در این فصل، تاپل‌ها و ساختارها را با هم مقایسه می‌کنیم تا بر پایه‌ی آنچه از پیش می‌دانید بنا کنیم و نشان دهیم چه زمانی ساختارها روشِ بهتری برایِ گروه‌بندیِ داده هستند.
 
-We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
-define associated functions, especially the kind of associated functions called
-_methods_, to specify behavior associated with a struct type. Structs and enums
-(discussed in Chapter 6) are the building blocks for creating new types in your
-program’s domain to take full advantage of Rust’s compile-time type checking.
+نشان می‌دهیم چگونه ساختارها را تعریف و نمونه‌سازی کنیم. درباره‌ی نحوه‌ی تعریفِ توابعِ وابسته، به‌خصوص نوعی از توابعِ وابسته به نامِ _متدها (methods)_، برایِ مشخص کردنِ رفتارِ مرتبط با یک نوعِ ساختار، بحث می‌کنیم. ساختارها و شمارش‌پذیرها (enums؛ که در فصلِ ۶ بحث می‌شوند) بلوک‌های سازنده برایِ ساختنِ نوع‌های جدید در حوزه‌ی برنامه‌ی شما هستند تا بتوانید به‌طورِ کامل از بررسیِ نوعِ زمانِ کامپایلِ راست بهره ببرید.
