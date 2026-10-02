@@ -1,19 +1,10 @@
-## Variables and Mutability
+## متغیرها و تغییرپذیری
 
-As mentioned in the [“Storing Values with
-Variables”][storing-values-with-variables]<!-- ignore --> section, by default,
-variables are immutable. This is one of many nudges Rust gives you to write
-your code in a way that takes advantage of the safety and easy concurrency that
-Rust offers. However, you still have the option to make your variables mutable.
-Let’s explore how and why Rust encourages you to favor immutability and why
-sometimes you might want to opt out.
+همان‌طور که در بخش [«ذخیره‌ی مقادیر با متغیرها»][storing-values-with-variables]<!-- ignore --> اشاره شد، متغیرها به‌صورت پیش‌فرض غیرقابل تغییر (immutable) هستند. این یکی از خیلی سوق‌دادن‌هایی است که Rust به شما می‌دهد تا کدتان را به روشی بنویسید که از امنیت و concurrency آسانی که Rust فراهم می‌کند بهره ببرید. با این حال، همچنان این امکان را دارید که متغیرهایتان را قابل تغییر (mutable) کنید. بیایید بررسی کنیم که Rust چطور و چرا شما را به سمت ترجیح دادن immutability تشویق می‌کند، و چرا گاهی ممکن است بخواهید از آن خارج شوید (opt out).
 
-When a variable is immutable, once a value is bound to a name, you can’t change
-that value. To illustrate this, generate a new project called _variables_ in
-your _projects_ directory by using `cargo new variables`.
+وقتی یک متغیر غیرقابل تغییر است، وقتی یک مقدار به یک نام مقید (bind) شد، دیگر نمی‌توانید آن مقدار را تغییر دهید. برای نشان دادن این موضوع، با استفاده از `cargo new variables` یک پروژه‌ی جدید به نام _variables_ در پوشه‌ی _projects_ خودتان بسازید.
 
-Then, in your new _variables_ directory, open _src/main.rs_ and replace its
-code with the following code, which won’t compile just yet:
+بعد، در پوشه‌ی جدید _variables_، فایل _src/main.rs_ را باز کنید و کدش را با کد زیر جایگزین کنید، که هنوز کامپایل نمی‌شود:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -21,39 +12,21 @@ code with the following code, which won’t compile just yet:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
-Save and run the program using `cargo run`. You should receive an error message
-regarding an immutability error, as shown in this output:
+برنامه را سیو کنید و با `cargo run` اجرا کنید. باید یک پیام خطا درباره‌ی یک خطای immutability بگیرید، همان‌طور که در این خروجی نشان داده شده:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
 ```
 
-This example shows how the compiler helps you find errors in your programs.
-Compiler errors can be frustrating, but really they only mean your program
-isn’t safely doing what you want it to do yet; they do _not_ mean that you’re
-not a good programmer! Experienced Rustaceans still get compiler errors.
+این مثال نشان می‌دهد که کامپایلر چطور به شما کمک می‌کند خطاهای برنامه‌هایتان را پیدا کنید. خطاهای کامپایلر می‌توانند عصبی‌کننده باشند، اما در واقع فقط یعنی برنامه‌ی شما هنوز به‌صورت امن کاری که می‌خواهید را انجام نمی‌دهد؛ آن‌ها به این معنا _نیستند_ که برنامه‌نویس خوبی نیستید! حتی Rustaceanهای باتجربه هم هنوز با خطاهای کامپایلر مواجه می‌شوند.
 
-You received the error message `` cannot assign twice to immutable variable `x` `` because you tried to assign a second value to the immutable `x` variable.
+پیام خطای `` cannot assign twice to immutable variable `x` `` را گرفتید چون سعی کردید یک مقدار دوم را به متغیر غیرقابل تغییر `x` assign کنید.
 
-It’s important that we get compile-time errors when we attempt to change a
-value that’s designated as immutable, because this very situation can lead to
-bugs. If one part of our code operates on the assumption that a value will
-never change and another part of our code changes that value, it’s possible
-that the first part of the code won’t do what it was designed to do. The cause
-of this kind of bug can be difficult to track down after the fact, especially
-when the second piece of code changes the value only _sometimes_. The Rust
-compiler guarantees that when you state that a value won’t change, it really
-won’t change, so you don’t have to keep track of it yourself. Your code is thus
-easier to reason through.
+مهم است که وقتی سعی می‌کنیم مقداری را که به‌عنوان غیرقابل تغییر تعیین شده تغییر دهیم، خطاهای زمان کامپایل (compile-time) بگیریم، چون همین وضعیت می‌تواند به باگ منجر شود. اگر یک بخش از کدمان بر اساس این فرض کار کند که یک مقدار هرگز تغییر نمی‌کند، و بخش دیگری از کدمان آن مقدار را تغییر دهد، ممکن است بخش اول کد کاری را که برایش طراحی شده انجام ندهد. پیدا کردن منبع این‌جور باگ‌ها بعد از وقوعشان می‌تواند سخت باشد، به‌خصوص وقتی که آن قطعه‌ی کد دوم مقدار را فقط _بعضی وقت‌ها_ تغییر می‌دهد. کامپایلر Rust تضمین می‌کند که وقتی اعلام می‌کنید یک مقدار تغییر نمی‌کند، واقعاً هم تغییر نمی‌کند، پس خودتان مجبور نیستید آن را زیر نظر بگیرید. به همین دلیل استدلال کردن روی کدتان آسان‌تر می‌شود.
 
-But mutability can be very useful and can make code more convenient to write.
-Although variables are immutable by default, you can make them mutable by
-adding `mut` in front of the variable name as you did in [Chapter
-2][storing-values-with-variables]<!-- ignore -->. Adding `mut` also conveys
-intent to future readers of the code by indicating that other parts of the code
-will be changing this variable’s value.
+اما mutability می‌تواند خیلی مفید باشد و نوشتن کد را راحت‌تر کند. با این‌که متغیرها به‌صورت پیش‌فرض غیرقابل تغییر هستند، می‌توانید با اضافه کردن `mut` جلوی نام متغیر، آن‌ها را قابل تغییر کنید، همان‌طور که در [فصل ۲][storing-values-with-variables]<!-- ignore --> انجام دادید. اضافه کردن `mut` همچنین نیت شما را به خوانندگان آینده‌ی کد منتقل می‌کند و نشان می‌دهد که بخش‌های دیگر کد قرار است مقدار این متغیر را تغییر دهند.
 
-For example, let’s change _src/main.rs_ to the following:
+برای مثال، بیایید _src/main.rs_ را به این‌طور تغییر دهیم:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -61,81 +34,46 @@ For example, let’s change _src/main.rs_ to the following:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/src/main.rs}}
 ```
 
-When we run the program now, we get this:
+وقتی الان برنامه را اجرا می‌کنیم، این را می‌گیریم:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/output.txt}}
 ```
 
-We’re allowed to change the value bound to `x` from `5` to `6` when `mut` is
-used. Ultimately, deciding whether to use mutability or not is up to you and
-depends on what you think is clearest in that particular situation.
+وقتی از `mut` استفاده می‌کنیم، اجازه داریم مقداری که به `x` مقید شده را از `5` به `6` تغییر دهیم. در نهایت، تصمیم گرفتن درباره‌ی استفاده یا عدم استفاده از mutability به خود شما بستگی دارد و به این وابسته است که فکر می‌کنید در آن شرایط خاص چه چیزی واضح‌تر است.
 
 {{#quiz ../quizzes/ch03-01-variables-and-mutability-sec1-variables.toml}}
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="constants"></a>
 
-### Declaring Constants
+### تعریف کردن Constant‌ها
 
-Like immutable variables, _constants_ are values that are bound to a name and
-are not allowed to change, but there are a few differences between constants
-and variables.
+مثل متغیرهای غیرقابل تغییر، _constant‌ها_ هم مقادیری هستند که به یک نام مقید شده‌اند و اجازه‌ی تغییر ندارند، اما چند تفاوت بین constant‌ها و متغیرها وجود دارد.
 
-First, you aren’t allowed to use `mut` with constants. Constants aren’t just
-immutable by default—they’re always immutable. You declare constants using the
-`const` keyword instead of the `let` keyword, and the type of the value _must_
-be annotated. We’ll cover types and type annotations in the next section,
-[“Data Types”][data-types]<!-- ignore -->, so don’t worry about the details
-right now. Just know that you must always annotate the type.
+اول این‌که، اجازه ندارید از `mut` همراه با constant‌ها استفاده کنید. constant‌ها فقط به‌صورت پیش‌فرض immutable نیستند، بلکه همیشه immutable هستند. constant‌ها را با استفاده از کلیدواژه‌ی `const` به‌جای کلیدواژه‌ی `let` تعریف می‌کنید، و تایپ آن مقدار _باید_ annotate شود. در بخش بعدی، [«تایپ‌های داده»][data-types]<!-- ignore -->، درباره‌ی تایپ‌ها و annotationهای تایپ صحبت می‌کنیم، پس فعلاً نگران جزئیاتش نباشید. فقط بدانید که همیشه باید تایپ را annotate کنید.
 
-Constants can be declared in any scope, including the global scope, which makes
-them useful for values that many parts of code need to know about.
+constant‌ها می‌توانند در هر اسکوپی، از جمله global scope، تعریف شوند، که همین باعث می‌شود برای مقادیری که چند بخش از کد باید از آن‌ها آگاه باشند مفید باشند.
 
-The last difference is that constants may be set only to a constant expression,
-not the result of a value that could only be computed at runtime.
+آخرین تفاوت این است که constant‌ها فقط می‌توانند به یک عبارت constant (constant expression) تنظیم شوند، نه به نتیجه‌ی مقداری که فقط در زمان اجرا (runtime) قابل محاسبه است.
 
-Here’s an example of a constant declaration:
+این‌جا یک مثال از تعریف یک constant را می‌بینید:
 
 ```rust
 const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 ```
 
-The constant’s name is `THREE_HOURS_IN_SECONDS`, and its value is set to the
-result of multiplying 60 (the number of seconds in a minute) by 60 (the number
-of minutes in an hour) by 3 (the number of hours we want to count in this
-program). Rust’s naming convention for constants is to use all uppercase with
-underscores between words. The compiler is able to evaluate a limited set of
-operations at compile time, which lets us choose to write out this value in a
-way that’s easier to understand and verify, rather than setting this constant
-to the value 10,800. See the [Rust Reference’s section on constant
-evaluation][const-eval] for more information on what operations can be used
-when declaring constants.
+نام این constant `THREE_HOURS_IN_SECONDS` است، و مقدارش برابر با نتیجه‌ی ضرب ۶۰ (تعداد ثانیه‌ها در یک دقیقه) در ۶۰ (تعداد دقیقه‌ها در یک ساعت) در ۳ (تعداد ساعت‌هایی که می‌خواهیم در این برنامه بشماریم) تنظیم شده است. قرارداد نام‌گذاری Rust برای constant‌ها استفاده از حروف بزرگ همراه با زیرخط بین کلمات است. کامپایلر می‌تواند مجموعه‌ی محدودی از عملیات را در زمان کامپایل ارزیابی کند، که به ما اجازه می‌دهد به‌جای این‌که این constant را مستقیماً برابر با مقدار ۱۰۸۰۰ قرار دهیم، آن را به شکلی بنویسیم که فهمیدن و بررسی‌کردنش راحت‌تر باشد. برای اطلاعات بیشتر درباره‌ی این‌که چه عملیاتی می‌توانند موقع تعریف constant‌ها استفاده شوند، به [بخش ارزیابی constant در Rust Reference][const-eval] نگاهی بیندازید.
 
-Constants are valid for the entire time a program runs, within the scope in
-which they were declared. This property makes constants useful for values in
-your application domain that multiple parts of the program might need to know
-about, such as the maximum number of points any player of a game is allowed to
-earn, or the speed of light.
+constant‌ها در تمام مدتی که یک برنامه اجرا می‌شود معتبر هستند، در همان اسکوپی که در آن تعریف شده‌اند. همین خاصیت باعث می‌شود constant‌ها برای مقادیری در دامنه‌ی برنامه‌ی شما که چند بخش از برنامه ممکن است باید از آن‌ها آگاه باشند مفید باشند، مثل بالاترین تعداد امتیازی که هر بازیکن یک بازی اجازه‌ی کسب کردنش را دارد، یا سرعت نور.
 
-Naming hardcoded values used throughout your program as constants is useful in
-conveying the meaning of that value to future maintainers of the code. It also
-helps to have only one place in your code that you would need to change if the
-hardcoded value needed to be updated in the future.
+نام‌گذاری مقادیر hardcode‌شده‌ای که در سراسر برنامه‌تان استفاده می‌شوند به‌شکل constant، در انتقال معنای آن مقدار به نگهدارنده‌های آینده‌ی کد مفید است. همچنین کمک می‌کند که فقط یک جای کدتان باشد که لازم باشد در آینده، اگر آن مقدار hardcode‌شده نیاز به به‌روزرسانی داشت، تغییرش دهید.
 
 {{#quiz ../quizzes/ch03-01-variables-and-mutability-sec2-constants.toml}}
 
 ### Shadowing
 
-As you saw in the guessing game tutorial in [Chapter
-2][comparing-the-guess-to-the-secret-number]<!-- ignore -->, you can declare a
-new variable with the same name as a previous variable. Rustaceans say that the
-first variable is _shadowed_ by the second, which means that the second
-variable is what the compiler will see when you use the name of the variable.
-In effect, the second variable overshadows the first, taking any uses of the
-variable name to itself until either it itself is shadowed or the scope ends.
-We can shadow a variable by using the same variable’s name and repeating the
-use of the `let` keyword as follows:
+همان‌طور که در آموزش بازی حدس زدن عدد در [فصل ۲][comparing-the-guess-to-the-secret-number]<!-- ignore --> دیدید، می‌توانید یک متغیر جدید با همان نام یک متغیر قبلی تعریف کنید. Rustaceanها می‌گویند که متغیر اول توسط متغیر دوم _shadow_ می‌شود، یعنی متغیر دوم همان چیزی است که کامپایلر وقتی از نام آن متغیر استفاده می‌کنید می‌بیند. در واقع، متغیر دوم روی متغیر اول سایه می‌اندازد، و هر استفاده‌ای از آن نام متغیر را به خودش می‌گیرد تا وقتی که خودش هم shadow شود یا اسکوپ به پایان برسد. می‌توانیم یک متغیر را با استفاده از همان نام متغیر و تکرار استفاده از کلیدواژه‌ی `let` این‌طور shadow کنیم:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -143,52 +81,33 @@ use of the `let` keyword as follows:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
 ```
 
-This program first binds `x` to a value of `5`. Then, it creates a new variable
-`x` by repeating `let x =`, taking the original value and adding `1` so that
-the value of `x` is `6`. Then, within an inner scope created with the curly
-brackets, the third `let` statement also shadows `x` and creates a new
-variable, multiplying the previous value by `2` to give `x` a value of `12`.
-When that scope is over, the inner shadowing ends and `x` returns to being `6`.
-When we run this program, it will output the following:
+این برنامه اول `x` را به مقدار `5` مقید می‌کند. بعد، با تکرار کردن `let x =`، یک متغیر جدید `x` می‌سازد، مقدار اصلی را می‌گیرد و `1` به آن اضافه می‌کند تا مقدار `x` برابر با `6` شود. سپس، داخل یک اسکوپ درونی که با آکولادها ساخته شده، سومین عبارت `let` هم `x` را shadow می‌کند و یک متغیر جدید می‌سازد، مقدار قبلی را در `2` ضرب می‌کند تا به `x` مقدار `12` بدهد. وقتی آن اسکوپ به پایان می‌رسد، shadowing درونی هم پایان می‌یابد و `x` دوباره برابر با `6` می‌شود. وقتی این برنامه را اجرا کنیم، این خروجی را می‌دهد:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
 ```
 
-Shadowing is different from marking a variable as `mut` because we’ll get a
-compile-time error if we accidentally try to reassign to this variable without
-using the `let` keyword. By using `let`, we can perform a few transformations
-on a value but have the variable be immutable after those transformations have
-completed.
+Shadowing با علامت‌گذاری یک متغیر به‌عنوان `mut` فرق دارد، چون اگر تصادفاً بدون استفاده از کلیدواژه‌ی `let` سعی کنیم مقدار جدیدی به این متغیر اختصاص دهیم، یک خطای زمان کامپایل می‌گیریم. با استفاده از `let`، می‌توانیم چند تبدیل روی یک مقدار انجام دهیم اما بعد از تمام شدن آن تبدیل‌ها، متغیر همچنان غیرقابل تغییر باقی بماند.
 
-The other difference between `mut` and shadowing is that because we’re
-effectively creating a new variable when we use the `let` keyword again, we can
-change the type of the value but reuse the same name. For example, say our
-program asks a user to show how many spaces they want between some text by
-inputting space characters, and then we want to store that input as a number:
+تفاوت دیگر بین `mut` و shadowing این است که چون واقعاً وقتی دوباره از کلیدواژه‌ی `let` استفاده می‌کنیم یک متغیر جدید می‌سازیم، می‌توانیم تایپ آن مقدار را تغییر دهیم اما همان نام را دوباره استفاده کنیم. برای مثال، فرض کنید برنامه‌ی ما از کاربر می‌خواهد با تایپ کردن کاراکترهای فاصله (space) نشان دهد چند فاصله بین یک متن می‌خواهد، و بعد می‌خواهیم آن ورودی را به‌شکل یک عدد ذخیره کنیم:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
-The first `spaces` variable is a string type, and the second `spaces` variable
-is a number type. Shadowing thus spares us from having to come up with
-different names, such as `spaces_str` and `spaces_num`; instead, we can reuse
-the simpler `spaces` name. However, if we try to use `mut` for this, as shown
-here, we’ll get a compile-time error:
+متغیر اول `spaces` یک تایپ رشته‌ای است، و متغیر دوم `spaces` یک تایپ عددی است. Shadowing به همین دلیل ما را از مجبور بودن به فکر کردن روی نام‌های متفاوت، مثل `spaces_str` و `spaces_num`، خلاص می‌کند؛ در عوض، می‌توانیم دوباره از نام ساده‌تر `spaces` استفاده کنیم. اما، اگر سعی کنیم برای این کار از `mut` استفاده کنیم، همان‌طور که این‌جا نشان داده شده، یک خطای زمان کامپایل می‌گیریم:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 
-The error says we’re not allowed to mutate a variable’s type:
+این خطا می‌گوید که اجازه نداریم تایپ یک متغیر را تغییر دهیم (mutate):
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
-Now that we’ve explored how variables work, let’s look at more data types they
-can have.
+حالا که بررسی کردیم متغیرها چطور کار می‌کنند، بیایید نگاهی به تایپ‌های داده‌ی بیشتری که می‌توانند داشته باشند بیندازیم.
 
 {{#quiz ../quizzes/ch03-01-variables-and-mutability-sec3-shadowing.toml}}
 
