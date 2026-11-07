@@ -21,10 +21,10 @@ The deployment workflow in [`.github/workflows/pages.yml`](.github/workflows/pag
 You will also need the local mdBook preprocessors and JavaScript extensions.
 
 1. Install the tools and versions listed in the deployment workflow.
-2. Install the repository's local preprocessors (the package provides the listing, note, heading, and figure binaries):
+2. Install all local mdBook preprocessors (the package provides the listing, note, heading, and figure binaries):
 
    ```bash
-   cargo install --path packages/mdbook-trpl
+   cargo install --path packages/mdbook-trpl --bins
    ```
 
 3. Build the JavaScript extensions:
@@ -84,7 +84,13 @@ The repository includes the MIT and Apache-2.0 license texts in [LICENSE-MIT](LI
 
 ### ساخت کتاب
 
-ابتدا افزونه‌های JavaScript را بسازید:
+ابتدا تمام پیش‌پردازنده‌های محلی را نصب کنید:
+
+```bash
+cargo install --path packages/mdbook-trpl --bins
+```
+
+سپس افزونه‌های JavaScript را بسازید:
 
 ```bash
 cd js-extensions
@@ -92,7 +98,7 @@ pnpm init-repo
 cd ..
 ```
 
-سپس کتاب را بسازید:
+در نهایت کتاب را بسازید:
 
 ```bash
 mdbook build
