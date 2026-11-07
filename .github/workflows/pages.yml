@@ -58,7 +58,7 @@ jobs:
           echo "${PWD}/bin" >> "${GITHUB_PATH}"
 
       - name: Build local preprocessors
-        run: cargo install --path packages/mdbook-trpl
+        run: cargo install --path packages/mdbook-trpl --bins
 
       - name: Build JavaScript extensions
         run: |
