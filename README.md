@@ -21,11 +21,10 @@ The deployment workflow in [`.github/workflows/pages.yml`](.github/workflows/pag
 You will also need the local mdBook preprocessors and JavaScript extensions.
 
 1. Install the tools and versions listed in the deployment workflow.
-2. Install the repository's local preprocessors:
+2. Install the repository's local preprocessors (the package provides the listing, note, heading, and figure binaries):
 
    ```bash
-   cargo install --locked --path packages/mdbook-trpl-listing
-   cargo install --locked --path packages/mdbook-trpl-note
+   cargo install --path packages/mdbook-trpl
    ```
 
 3. Build the JavaScript extensions:
