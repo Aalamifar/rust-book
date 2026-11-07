@@ -1,127 +1,120 @@
-## کتاب برنامه‌نویسی Rust
+# The Rust Programming Language — Persian Edition
 
 [![Deploy Persian Rust Book](https://github.com/Aalamifar/rust-book/actions/workflows/pages.yml/badge.svg)](https://github.com/Aalamifar/rust-book/actions/workflows/pages.yml)
 
-این مخزن شامل منبع کتاب **«The Rust Programming Language»** است؛ به‌ویژه یک شاخهٔ آزمایشی که ویژگی‌های تعاملی مانند آزمون‌ها (quizzes) را پشتیبانی می‌کند.
+A Persian translation and interactive edition of **[The Rust Programming Language](https://doc.rust-lang.org/book/)**. This repository builds on the official Rust book and the interactive book project, bringing Persian readers features such as quizzes and Aquascope visualizations.
 
-**اگر مشکلی را در <https://aalamifar.github.io/rust-book/> کشف کردید، لطفاً آن را در این مخزن گزارش کنید، نه در جای دیگری.**
+**Read the book online:** https://aalamifar.github.io/rust-book/
 
-[این کتاب به‌صورت چاپی توسط No Starch Press به انگلیسی موجود است][nostarch].
+## Highlights
 
-[nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
+- Persian translation of *The Rust Programming Language*.
+- Interactive quizzes powered by [mdbook-quiz](https://github.com/cognitive-engineering-lab/mdbook-quiz).
+- Code visualizations powered by [Aquascope](https://github.com/cognitive-engineering-lab/aquascope).
+- Custom mdBook preprocessors maintained in this repository.
+- Automated deployment to GitHub Pages.
 
-همچنین می‌توانید [کتاب تعاملی][book_fa] را به‌صورت رایگان آنلاین به فارسی بخوانید. همینطور می‌توانید کتاب را مطابق آخرین نسخه‌های Rustا [stable]، [beta] یا [nightly] استفاده کنید. توجه داشته باشید که ممکن است مشکلاتی که در این نسخه‌ها وجود دارد، در این مخزن اصلاح شده باشد، زیرا این انتشار‌ها به‌صورت کمتری به‌روز می‌شوند.
+## Building locally
 
-[book_fa]:https://aalamifar.github.io/rust-book/
-[stable]: https://doc.rust-lang.org/stable/book/
-[beta]: https://doc.rust-lang.org/beta/book/
-[nightly]: https://doc.rust-lang.org/nightly/book/
+The deployment workflow in [`.github/workflows/pages.yml`](.github/workflows/pages.yml) is the source of truth for the versions used in production. It currently uses Rust 1.90, mdBook 0.5.2, mdbook-quiz 0.5.0, Aquascope 0.4.0, Node.js 20, and pnpm 9, plus a dedicated nightly Rust toolchain for Aquascope.
 
-برای دریافت کدهای تمام مثال‌های کتاب، به [releases] مراجعه کنید.
+You will also need the local mdBook preprocessors and JavaScript extensions.
 
-[releases]: https://github.com/rust-lang/book/releases
+1. Install the tools and versions listed in the deployment workflow.
+2. Install the repository's local preprocessors:
 
-## پیش‌نیازها
+   ```bash
+   cargo install --locked --path packages/mdbook-trpl-listing
+   cargo install --locked --path packages/mdbook-trpl-note
+   ```
 
-برای ساخت کتاب به [mdBook](https://github.com/rust-lang/mdBook) نیاز دارید؛ ترجیحاً همان نسخه‌ای که در این کتاب استفاده شده در [این فایل](https://github.com/Aalamifar/rust-book/blob/main/book.toml) استفاده می‌کند استفاده کنید. برای دریافت آن:
+3. Build the JavaScript extensions:
 
-```bash
-$ cargo install mdbook --locked --version <شماره_نسخه>
-```
+   ```bash
+   cd js-extensions
+   pnpm init-repo
+   cd ..
+   ```
 
-این فورک همچنین به چند پیش‌پردازندهٔ mdBook برای پشتیبانی از افزونه‌های آزمایشی ما نیاز دارد. دستورالعمل نصب هر کدام در لینک‌های زیر آمده است:
+4. Build and serve the book:
 
-* `mdbook-aquascope`: <https://github.com/cognitive-engineering-lab/aquascope#installation>
-* `mdbook-quiz`: <https://github.com/cognitive-engineering-lab/mdbook-quiz#installation>
+   ```bash
+   mdbook build
+   mdbook serve --open
+   ```
 
-نسخهٔ دقیق هر پیش‌پردازنده را می‌توانید در [CD این مخزن](https://github.com/Aalamifar/rust-book/blob/main/.github/workflows/pages.yml) ببینید.
+The generated site is written to the `book/` directory.
 
-و در نهایت به [pnpm](https://pnpm.io/installation) نیاز دارید.
+## Contributing
 
-کتاب دو افزونهٔ mdbook دارد که در این مخزن قرار دارند. اگر آن‌ها را نصب نکنید، هشدارهایی هنگام ساخت می‌بینید و خروجی به‌درستی نمایش داده نمی‌شود، اما همچنان می‌توانید کتاب را بسازید. برای استفاده از این افزونه‌ها اجرا کنید:
+Contributions are welcome. The current contribution guide is written in Persian: [CONTRIBUTING.md](CONTRIBUTING.md). Before opening an issue or pull request, please check the existing issues and pull requests.
 
-```bash
-$ cargo install --locked --path packages/mdbook-trpl-listing
-$ cargo install --locked --path packages/mdbook-trpl-note
-```
+If you find a problem in the published book, please report it in this repository.
 
-## ساخت کتاب
+## Sources and attribution
 
-### با `cargo-make`
+This edition is based on:
 
-اگر [`cargo-make`] نصب شده باشد، کافی است اجرا کنید:
+- [rust-lang/book](https://github.com/rust-lang/book) — the official Rust book.
+- [cognitive-engineering-lab/rust-book](https://github.com/cognitive-engineering-lab/rust-book) — the interactive edition and related tooling.
 
-```bash
-$ cargo make build
-```
+The printed English edition is published by [No Starch Press](https://nostarch.com/rust-programming-language-2nd-edition).
 
-### بدون `cargo-make`
+## License
 
-ابتدا افزونه‌های جاوااسکریپت را بسازید:
+The repository includes the MIT and Apache-2.0 license texts in [LICENSE-MIT](LICENSE-MIT) and [LICENSE-APACHE](LICENSE-APACHE). Please review the upstream projects' notices and licensing terms when reusing translated or third-party content.
 
-```bash
-$ cd js-extensions
-$ pnpm init-repo
-$ cd ..
-```
+---
 
-سپس کتاب را می‌توانید با دستور زیر بسازید:
+## نسخهٔ فارسی
 
-```bash
-$ mdbook build
-```
+این مخزن شامل ترجمهٔ فارسی و نسخهٔ تعاملی کتاب **The Rust Programming Language** است. در کنار متن فارسی، قابلیت‌هایی مانند آزمون‌های تعاملی (Quiz) و نمایش بصری کد با Aquascope نیز در آن فراهم شده است.
 
-### خروجی
+**[مطالعهٔ رایگان کتاب به زبان فارسی](https://aalamifar.github.io/rust-book/)**
 
-خروجی در پوشهٔ `book` قرار می‌گیرد. برای مشاهده آن در مرورگر وب، فایل `index.html` را باز کنید.
+### پیش‌نیازها
 
-_Firefox:_
+برای ساخت کتاب به mdBook و پیش‌پردازنده‌های آن نیاز دارید. نسخه‌های دقیق ابزارهای مورد استفاده در فرایند انتشار در [فایل workflow](.github/workflows/pages.yml) مشخص شده‌اند.
 
-```bash
-$ firefox book/index.html                       # Linux
-$ open -a "Firefox" book/index.html             # macOS
-$ Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
-$ start firefox.exe .\book\index.html           # Windows (Cmd)
-```
+این مخزن همچنین از ابزارهای زیر استفاده می‌کند:
 
-_Chrome:_
+- `mdbook-aquascope`
+- `mdbook-quiz`
+- افزونه‌های محلی mdBook در پوشهٔ `packages`
+- `pnpm` برای ساخت افزونه‌های JavaScript
 
-```bash
-$ google-chrome book/index.html                 # Linux
-$ open -a "Google Chrome" book/index.html       # macOS
-$ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
-$ start chrome.exe .\book\index.html            # Windows (Cmd)
-```
+### ساخت کتاب
 
-برای اجرای تست‌ها:
+ابتدا افزونه‌های JavaScript را بسازید:
 
 ```bash
-$ cd packages/trpl
-$ mdbook test --library-path packages/trpl/target/debug/deps
+cd js-extensions
+pnpm init-repo
+cd ..
 ```
 
-### اجرای سریع تر کتاب
-
-برای اجرای سریع تر کتاب می توانید بعد از ساخت کتاب با استفاده از دستور زیر در دایرکتوری کتاب آن را اجرا کنید:
+سپس کتاب را بسازید:
 
 ```bash
-$ mdbook serve --open
+mdbook build
 ```
 
-## مشارکت
+برای اجرای محلی و مشاهدهٔ تغییرات:
 
-ما مشتاق کمک‌های شما هستیم! لطفاً برای آشنایی با انواع مشارکت‌های موردنیاز، به [CONTRIBUTING.md][contrib] و [CONTRIBUTING_fa.md][contrib_fa] مراجعه کنید.
+```bash
+mdbook serve --open
+```
 
-[contrib]: https://github.com/Aalamifar/rust-book/blob/main/CONTRIBUTING.md
-[contrib_fa]: https://github.com/Aalamifar/rust-book/blob/main/CONTRIBUTING_fa.md
+خروجی در پوشهٔ `book` قرار می‌گیرد.
 
-### درباره ترجمه‌
+### مشارکت و گزارش مشکل
 
-این مخزن ترجمهٔ فارسی کتاب Rust است و شامل ویژگی‌های تعاملی نسخهٔ آزمایشی (آزمون‌ها، Aquascope و …) می‌شود. متن اصلی به انگلیسی از [rust-lang/book](https://github.com/rust-lang/book) و  
-ا[cognitive-engineering-lab/rust-book](https://github.com/cognitive-engineering-lab/rust-book) گرفته شده است و برای ترجمه و کار در هر قسمت از کتاب یک issues در repositorie باز میشود و در آخر به شاخه اصلی ادغام می‌شود
+برای آشنایی با روند مشارکت، راهنمای [CONTRIBUTING.md](CONTRIBUTING.md) را بخوانید. اگر در نسخهٔ آنلاین کتاب مشکلی پیدا کردید، لطفاً آن را در بخش Issues همین مخزن گزارش کنید.
 
-## بررسی املایی
+### دربارهٔ ترجمه
 
-برای اسکن فایل‌های منبع به‌منظور یافتن خطاهای املایی، می‌توانید اسکریپت `spellcheck.sh` موجود در پوشهٔ `ci` را استفاده کنید. این اسکریپت به یک واژه‌نامهٔ معتبر نیاز دارد که در `ci/dictionary.txt` فراهم شده است. اگر اسکریپت یک **false positive** تولید کرد (مثلاً واژه‌ای مثل `BTreeMap` که در واژه‌نامه وجود ندارد)، کافی است آن واژه را به `ci/dictionary.txt` اضافه کنید (به ترتیب حروف الفبا برای حفظ سازگاری).
+متن اصلی این پروژه از [مخزن رسمی کتاب Rust](https://github.com/rust-lang/book) و [نسخهٔ تعاملی کتاب](https://github.com/cognitive-engineering-lab/rust-book) گرفته شده است. این مخزن تلاش می‌کند دسترسی فارسی‌زبانان به یادگیری Rust را با ترجمه و امکانات تعاملی آسان‌تر کند.
 
-[`cargo-make`]: https://github.com/sagiegurari/cargo-make
+### بررسی املایی
+
+برای بررسی املای فایل‌های منبع می‌توانید از اسکریپت `ci/spellcheck.sh` و واژه‌نامهٔ `ci/dictionary.txt` استفاده کنید. اگر اسکریپت واژه‌ای معتبر مانند `BTreeMap` را به‌اشتباه گزارش کرد، آن را به واژه‌نامه اضافه کنید و ترتیب الفبایی را حفظ کنید.
