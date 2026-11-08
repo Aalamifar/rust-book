@@ -1,43 +1,46 @@
-## Cargo Workspaces
+## فضای کاری Cargo (Cargo Workspaces)
 
-In Chapter 12, we built a package that included a binary crate and a library
-crate. As your project develops, you might find that the library crate
-continues to get bigger and you want to split your package further into
-multiple library crates. Cargo offers a feature called _workspaces_ that can
-help manage multiple related packages that are developed in tandem.
+در فصل ۱۲ بسته‌ای ساختیم که شامل یک Crate اجرایی و یک Crate کتابخانه‌ای
+بود. با رشد پروژه ممکن است متوجه شوید که Crate کتابخانه‌ای بزرگ‌تر و
+بزرگ‌تر می‌شود و می‌خواهید بستهٔ خود را به چند Crate کتابخانه‌ای کوچک‌تر
+تقسیم کنید. Cargo قابلیتی به نام _فضای کاری_ (Workspace) ارائه می‌دهد
+که به مدیریت چند بستهٔ مرتبط با یکدیگر کمک می‌کند؛ بسته‌هایی که هم‌زمان
+توسعه داده می‌شوند.
 
-### Creating a Workspace
+### ساختن یک فضای کاری
 
-A _workspace_ is a set of packages that share the same _Cargo.lock_ and output
-directory. Let’s make a project using a workspace—we’ll use trivial code so
-that we can concentrate on the structure of the workspace. There are multiple
-ways to structure a workspace, so we'll just show one common way. We’ll have a
-workspace containing a binary and two libraries. The binary, which will provide
-the main functionality, will depend on the two libraries. One library will
-provide an `add_one` function and the other library an `add_two` function.
-These three crates will be part of the same workspace. We’ll start by creating
-a new directory for the workspace:
+یک _Workspace_ مجموعه‌ای از بسته‌هاست که فایل `Cargo.lock` و پوشهٔ
+خروجی مشترکی دارند. بیایید با استفاده از Workspace یک پروژه بسازیم.
+برای اینکه بتوانیم روی ساختار Workspace تمرکز کنیم، از کدی ساده و
+ابتدایی استفاده خواهیم کرد. روش‌های مختلفی برای سازمان‌دهی یک Workspace
+وجود دارد؛ ما یکی از ساختارهای رایج را نشان می‌دهیم.
+
+Workspace ما شامل یک برنامهٔ اجرایی و دو کتابخانه خواهد بود. برنامهٔ
+اجرایی، که قابلیت اصلی را فراهم می‌کند، به آن دو کتابخانه وابسته است.
+یکی از کتابخانه‌ها تابعی به نام `add_one` و دیگری تابعی به نام
+`add_two` ارائه می‌کند. هر سه Crate عضو یک Workspace خواهند بود.
+ابتدا یک پوشهٔ جدید برای Workspace می‌سازیم:
 
 ```console
 $ mkdir add
 $ cd add
 ```
 
-Next, in the _add_ directory, we create the _Cargo.toml_ file that will
-configure the entire workspace. This file won’t have a `[package]` section.
-Instead, it will start with a `[workspace]` section that will allow us to add
-members to the workspace. We also make a point to use the latest and greatest
-version of Cargo’s resolver algorithm in our workspace by setting the
-`resolver` value to `"3"`:
+سپس در پوشهٔ _add_ فایلی به نام _Cargo.toml_ ایجاد می‌کنیم تا کل
+Workspace را پیکربندی کند. این فایل بخش `[package]` نخواهد داشت؛
+در عوض با بخش `[workspace]` شروع می‌شود که به ما اجازه می‌دهد اعضای
+Workspace را به آن اضافه کنیم. همچنین با قرار دادن مقدار `"3"` برای
+گزینهٔ `resolver`، از جدیدترین الگوریتم حل وابستگی Cargo استفاده
+می‌کنیم:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">نام فایل: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace/add/Cargo.toml}}
 ```
 
-Next, we’ll create the `adder` binary crate by running `cargo new` within the
-_add_ directory:
+در مرحلهٔ بعد، با اجرای `cargo new` درون پوشهٔ _add_، Crate اجرایی
+`adder` را ایجاد می‌کنیم:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-01-adder-crate/add
@@ -53,16 +56,17 @@ $ cargo new adder
       Adding `adder` as member of workspace at `file:///projects/add`
 ```
 
-Running `cargo new` inside a workspace also automatically adds the newly created
-package to the `members` key in the `[workspace]` definition in the workspace
-_Cargo.toml_, like this:
+اجرای `cargo new` درون یک Workspace، بستهٔ تازه‌ساخته‌شده را به‌طور
+خودکار به فهرست کلید `members` در بخش `[workspace]` فایل
+_Cargo.toml_ اضافه می‌کند؛ چیزی شبیه به این:
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/output-only-01-adder-crate/add/Cargo.toml}}
 ```
 
-At this point, we can build the workspace by running `cargo build`. The files
-in your _add_ directory should look like this:
+در این مرحله می‌توانیم با اجرای `cargo build`، کل Workspace را
+کامپایل کنیم. فایل‌ها و پوشه‌های موجود در مسیر _add_ باید ساختاری
+شبیه به این داشته باشند:
 
 ```text
 ├── Cargo.lock
@@ -74,21 +78,23 @@ in your _add_ directory should look like this:
 └── target
 ```
 
-The workspace has one _target_ directory at the top level that the compiled
-artifacts will be placed into; the `adder` package doesn’t have its own
-_target_ directory. Even if we were to run `cargo build` from inside the
-_adder_ directory, the compiled artifacts would still end up in _add/target_
-rather than _add/adder/target_. Cargo structures the _target_ directory in a
-workspace like this because the crates in a workspace are meant to depend on
-each other. If each crate had its own _target_ directory, each crate would have
-to recompile each of the other crates in the workspace to place the artifacts
-in its own _target_ directory. By sharing one _target_ directory, the crates
-can avoid unnecessary rebuilding.
+Workspace فقط یک پوشهٔ `target` در سطح ریشه دارد و فایل‌های کامپایل‌شده
+در همان‌جا قرار می‌گیرند؛ بستهٔ `adder` پوشهٔ `target` جداگانه‌ای
+ندارد. حتی اگر دستور `cargo build` را از داخل پوشهٔ _adder_ اجرا کنیم،
+خروجی کامپایل همچنان در مسیر _add/target_ قرار می‌گیرد، نه در
+_add/adder/target_.
 
-### Creating the Second Package in the Workspace
+Cargo پوشهٔ `target` را در Workspace به این شکل سازمان‌دهی می‌کند،
+چون Crateهای یک Workspace قرار است به یکدیگر وابسته باشند. اگر هر Crate
+پوشهٔ `target` جداگانه‌ای داشت، برای قرار دادن خروجی‌ها در پوشهٔ
+مخصوص خودش مجبور بود Crateهای دیگر Workspace را دوباره کامپایل کند.
+با به‌اشتراک‌گذاشتن یک پوشهٔ `target`، از کامپایل‌های غیرضروری جلوگیری
+می‌شود.
 
-Next, let’s create another member package in the workspace and call it
-`add_one`. Generate a new library crate named `add_one`:
+### ساختن دومین بسته در Workspace
+
+حالا بیایید عضو دیگری به Workspace اضافه کنیم و نام آن را `add_one`
+بگذاریم. یک Crate کتابخانه‌ای جدید با همین نام ایجاد کنید:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-02-add-one/add
@@ -104,16 +110,17 @@ $ cargo new add_one --lib
       Adding `add_one` as member of workspace at `file:///projects/add`
 ```
 
-The top-level _Cargo.toml_ will now include the _add_one_ path in the `members`
-list:
+اکنون فایل _Cargo.toml_ در ریشه، مسیر _add_one_ را نیز در فهرست
+`members` خواهد داشت:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">نام فایل: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
 ```
 
-Your _add_ directory should now have these directories and files:
+در این مرحله پوشهٔ _add_ باید شامل فایل‌ها و پوشه‌هایی با ساختار زیر
+باشد:
 
 ```text
 ├── Cargo.lock
@@ -129,32 +136,36 @@ Your _add_ directory should now have these directories and files:
 └── target
 ```
 
-In the _add_one/src/lib.rs_ file, let’s add an `add_one` function:
+در فایل _add_one/src/lib.rs_ تابعی به نام `add_one` اضافه می‌کنیم:
 
-<span class="filename">Filename: add_one/src/lib.rs</span>
+<span class="filename">نام فایل: add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add_one/src/lib.rs}}
 ```
 
-Now we can have the `adder` package with our binary depend on the `add_one`
-package that has our library. First, we’ll need to add a path dependency on
-`add_one` to _adder/Cargo.toml_.
+حالا می‌توانیم کاری کنیم که بستهٔ `adder`، که برنامهٔ اجرایی ما را
+در خود دارد، به بستهٔ `add_one` که کتابخانهٔ ماست وابسته شود. ابتدا
+باید یک وابستگی مبتنی بر مسیر (Path Dependency) به `add_one` در فایل
+_adder/Cargo.toml_ اضافه کنیم:
 
-<span class="filename">Filename: adder/Cargo.toml</span>
+<span class="filename">نام فایل: adder/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:7}}
 ```
 
-Cargo doesn’t assume that crates in a workspace will depend on each other, so
-we need to be explicit about the dependency relationships.
+Cargo فرض نمی‌کند که Crateهای موجود در یک Workspace لزوماً به یکدیگر
+وابسته‌اند؛ بنابراین باید رابطهٔ وابستگی میان آن‌ها را به‌صراحت مشخص
+کنیم.
 
-Next, let’s use the `add_one` function (from the `add_one` crate) in the
-`adder` crate. Open the _adder/src/main.rs_ file and change the `main`
-function to call the `add_one` function, as in Listing 14-7.
+در مرحلهٔ بعد، از تابع `add_one` (متعلق به Crate کتابخانه‌ای
+`add_one`) در Crate مربوط به `adder` استفاده می‌کنیم. فایل
+_adder/src/main.rs_ را باز کنید و تابع `main` را طوری تغییر دهید
+که تابع `add_one` را فراخوانی کند؛ همان‌طور که در Listing 14-7
+می‌بینید.
 
-<Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate from the `adder` crate">
+<Listing number="14-7" file-name="adder/src/main.rs" caption="استفاده از Crate کتابخانه‌ای add_one در Crate مربوط به adder">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
@@ -162,8 +173,8 @@ function to call the `add_one` function, as in Listing 14-7.
 
 </Listing>
 
-Let’s build the workspace by running `cargo build` in the top-level _add_
-directory!
+حالا با اجرای دستور `cargo build` در پوشهٔ ریشهٔ _add_، کل Workspace
+را کامپایل می‌کنیم!
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-07/add
@@ -178,9 +189,8 @@ $ cargo build
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s
 ```
 
-To run the binary crate from the _add_ directory, we can specify which package
-in the workspace we want to run by using the `-p` argument and the package name
-with `cargo run`:
+برای اجرای Crate باینری از پوشهٔ _add_، می‌توانیم با استفاده از آرگومان
+`-p` و نام بسته به Cargo بگوییم کدام بسته از Workspace را اجرا کند:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-07/add
@@ -195,40 +205,48 @@ $ cargo run -p adder
 Hello, world! 10 plus one is 11!
 ```
 
-This runs the code in _adder/src/main.rs_, which depends on the `add_one` crate.
+این دستور کد موجود در _adder/src/main.rs_ را اجرا می‌کند؛ کدی که به
+Crate کتابخانه‌ای `add_one` وابسته است.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="depending-on-an-external-package-in-a-workspace"></a>
 
-### Depending on an External Package
+### وابستگی به یک بستهٔ خارجی در Workspace
 
-Notice that the workspace has only one _Cargo.lock_ file at the top level,
-rather than having a _Cargo.lock_ in each crate’s directory. This ensures that
-all crates are using the same version of all dependencies. If we add the `rand`
-package to the _adder/Cargo.toml_ and _add_one/Cargo.toml_ files, Cargo will
-resolve both of those to one version of `rand` and record that in the one
-_Cargo.lock_. Making all crates in the workspace use the same dependencies
-means the crates will always be compatible with each other. Let’s add the
-`rand` crate to the `[dependencies]` section in the _add_one/Cargo.toml_ file
-so that we can use the `rand` crate in the `add_one` crate:
+توجه کنید که Workspace فقط یک فایل `Cargo.lock` در پوشهٔ ریشه دارد،
+نه یک فایل `Cargo.lock` در پوشهٔ هر Crate. این کار تضمین می‌کند که
+تمام Crateها از نسخهٔ یکسانی از وابستگی‌ها استفاده کنند.
+
+اگر بستهٔ `rand` را به فایل‌های _adder/Cargo.toml_ و
+_add_one/Cargo.toml_ اضافه کنیم، Cargo برای هر دو بسته یک نسخه از
+`rand` را انتخاب می‌کند و اطلاعات آن را در همان فایل `Cargo.lock`
+ثبت می‌کند. یکسان بودن نسخهٔ وابستگی‌ها در تمام Crateهای Workspace
+باعث می‌شود آن‌ها همواره با یکدیگر سازگار باشند.
+
+بیایید Crate مربوط به `rand` را به بخش `[dependencies]` در فایل
+_add_one/Cargo.toml_ اضافه کنیم تا بتوانیم در Crate `add_one` از
+آن استفاده کنیم:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
+
+* ch01-01-installation.md
 * ch02-00-guessing-game-tutorial.md
 * ch07-04-bringing-paths-into-scope-with-the-use-keyword.md
 -->
 
-<span class="filename">Filename: add_one/Cargo.toml</span>
+<span class="filename">نام فایل: add_one/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add_one/Cargo.toml:6:7}}
 ```
 
-We can now add `use rand;` to the _add_one/src/lib.rs_ file, and building the
-whole workspace by running `cargo build` in the _add_ directory will bring in
-and compile the `rand` crate. We will get one warning because we aren’t
-referring to the `rand` we brought into scope:
+اکنون می‌توانیم عبارت `use rand;` را به فایل
+_add_one/src/lib.rs_ اضافه کنیم. با اجرای `cargo build` در پوشهٔ
+_add_، کل Workspace ساخته می‌شود و Crate مربوط به `rand` نیز دریافت
+و کامپایل خواهد شد. چون هنوز از `rand`ای که وارد محدوده کرده‌ایم
+استفاده‌ای نمی‌کنیم، یک هشدار دریافت خواهیم کرد:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add
@@ -239,9 +257,9 @@ copy output below; the output updating script doesn't handle subdirectories in p
 ```console
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.8.5
+  Downloaded rand v0.10.1
    --snip--
-   Compiling rand v0.8.5
+   Compiling rand v0.10.1
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
 warning: unused import: `rand`
  --> add_one/src/lib.rs:1:5
@@ -249,18 +267,21 @@ warning: unused import: `rand`
 1 | use rand;
   |     ^^^^
   |
-  = note: `#[warn(unused_imports)]` on by default
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
 
 warning: `add_one` (lib) generated 1 warning (run `cargo fix --lib -p add_one` to apply 1 suggestion)
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.95s
 ```
 
-The top-level _Cargo.lock_ now contains information about the dependency of
-`add_one` on `rand`. However, even though `rand` is used somewhere in the
-workspace, we can’t use it in other crates in the workspace unless we add
-`rand` to their _Cargo.toml_ files as well. For example, if we add `use rand;`
-to the _adder/src/main.rs_ file for the `adder` package, we’ll get an error:
+اکنون فایل `Cargo.lock` در ریشه، اطلاعات وابستگی `add_one` به
+`rand` را در خود دارد. با این حال، با اینکه در بخشی از Workspace
+از `rand` استفاده شده است، نمی‌توانیم در Crateهای دیگر Workspace
+از آن استفاده کنیم، مگر اینکه `rand` را به فایل _Cargo.toml_ همان
+بسته‌ها نیز اضافه کنیم.
+
+برای مثال، اگر عبارت `use rand;` را به فایل _adder/src/main.rs_
+در بستهٔ `adder` اضافه کنیم، با خطا روبه‌رو می‌شویم:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-03-use-rand/add
@@ -279,40 +300,36 @@ error[E0432]: unresolved import `rand`
   |     ^^^^ no external crate `rand`
 ```
 
-To fix this, edit the _Cargo.toml_ file for the `adder` package and indicate
-that `rand` is a dependency for it as well. Building the `adder` package will
-add `rand` to the list of dependencies for `adder` in _Cargo.lock_, but no
-additional copies of `rand` will be downloaded. Cargo will ensure that every
-crate in every package in the workspace using the `rand` package will use the
-same version as long as they specify compatible versions of `rand`, saving us
-space and ensuring that the crates in the workspace will be compatible with
-each other.
+برای رفع این خطا، فایل _Cargo.toml_ مربوط به بستهٔ `adder` را ویرایش
+کنید و مشخص کنید که `rand` یکی از وابستگی‌های آن بسته نیز هست.
+با ساخت بستهٔ `adder`، وابستگی `rand` به فهرست وابستگی‌های این بسته
+در فایل `Cargo.lock` اضافه می‌شود؛ اما نسخهٔ دیگری از `rand`
+دانلود نخواهد شد.
 
-If crates in the workspace specify incompatible versions of the same
-dependency, Cargo will resolve each of them but will still try to resolve as
-few versions as possible.
+Cargo تضمین می‌کند که تمام Crateهای تمام بسته‌های Workspace که از
+`rand` استفاده می‌کنند، تا زمانی که نسخه‌های سازگاری از آن را
+درخواست کرده باشند، از همان نسخه استفاده کنند. این کار هم در فضای
+دیسک صرفه‌جویی می‌کند و هم سازگاری Crateهای Workspace با یکدیگر را
+حفظ می‌کند.
 
-Note that Cargo only ensures compatibility within the rules of [Semantic Versioning].
-For example, say a workspace has one crate that depends on `rand` 0.8.0, and another crate
-that depends on `rand` 0.8.1. The semver rules say that 0.8.1 is compatible with 0.8.0,
-so both crates will depend on 0.8.1 (or potentially a more recent patch, like 0.8.2). But if
-one crate depends on `rand` 0.7.0 and another on `rand` 0.8.0, those versions are semver-incompatible.
-Therefore, Cargo will use a different version of `rand` for each crate.
+اگر Crateهای موجود در Workspace نسخه‌های ناسازگاری از یک وابستگی
+مشترک درخواست کنند، Cargo می‌تواند هر دو نسخه را انتخاب کند؛ با این
+حال تلاش می‌کند تعداد نسخه‌های متفاوت را تا حد امکان کم نگه دارد.
 
-### Adding a Test to a Workspace
+### اضافه کردن آزمون به Workspace
 
-For another enhancement, let’s add a test of the `add_one::add_one` function
-within the `add_one` crate:
+برای بهبود بیشتر، بیایید آزمونی برای تابع `add_one::add_one` درون
+Crate مربوط به `add_one` بنویسیم:
 
-<span class="filename">Filename: add_one/src/lib.rs</span>
+<span class="filename">نام فایل: add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add/add_one/src/lib.rs}}
 ```
 
-Now run `cargo test` in the top-level _add_ directory. Running `cargo test` in
-a workspace structured like this one will run the tests for all the crates in
-the workspace:
+حالا دستور `cargo test` را در پوشهٔ ریشهٔ _add_ اجرا کنید. اجرای
+`cargo test` در Workspaceای با این ساختار، آزمون‌های تمام Crateهای
+موجود در Workspace را اجرا می‌کند:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
@@ -346,14 +363,15 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-The first section of the output shows that the `it_works` test in the `add_one`
-crate passed. The next section shows that zero tests were found in the `adder`
-crate, and then the last section shows that zero documentation tests were found
-in the `add_one` crate.
+بخش اول خروجی نشان می‌دهد آزمون `it_works` در Crate مربوط به
+`add_one` با موفقیت اجرا شده است. بخش بعدی نشان می‌دهد که در Crate
+`adder` هیچ آزمونی پیدا نشده و بخش پایانی نیز نشان می‌دهد که هیچ
+آزمون مستندسازی‌ای (Documentation Test) در Crate `add_one` وجود
+نداشته است.
 
-We can also run tests for one particular crate in a workspace from the
-top-level directory by using the `-p` flag and specifying the name of the crate
-we want to test:
+همچنین می‌توانیم از پوشهٔ ریشه، آزمون‌های یک Crate مشخص در Workspace
+را اجرا کنیم. برای این کار از پرچم `-p` استفاده می‌کنیم و نام Crate
+موردنظر را به آن می‌دهیم:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
@@ -378,23 +396,27 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-This output shows `cargo test` only ran the tests for the `add_one` crate and
-didn’t run the `adder` crate tests.
+این خروجی نشان می‌دهد که دستور `cargo test` فقط آزمون‌های Crate
+`add_one` را اجرا کرده و آزمون‌های Crate `adder` را اجرا نکرده است.
 
-If you publish the crates in the workspace to
-[crates.io](https://crates.io/)<!-- ignore -->, each crate in the workspace
-will need to be published separately. Like `cargo test`, we can publish a
-particular crate in our workspace by using the `-p` flag and specifying the
-name of the crate we want to publish.
+اگر Crateهای موجود در Workspace را در
+[crates.io](https://crates.io/)<!-- ignore --> منتشر کنید، هر Crate
+باید جداگانه منتشر شود. درست مانند `cargo test`، برای انتشار یک Crate
+مشخص از Workspace نیز می‌توانیم از پرچم `-p` استفاده کنیم و نام
+بستهٔ موردنظر را مشخص کنیم.
 
-For additional practice, add an `add_two` crate to this workspace in a similar
-way as the `add_one` crate!
+برای تمرین بیشتر، یک Crate دیگر به نام `add_two` به همین روش و با
+الگو گرفتن از Crate `add_one` به Workspace اضافه کنید!
 
-As your project grows, consider using a workspace: It enables you to work with
-smaller, easier-to-understand components than one big blob of code.
-Furthermore, keeping the crates in a workspace can make coordination between
-crates easier if they are often changed at the same time.
+با بزرگ‌تر شدن پروژه، استفاده از Workspace را در نظر بگیرید. Workspace
+به شما اجازه می‌دهد پروژه را به بخش‌های کوچک‌تر و قابل‌فهم‌تری تقسیم
+کنید، به‌جای اینکه همه‌چیز در یک تودهٔ بزرگ از کد قرار بگیرد. علاوه بر
+این، اگر Crateها اغلب هم‌زمان تغییر می‌کنند، نگهداری آن‌ها در یک
+Workspace هماهنگی میانشان را آسان‌تر می‌کند.
 
-{{#quiz ../quizzes/ch14-03-cargo-workspaces.toml}}
-
-[Semantic Versioning]: https://semver.org/
+> 💡 **نکتهٔ مدرس:** سه مفهوم را از هم جدا نگه دارید:
+> `[workspace].members` مشخص می‌کند چه بسته‌هایی عضو فضای کاری‌اند؛
+> اما این عضویت به‌تنهایی به معنی وابستگی یک بسته به بستهٔ دیگر نیست.
+> برای وابستگی محلی باید در `[dependencies]` مسیر آن بسته را بنویسیم.
+> همچنین `-p` برای انتخاب یک بسته از میان اعضای Workspace استفاده
+> می‌شود؛ مثلاً `cargo test -p add_one`.
