@@ -1,16 +1,17 @@
-## Customizing Builds with Release Profiles
+## سفارشی‌سازی فرایند ساخت با پروفایل‌های انتشار (Release Profiles)
 
-In Rust, _release profiles_ are predefined, customizable profiles with
-different configurations that allow a programmer to have more control over
-various options for compiling code. Each profile is configured independently of
-the others.
+در Rust، _پروفایل‌های انتشار_ (Release Profiles) مجموعه‌ای از پروفایل‌های
+ازپیش‌تعریف‌شده و قابل‌سفارشی‌سازی هستند. هر پروفایل پیکربندی متفاوتی دارد
+و به برنامه‌نویس اجازه می‌دهد گزینه‌های مختلف کامپایل کد را با کنترل
+بیشتری تنظیم کند. هر پروفایل مستقل از پروفایل‌های دیگر پیکربندی می‌شود.
 
-Cargo has two main profiles: the `dev` profile Cargo uses when you run `cargo
-build`, and the `release` profile Cargo uses when you run `cargo build
---release`. The `dev` profile is defined with good defaults for development,
-and the `release` profile has good defaults for release builds.
+Cargo دو پروفایل اصلی دارد: پروفایل `dev` که هنگام اجرای دستور
+`cargo build` استفاده می‌شود و پروفایل `release` که با اجرای
+`cargo build --release` به کار می‌رود. تنظیمات پیش‌فرض پروفایل `dev`
+برای فرایند توسعه مناسب‌اند؛ در مقابل، تنظیمات پروفایل `release` برای
+ساخت نسخهٔ نهایی برنامه در نظر گرفته شده‌اند.
 
-These profile names might be familiar from the output of your builds:
+ممکن است نام این پروفایل‌ها را در خروجی دستورهای ساخت دیده باشید:
 
 <!-- manual-regeneration
 anywhere, run:
@@ -26,15 +27,17 @@ $ cargo build --release
     Finished `release` profile [optimized] target(s) in 0.32s
 ```
 
-The `dev` and `release` are these different profiles used by the compiler.
+عبارت‌های `dev` و `release` در خروجی بالا نام دو پروفایلی هستند که
+کامپایلر برای ساخت برنامه از آن‌ها استفاده کرده است.
 
-Cargo has default settings for each of the profiles that apply when you haven't
-explicitly added any `[profile.*]` sections in the project’s _Cargo.toml_ file.
-By adding `[profile.*]` sections for any profile you want to customize, you
-override any subset of the default settings. For example, here are the default
-values for the `opt-level` setting for the `dev` and `release` profiles:
+Cargo برای هر پروفایل تنظیمات پیش‌فرضی دارد. این تنظیمات زمانی اعمال
+می‌شوند که در فایل _Cargo.toml_ پروژه هیچ بخشی از نوع `[profile.*]`
+تعریف نکرده باشید. با اضافه کردن بخش `[profile.*]` برای هر پروفایلی که
+می‌خواهید سفارشی کنید، می‌توانید هر تعداد از تنظیمات پیش‌فرض آن را که
+لازم دارید بازنویسی کنید. برای نمونه، مقادیر پیش‌فرض گزینهٔ `opt-level`
+در پروفایل‌های `dev` و `release` به این صورت‌اند:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">نام فایل: Cargo.toml</span>
 
 ```toml
 [profile.dev]
@@ -44,34 +47,44 @@ opt-level = 0
 opt-level = 3
 ```
 
-The `opt-level` setting controls the number of optimizations Rust will apply to
-your code, with a range of 0 to 3. Applying more optimizations extends
-compiling time, so if you’re in development and compiling your code often,
-you’ll want fewer optimizations to compile faster even if the resultant code
-runs slower. The default `opt-level` for `dev` is therefore `0`. When you’re
-ready to release your code, it’s best to spend more time compiling. You’ll only
-compile in release mode once, but you’ll run the compiled program many times,
-so release mode trades longer compile time for code that runs faster. That is
-why the default `opt-level` for the `release` profile is `3`.
+تنظیم `opt-level` میزان بهینه‌سازی‌هایی را مشخص می‌کند که Rust روی کد
+اعمال می‌کند. مقدار این گزینه می‌تواند از ۰ تا ۳ باشد. هرچه سطح
+بهینه‌سازی بالاتر باشد، زمان کامپایل نیز بیشتر می‌شود. بنابراین اگر در
+مرحلهٔ توسعه هستید و مرتباً کدتان را کامپایل می‌کنید، بهتر است سطح
+بهینه‌سازی پایین‌تری انتخاب کنید تا کامپایل سریع‌تر انجام شود؛ حتی اگر
+برنامهٔ حاصل کمی کندتر اجرا شود.
 
-You can override a default setting by adding a different value for it in
-_Cargo.toml_. For example, if we want to use optimization level 1 in the
-development profile, we can add these two lines to our project’s _Cargo.toml_
-file:
+به همین دلیل مقدار پیش‌فرض `opt-level` در پروفایل `dev` برابر با `0`
+است. اما وقتی آمادهٔ انتشار برنامه هستید، بهتر است زمان بیشتری را صرف
+کامپایل کنید. در حالت انتشار معمولاً برنامه را یک‌بار کامپایل می‌کنید،
+ولی ممکن است آن را بارها اجرا کنید. در نتیجه، پروفایل انتشار زمان
+کامپایل بیشتر را با سرعت اجرای بالاتر معاوضه می‌کند. به همین علت مقدار
+پیش‌فرض `opt-level` در پروفایل `release` برابر با `3` است.
 
-<span class="filename">Filename: Cargo.toml</span>
+برای بازنویسی یک تنظیم پیش‌فرض، کافی است مقدار دیگری برای آن در فایل
+_Cargo.toml_ قرار دهید. برای مثال، اگر بخواهیم سطح بهینه‌سازی پروفایل
+توسعه را روی ۱ تنظیم کنیم، دو خط زیر را به فایل _Cargo.toml_ پروژه
+اضافه می‌کنیم:
+
+<span class="filename">نام فایل: Cargo.toml</span>
 
 ```toml
 [profile.dev]
 opt-level = 1
 ```
 
-This code overrides the default setting of `0`. Now when we run `cargo build`,
-Cargo will use the defaults for the `dev` profile plus our customization to
-`opt-level`. Because we set `opt-level` to `1`, Cargo will apply more
-optimizations than the default, but not as many as in a release build.
+این تنظیم، مقدار پیش‌فرض یعنی `0` را بازنویسی می‌کند. از این پس، هنگام
+اجرای `cargo build`، Cargo تنظیمات پیش‌فرض پروفایل `dev` را به همراه
+تغییر سفارشی ما برای `opt-level` اعمال می‌کند. چون مقدار این گزینه را
+روی `1` گذاشته‌ایم، Cargo کد را بیشتر از حالت پیش‌فرض بهینه‌سازی می‌کند،
+اما میزان بهینه‌سازی همچنان از حالت انتشار کمتر خواهد بود.
 
-For the full list of configuration options and defaults for each profile, see
-[Cargo’s documentation](https://doc.rust-lang.org/cargo/reference/profiles.html).
+برای مشاهدهٔ فهرست کامل گزینه‌های پیکربندی و مقادیر پیش‌فرض هر پروفایل،
+به [مستندات Cargo دربارهٔ پروفایل‌ها](https://doc.rust-lang.org/cargo/reference/profiles.html)
+مراجعه کنید.
 
-{{#quiz ../quizzes/ch14-01-release-profiles.toml}}
+> 💡 **نکتهٔ مدرس:** تفاوت مهم `dev` و `release` فقط نام آن‌ها نیست:
+> اولی برای بازخورد سریع هنگام توسعه طراحی شده و دومی برای اجرای سریع‌تر
+> برنامهٔ نهایی. همچنین `opt-level = 3` تضمین نمی‌کند که هر برنامه‌ای
+> در همهٔ شرایط سریع‌تر شود؛ بهینه‌سازی بیشتر می‌تواند زمان ساخت و حتی
+> اندازهٔ خروجی را افزایش دهد.
