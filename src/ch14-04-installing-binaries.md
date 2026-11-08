@@ -2,28 +2,33 @@
 
 <a id="installing-binaries-from-cratesio-with-cargo-install"></a>
 
-## Installing Binaries with `cargo install`
+## نصب برنامه‌های اجرایی با `cargo install`
 
-The `cargo install` command allows you to install and use binary crates
-locally. This isn’t intended to replace system packages; it’s meant to be a
-convenient way for Rust developers to install tools that others have shared on
-[crates.io](https://crates.io/)<!-- ignore -->. Note that you can only install
-packages that have binary targets. A _binary target_ is the runnable program
-that is created if the crate has a _src/main.rs_ file or another file specified
-as a binary, as opposed to a library target that isn’t runnable on its own but
-is suitable for including within other programs. Usually, crates have
-information in the README file about whether a crate is a library, has a
-binary target, or both.
+دستور `cargo install` به شما اجازه می‌دهد Crateهای اجرایی را به‌صورت
+محلی نصب و استفاده کنید. هدف این دستور جایگزین کردن مدیر بستهٔ سیستم‌عامل
+نیست؛ بلکه راهی ساده و راحت برای نصب ابزارهایی است که توسعه‌دهندگان Rust
+در [crates.io](https://crates.io/)<!-- ignore --> با دیگران به اشتراک
+گذاشته‌اند.
 
-All binaries installed with `cargo install` are stored in the installation
-root’s _bin_ folder. If you installed Rust using _rustup.rs_ and don’t have any
-custom configurations, this directory will be *$HOME/.cargo/bin*. Ensure that
-this directory is in your `$PATH` to be able to run programs you’ve installed
-with `cargo install`.
+توجه کنید که فقط می‌توانید بسته‌هایی را نصب کنید که هدف اجرایی
+(Binary Target) داشته باشند. _هدف اجرایی_ همان برنامهٔ قابل‌اجراست که
+در صورت وجود فایل _src/main.rs_ یا فایل دیگری که به‌عنوان یک باینری
+تعریف شده باشد، ساخته می‌شود. این مفهوم در مقابل هدف کتابخانه‌ای
+(Library Target) قرار می‌گیرد؛ هدف کتابخانه‌ای به‌تنهایی قابل اجرا نیست،
+اما می‌توان آن را در برنامه‌های دیگر به کار برد. معمولاً در فایل README
+هر Crate توضیح داده می‌شود که آن Crate یک کتابخانه است، هدف اجرایی دارد
+یا هر دو.
 
-For example, in Chapter 12 we mentioned that there’s a Rust implementation of
-the `grep` tool called `ripgrep` for searching files. To install `ripgrep`, we
-can run the following:
+تمام باینری‌هایی که با `cargo install` نصب می‌شوند، در پوشهٔ `bin`
+از مسیر ریشهٔ نصب Rust قرار می‌گیرند. اگر Rust را با استفاده از
+_rustup.rs_ نصب کرده‌اید و پیکربندی سفارشی‌ای ندارید، این مسیر معمولاً
+`$HOME/.cargo/bin` است. برای اینکه بتوانید برنامه‌های نصب‌شده با
+`cargo install` را اجرا کنید، مطمئن شوید این پوشه در متغیر محیطی
+`$PATH` قرار دارد.
+
+برای مثال، در فصل ۱۲ اشاره کردیم که پیاده‌سازی‌ای از ابزار `grep`
+با زبان Rust وجود دارد که `ripgrep` نام دارد و برای جست‌وجو در فایل‌ها
+استفاده می‌شود. برای نصب `ripgrep` می‌توانیم دستور زیر را اجرا کنیم:
 
 <!-- manual-regeneration
 cargo install something you don't have, copy relevant output below
@@ -37,12 +42,19 @@ $ cargo install ripgrep
   Installing ripgrep v14.1.1
 --snip--
    Compiling grep v0.3.2
-    Finished `release` profile [optimized + debuginfo] target(s) in 6.73s
+    Finished `release` profile [optimized] target(s) in 6.73s
   Installing ~/.cargo/bin/rg
    Installed package `ripgrep v14.1.1` (executable `rg`)
 ```
 
-The second-to-last line of the output shows the location and the name of the
-installed binary, which in the case of `ripgrep` is `rg`. As long as the
-installation directory is in your `$PATH`, as mentioned previously, you can
-then run `rg --help` and start using a faster, Rustier tool for searching files!
+خط یکی‌مانده‌به‌آخر خروجی، مسیر و نام باینری نصب‌شده را نشان می‌دهد.
+در این مثال نام فایل اجرایی `rg` است، نه `ripgrep`. اگر مسیر نصب
+در متغیر `$PATH` قرار داشته باشد، همان‌طور که پیش‌تر گفتیم، می‌توانید
+دستور `rg --help` را اجرا کنید و از یک ابزار جست‌وجوی سریع‌تر که با
+Rust نوشته شده است استفاده کنید!
+
+> 💡 **نکتهٔ مدرس:** نام Crate لزوماً با نام فایل اجرایی آن یکی نیست.
+> در مثال بالا بستهٔ `ripgrep` نصب می‌شود، اما فرمانی که در ترمینال
+> اجرا می‌کنیم `rg` است. همچنین `cargo install` ابزار را در مسیر
+> کاربر نصب می‌کند؛ این دستور معمولاً جایگزین نصب بسته‌های سیستمی
+> توزیع لینوکس نمی‌شود.
