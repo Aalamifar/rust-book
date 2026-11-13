@@ -1,7 +1,7 @@
 ## انتشار یک Crate در Crates.io
 
 تا اینجا از Packageهای موجود در [crates.io](https://crates.io/)<!-- ignore -->
-به‌عنوان Dependency پروژه‌هایمان استفاده کرده‌ایم؛ اما شما هم می‌توانید
+به‌عنوان dependency پروژه‌هایمان استفاده کرده‌ایم؛ اما شما هم می‌توانید
 با انتشار Crateهای خود، کدتان را با دیگران به اشتراک بگذارید.
 Registry مربوط به Crateها در [crates.io](https://crates.io/)<!-- ignore -->
 کد منبع Crateها را توزیع می‌کند و به همین دلیل بیشتر میزبان کدهای
@@ -411,8 +411,8 @@ license = "MIT OR Apache-2.0"
 [dependencies]
 ```
 
-[مستندات Cargo](https://doc.rust-lang.org/cargo/) Metadataهای
-دیگری را نیز توضیح می‌دهد که با مشخص کردن آن‌ها، دیگران راحت‌تر
+[مستندات Cargo](https://doc.rust-lang.org/cargo/) سایر Metadataها
+را نیز توضیح می‌دهد که با مشخص کردن آن‌ها، دیگران راحت‌تر
 می‌توانند Crate شما را پیدا کنند و از آن استفاده کنند.
 
 ### انتشار در Crates.io
@@ -477,7 +477,7 @@ You may press ctrl-c to skip waiting; the crate should be available shortly.
 <a id="removing-versions-from-cratesio-with-cargo-yank"></a>
 <a id="deprecating-versions-from-cratesio-with-cargo-yank"></a>
 
-### منسوخ کردن نسخه‌ها در Crates.io
+### Yank کردن نسخه‌ها در Crates.io
 
 با اینکه نمی‌توانید نسخه‌های قبلی یک Crate را حذف کنید، می‌توانید
 جلوی اضافه شدن آن نسخه‌ها به‌عنوان وابستگی جدید در پروژه‌های آینده
