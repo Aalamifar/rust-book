@@ -2,7 +2,7 @@
 
 در فصل ۱۲ Packageای ساختیم که شامل یک Crate اجرایی و یک Crate کتابخانه‌ای
 بود. با رشد پروژه ممکن است متوجه شوید که Crate کتابخانه‌ای بزرگ‌تر و
-بزرگ‌تر می‌شود و می‌خواهید Package‌ی خود را به چند Crate کتابخانه‌ای کوچک‌تر
+بزرگ‌تر می‌شود و می‌خواهید Package خود را به چند Crate کتابخانه‌ای کوچک‌تر
 تقسیم کنید. Cargo قابلیتی به نام _Workspace_ (Workspace) ارائه می‌دهد
 که به مدیریت چند Packageٔ مرتبط با یکدیگر کمک می‌کند؛ Packageهایی که هم‌زمان
 توسعه داده می‌شوند.
@@ -16,7 +16,7 @@
 وجود دارد؛ ما یکی از ساختارهای رایج را نشان می‌دهیم.
 
 Workspace ما شامل سه Package خواهد بود: یک برنامهٔ اجرایی و دو کتابخانه. برنامهٔ
-اجرایی، که قابلیت اصلی را فراهم می‌کند، به آن دو کتابخانه وابسته است.
+اجرایی، که قابلیت اصلی را فراهم می‌کند، به آن دو کتابخانه واPackage است.
 یکی از کتابخانه‌ها تابعی به نام `add_one` و دیگری تابعی به نام
 `add_two` ارائه می‌کند. هر سه Package عضو این Workspace خواهند بود.
 ابتدا یک پوشهٔ جدید برای Workspace می‌سازیم:
@@ -85,13 +85,13 @@ Workspace فقط یک پوشهٔ `target` در سطح ریشه دارد و فا�
 _add/adder/target_.
 
 Cargo پوشهٔ `target` را در Workspace به این شکل سازمان‌دهی می‌کند،
-چون Packageهای عضو یک Workspace ممکن است به یکدیگر وابسته باشند. اگر هر Crate
+چون Packageهای عضو یک Workspace ممکن است به یکدیگر واPackage باشند. اگر هر Crate
 پوشهٔ `target` جداگانه‌ای داشت، برای قرار دادن خروجی‌ها در پوشهٔ
-مخصوص خودش مجبور بود Crateهای دیگر Workspace را دوباره کامپایل کند.
+مخصوص خودش مجبور بود Packageهای دیگر Workspace را دوباره کامپایل کند.
 با به‌اشتراک‌گذاشتن یک پوشهٔ `target`، از کامپایل‌های غیرضروری جلوگیری
 می‌شود.
 
-### ساختن دومین بسته در Workspace
+### ساختن دومین Package در Workspace
 
 حالا بیایید عضو دیگری به Workspace اضافه کنیم و نام آن را `add_one`
 بگذاریم. یک Crate کتابخانه‌ای جدید با همین نام ایجاد کنید:
@@ -145,7 +145,7 @@ $ cargo new add_one --lib
 ```
 
 حالا می‌توانیم کاری کنیم که Package `adder`، که برنامهٔ اجرایی ما را
-در خود دارد، به Package `add_one` که کتابخانهٔ ماست وابسته شود. ابتدا
+در خود دارد، به Package `add_one` که کتابخانهٔ ماست واPackage شود. ابتدا
 باید یک Path Dependency به `add_one` در فایل
 _adder/Cargo.toml_ اضافه کنیم:
 
@@ -155,8 +155,8 @@ _adder/Cargo.toml_ اضافه کنیم:
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:7}}
 ```
 
-Cargo فرض نمی‌کند که Crateهای موجود در یک Workspace لزوماً به یکدیگر
-وابسته‌اند؛ بنابراین باید رابطهٔ وابستگی میان آن‌ها را به‌صراحت مشخص
+Cargo فرض نمی‌کند که Packageهای عضو یک Workspace لزوماً به یکدیگر
+واPackage‌اند؛ بنابراین باید رابطهٔ وابستگی میان آن‌ها را به‌صراحت مشخص
 کنیم.
 
 در مرحلهٔ بعد، از تابع `add_one` (متعلق به Crate کتابخانه‌ای
@@ -190,7 +190,7 @@ $ cargo build
 ```
 
 برای اجرای Crate باینری از پوشهٔ _add_، می‌توانیم با استفاده از آرگومان
-`-p` و نام بسته به Cargo بگوییم کدام بسته از Workspace را اجرا کند:
+`-p` و نام Package به Cargo بگوییم کدام Package از Workspace را اجرا کند:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-07/add
@@ -206,20 +206,20 @@ Hello, world! 10 plus one is 11!
 ```
 
 این دستور کد موجود در _adder/src/main.rs_ را اجرا می‌کند؛ کدی که به
-Crate کتابخانه‌ای `add_one` وابسته است.
+Crate کتابخانه‌ای `add_one` واPackage است.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="depending-on-an-external-package-in-a-workspace"></a>
 
-### وابستگی به یک وابستگی خارجی در Workspace
+### افزودن یک وابستگی خارجی به Workspace
 
 توجه کنید که Workspace فقط یک فایل `Cargo.lock` در پوشهٔ ریشه دارد،
 نه یک فایل `Cargo.lock` در پوشهٔ هر Crate. این کار تضمین می‌کند که
 تمام Packageهای عضو Workspace از نسخهٔ یکسانی از وابستگی‌ها استفاده کنند.
 
 اگر Crate مربوط به `rand` را به فایل‌های _adder/Cargo.toml_ و
-_add_one/Cargo.toml_ اضافه کنیم، Cargo برای هر دو بسته یک نسخه از
+_add_one/Cargo.toml_ اضافه کنیم، Cargo برای هر دو Package یک نسخه از
 `rand` را انتخاب می‌کند و اطلاعات آن را در همان فایل `Cargo.lock`
 ثبت می‌کند. یکسان بودن نسخهٔ وابستگی‌ها در تمام Packageهای Workspace
 باعث می‌شود آن‌ها همواره با یکدیگر سازگار باشند.
@@ -276,7 +276,7 @@ warning: `add_one` (lib) generated 1 warning (run `cargo fix --lib -p add_one` t
 
 اکنون فایل `Cargo.lock` در ریشه، اطلاعات وابستگی `add_one` به
 `rand` را در خود دارد. با این حال، با اینکه در بخشی از Workspace
-از `rand` استفاده شده است، نمی‌توانیم در Crateهای دیگر Workspace
+از `rand` استفاده شده است، نمی‌توانیم در Packageهای دیگر Workspace
 از آن استفاده کنیم، مگر اینکه `rand` را به فایل _Cargo.toml_ همان
 Packageها نیز اضافه کنیم.
 
@@ -301,15 +301,15 @@ error[E0432]: unresolved import `rand`
 ```
 
 برای رفع این خطا، فایل _Cargo.toml_ مربوط به Package `adder` را ویرایش
-کنید و مشخص کنید که `rand` یکی از وابستگی‌های آن بسته نیز هست.
-با ساخت بستهٔ `adder`، وابستگی `rand` به فهرست وابستگی‌های این بسته
+کنید و مشخص کنید که `rand` یکی از وابستگی‌های آن Package نیز هست.
+با ساخت Package `adder`، وابستگی `rand` به فهرست وابستگی‌های این Package
 در فایل `Cargo.lock` اضافه می‌شود؛ اما نسخهٔ دیگری از `rand`
 دانلود نخواهد شد.
 
-Cargo تضمین می‌کند که تمام Crateهای وابسته در Packageهای Workspace که از
+Cargo تضمین می‌کند که تمام Crateهای واPackage در Packageهای Workspace که از
 `rand` استفاده می‌کنند، تا زمانی که نسخه‌های سازگاری از آن را
 درخواست کرده باشند، از همان نسخه استفاده کنند. این کار هم در فضای
-دیسک صرفه‌جویی می‌کند و هم سازگاری Crateهای Workspace با یکدیگر را
+دیسک صرفه‌جویی می‌کند و هم سازگاری Packageهای Workspace با یکدیگر را
 حفظ می‌کند.
 
 اگر Packageهای موجود در Workspace نسخه‌های ناسازگاری از یک وابستگی
@@ -328,8 +328,8 @@ Crate مربوط به `add_one` بنویسیم:
 ```
 
 حالا دستور `cargo test` را در پوشهٔ ریشهٔ _add_ اجرا کنید. اجرای
-`cargo test` در Workspaceای با این ساختار، آزمون‌های تمام Crateهای
-موجود در Workspace را اجرا می‌کند:
+`cargo test` در Workspaceای با این ساختار، آزمون‌های تمام Packageهای
+عضو Workspace را اجرا می‌کند:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
@@ -369,7 +369,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 آزمون مستندسازی‌ای (Documentation Test) در Crate `add_one` وجود
 نداشته است.
 
-همچنین می‌توانیم از پوشهٔ ریشه، آزمون‌های یک Crate مشخص در Workspace
+همچنین می‌توانیم از پوشهٔ ریشه، آزمون‌های یک Package مشخص در Workspace
 را اجرا کنیم. برای این کار از پرچم `-p` استفاده می‌کنیم و نام Crate
 موردنظر را به آن می‌دهیم:
 
@@ -399,7 +399,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 این خروجی نشان می‌دهد که دستور `cargo test` فقط آزمون‌های Crate
 `add_one` را اجرا کرده و آزمون‌های Crate `adder` را اجرا نکرده است.
 
-اگر Crateهای موجود در Workspace را در
+اگر Packageهای موجود در Workspace را در
 [crates.io](https://crates.io/)<!-- ignore --> منتشر کنید، هر Crate
 باید جداگانه منتشر شود. درست مانند `cargo test`، برای انتشار یک Crate
 مشخص از Workspace نیز می‌توانیم از پرچم `-p` استفاده کنیم و نام
