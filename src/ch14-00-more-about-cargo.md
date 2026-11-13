@@ -1,14 +1,19 @@
-# More About Cargo and Crates.io
+# بیشتر دربارهٔ Cargo و Crates.io
 
-So far, we’ve used only the most basic features of Cargo to build, run, and
-test our code, but it can do a lot more. In this chapter, we’ll discuss some of
-its other, more advanced features to show you how to do the following:
+تا اینجا برای ساختن، اجرا کردن و آزمودن کدهایمان فقط از ابتدایی‌ترین
+قابلیت‌های Cargo استفاده کرده‌ایم؛ اما Cargo امکانات بسیار بیشتری دارد.
+در این فصل با برخی از قابلیت‌های پیشرفته‌تر آن آشنا می‌شویم تا یاد بگیریم
+چطور:
 
-- Customize your build through release profiles.
-- Publish libraries on [crates.io](https://crates.io/)<!-- ignore -->.
-- Organize large projects with workspaces.
-- Install binaries from [crates.io](https://crates.io/)<!-- ignore -->.
-- Extend Cargo using custom commands.
+- فرایند ساخت برنامه را با استفاده از Release Profileها
+  سفارشی‌سازی کنیم.
+- کتابخانه‌ها را در [crates.io](https://crates.io/)<!-- ignore --> منتشر کنیم.
+- پروژه‌های بزرگ را با استفاده از Workspace سازمان‌دهی کنیم.
+- برنامه‌های اجرایی (Binary) را از [crates.io](https://crates.io/)<!-- ignore -->
+  نصب کنیم.
+- با نوشتن دستورهای سفارشی، قابلیت‌های Cargo را گسترش دهیم.
 
-Cargo can do even more than the functionality we cover in this chapter, so for
-a full explanation of all its features, see [its documentation](https://doc.rust-lang.org/cargo/).
+Cargo قابلیت‌های بسیار بیشتری از مواردی دارد که در این فصل بررسی می‌کنیم.
+برای آشنایی کامل با تمام امکانات آن، به
+[مستندات Cargo](https://doc.rust-lang.org/cargo/) مراجعه کنید.
+

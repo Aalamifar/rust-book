@@ -1,17 +1,26 @@
-## Extending Cargo with Custom Commands
+## گسترش Cargo با دستورهای سفارشی
 
-Cargo is designed so that you can extend it with new subcommands without having
-to modify it. If a binary in your `$PATH` is named `cargo-something`, you can
-run it as if it were a Cargo subcommand by running `cargo something`. Custom
-commands like this are also listed when you run `cargo --list`. Being able to
-use `cargo install` to install extensions and then run them just like the
-built-in Cargo tools is a super-convenient benefit of Cargo’s design!
+Cargo طوری طراحی شده است که بتوانید بدون نیاز به تغییر دادن خود Cargo،
+Subcommandهای جدیدی به آن اضافه کنید. اگر یک فایل اجرایی
+در یکی از مسیرهای موجود در متغیر `$PATH` نامی به شکل
+`cargo-something` داشته باشد، می‌توانید آن را با اجرای دستور
+`cargo something` درست مانند یکی از Subcommandهای داخلی Cargo اجرا کنید.
 
-## Summary
+این دستورهای سفارشی هنگام اجرای `cargo --list` نیز در فهرست دستورها
+نمایش داده می‌شوند. اینکه بتوانید افزونه‌های Cargo را با
+`cargo install` نصب کنید و سپس درست مانند ابزارهای داخلی Cargo
+از آن‌ها استفاده کنید، یکی از مزیت‌های بسیار کاربردی طراحی Cargo است!
 
-Sharing code with Cargo and [crates.io](https://crates.io/)<!-- ignore --> is
-part of what makes the Rust ecosystem useful for many different tasks. Rust’s
-standard library is small and stable, but crates are easy to share, use, and
-improve on a timeline different from that of the language. Don’t be shy about
-sharing code that’s useful to you on [crates.io](https://crates.io/)<!-- ignore
--->; it’s likely that it will be useful to someone else as well!
+## جمع‌بندی
+
+به‌اشتراک‌گذاشتن کد با کمک Cargo و
+[crates.io](https://crates.io/)<!-- ignore --> بخشی از چیزی است که
+اکوسیستم Rust را برای انجام کارهای گوناگون مفید و قدرتمند می‌کند.
+کتابخانهٔ استاندارد Rust کوچک و پایدار است، اما Crateها را می‌توان
+به‌آسانی به اشتراک گذاشت، استفاده کرد و مستقل از چرخهٔ انتشار خود زبان،
+بهبود داد.
+
+از به‌اشتراک‌گذاشتن کدی که برایتان مفید بوده است در
+[crates.io](https://crates.io/)<!-- ignore --> خجالت نکشید؛ احتمال
+زیادی وجود دارد که همان کد برای شخص دیگری هم مفید باشد!
+
